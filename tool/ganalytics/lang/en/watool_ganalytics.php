@@ -15,24 +15,14 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Lang strings
  *
- * @package   tool_webanalytics
+ * @package   waprovider_ganalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright 2016 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_webanalytics\plugininfo;
+defined('MOODLE_INTERNAL') || die;
 
-defined('MOODLE_INTERNAL') || die();
-
-
-use core\plugininfo\base;
-
-defined('MOODLE_INTERNAL') || die();
-
-
-class waprovider extends base {
-
-}
+$string['pluginname'] = 'Google Analytics';

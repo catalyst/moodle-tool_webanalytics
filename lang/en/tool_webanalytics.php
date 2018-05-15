@@ -26,5 +26,5 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Web Analytics';
-$string['subplugintype_waprovider'] = 'Web Analytics Provider';
-$string['subplugintype_waprovider_plural'] = 'Web Analytics Providers';
+$string['subplugintype_watool'] = 'Web Analytics Tool';
+$string['subplugintype_watool_plural'] = 'Web Analytics Tools';

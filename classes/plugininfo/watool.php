@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Sub plugins information.
+ * Sub plugin class.
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -23,9 +23,16 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace tool_webanalytics\plugininfo;
+
 defined('MOODLE_INTERNAL') || die();
 
-$subplugins = array(
-    'watool' => 'admin/tool/webanalytics/tool',
-);
 
+use core\plugininfo\base;
+
+defined('MOODLE_INTERNAL') || die();
+
+
+class watool extends base {
+
+}
