@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings
+ * Version information.
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -23,8 +23,16 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+namespace tool_webanalytics\plugininfo;
 
-$string['pluginname'] = 'Web Analytics';
-$string['subplugintype_waprovider'] = 'Web Analytics Provider';
-$string['subplugintype_waprovider_plural'] = 'Web Analytics Providers';
+defined('MOODLE_INTERNAL') || die();
+
+
+use core\plugininfo\base;
+
+defined('MOODLE_INTERNAL') || die();
+
+
+class waprovider extends base {
+
+}
