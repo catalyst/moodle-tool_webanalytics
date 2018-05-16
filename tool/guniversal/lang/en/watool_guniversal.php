@@ -26,3 +26,8 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Google Universal Analytics';
+$string['siteid'] = 'Site ID';
+$string['siteid_help'] = 'Enter your Site ID or Google Analytics';
+$string['userid'] = 'Track User ID';
+$string['userid_help'] = 'If enabled userId parameter will be sent for tracking';
+

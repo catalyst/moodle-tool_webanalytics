@@ -29,7 +29,7 @@
     * addition Page tracking info added by this plugin
 
     Example context (json):
-    { "siteid": UA-90210-15, "addition": 2, }
+    { "siteid": UA-90210-15, "addition": 2, "userid": 3, }
 }}
 
 {{#js}}
@@ -39,4 +39,5 @@
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
     ga('create', '{{analyticsid}}', {'siteSpeedSampleRate': 50});
     ga('send', {{{addition}}});
+    {{#userid}}ga('set', 'userId', {{userid}});{{/userid}}
 {{/js}}

@@ -47,13 +47,17 @@ class tool implements tool_interface {
      * @inheritdoc
      */
     public function insert_tracking() {
-        global $CFG, $OUTPUT;
+        global $CFG, $OUTPUT, $USER;
 
         $settings = $this->record->get_property('settings');
 
         $template = new \stdClass();
         $template->analyticsid = $settings['siteid'];
         $template->addition = "'pageview'";
+
+        if (!empty($settings['userid']) && !empty($USER->id)) {
+            $template->userid = $USER->id;
+        }
 
         if ($this->should_track()) {
             $location = "additionalhtml" . $this->record->get_property('location');
@@ -69,10 +73,13 @@ class tool implements tool_interface {
      * @inheritdoc
      */
     public function form_add_settings_elements(\MoodleQuickForm &$mform) {
-        $mform->addElement('text', 'siteid', get_string('siteid', 'local_analytics'));
-        $mform->addHelpButton('siteid', 'siteid', 'local_analytics');
+        $mform->addElement('text', 'siteid', get_string('siteid', 'watool_guniversal'));
+        $mform->addHelpButton('siteid', 'siteid', 'watool_guniversal');
         $mform->setType('siteid', PARAM_TEXT);
         $mform->addRule('siteid', get_string('required'), 'required', null, 'client');
+
+        $mform->addElement('checkbox', 'userid', get_string('userid', 'watool_guniversal'));
+        $mform->addHelpButton('userid', 'userid', 'watool_guniversal');
     }
 
     public function form_definition_after_data(\MoodleQuickForm &$mform) {
@@ -93,10 +100,8 @@ class tool implements tool_interface {
      */
     public function form_build_settings(\stdClass $data) {
         $settings = [];
-
-        if (isset($data->siteid)) {
-            $settings['siteid'] = $data->siteid;
-        }
+        $settings['siteid']  = isset($data->siteid) ? $data->siteid : '';
+        $settings['userid'] = isset($data->userid) ? $data->userid : 0;
 
         return $settings;
     }
@@ -105,6 +110,7 @@ class tool implements tool_interface {
      * @inheritdoc
      */
     public function form_set_data(\stdClass &$data) {
-        $data->siteid = $data->settings['siteid'];
+        $data->siteid = isset($data->settings['siteid']) ? $data->settings['siteid'] : '';
+        $data->userid = isset($data->settings['userid']) ? $data->settings['userid'] : 0;
     }
 }
