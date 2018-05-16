@@ -26,9 +26,23 @@
 namespace tool_webanalytics\plugininfo;
 
 use core\plugininfo\base;
+use tool_webanalytics\record_interface;
 
 defined('MOODLE_INTERNAL') || die();
 
 class watool extends base {
+
+    /**
+     * Return a configured web analytics tool instance.
+     *
+     * @param \tool_webanalytics\record_interface $record
+     *
+     * @return \tool_webanalytics\tool\tool_interface
+     */
+    public function get_tool_instance(record_interface $record) {
+        $class = '\\watool_' . $this->name . '\\tool\\tool';
+
+        return new  $class($record);
+    }
 
 }

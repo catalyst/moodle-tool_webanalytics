@@ -92,10 +92,6 @@ class record implements record_interface {
 
         foreach ($data as $name => $value) {
             if (property_exists($this, $name)) {
-                if ($name == 'settings') {
-                    $value = unserialize($value);
-                }
-
                 $this->$name = $value;
             }
         }
@@ -145,7 +141,7 @@ class record implements record_interface {
         $dbrecord->enabled = $this->get_property('enabled');
         $dbrecord->location = $this->get_property('location');
         $dbrecord->type = $this->get_property('type');
-        $dbrecord->settings = serialize($this->get_settings());
+        $dbrecord->settings = $this->get_settings();
 
         return $dbrecord;
     }

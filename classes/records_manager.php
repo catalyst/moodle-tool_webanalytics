@@ -78,7 +78,9 @@ class records_manager implements records_manager_interface {
      */
     public function get($id) {
         $record = $this->db->get_record(self::TABLE_NAME, array('id' => $id));
+
         if (!empty($record)) {
+            $record->settings = unserialize($record->settings);
             $record = new record($record);
         }
 
@@ -88,7 +90,7 @@ class records_manager implements records_manager_interface {
     /**
      * Returns all existing analytics records.
      *
-     * @return array
+     * @return \tool_webanalytics\record_interface[]
      */
     public function get_all() {
         if ($this->allrecords === false) {
@@ -120,6 +122,8 @@ class records_manager implements records_manager_interface {
      */
     public function save(record_interface $record) {
         $dbrecord = $record->export();
+
+        $dbrecord->settings = serialize($dbrecord->settings);
 
         if (empty($dbrecord->id)) {
             $dbrecord->id = $this->db->insert_record(self::TABLE_NAME, $dbrecord, true);
@@ -155,7 +159,8 @@ class records_manager implements records_manager_interface {
 
         if (!empty($records)) {
             foreach ($records as $record) {
-                if (!empty($record) && !empty($record->settings)) {
+                if (!empty($record)) {
+                    $record->settings = unserialize($record->settings);
                     $records[$record->id] = new record($record);
                 }
             }

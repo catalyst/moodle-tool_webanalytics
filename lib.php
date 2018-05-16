@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Web analytics tool interface.
+ * Callback functions.
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -23,11 +23,13 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-namespace tool_webanalytics;
+defined('MOODLE_INTERNAL') || die;
 
-defined('MOODLE_INTERNAL') || die();
+use tool_webanalytics\injector;
 
-interface tool_interface {
-    public function insert_tracking();
-    public function form_settings_fields();
+/**
+ * This hook was introduced in moodle 3.3.
+ */
+function tool_webanalytics_before_http_headers() {
+    injector::inject();
 }

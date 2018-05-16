@@ -55,7 +55,7 @@ if ($edit) {
     $record = $record->export();
 }
 
-$mform = new edit(null, $settings);
+$mform = new edit(null, ['record' => new record($record)]);
 $mform->set_data($record);
 
 if ($mform->is_cancelled()) {

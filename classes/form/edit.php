@@ -31,6 +31,23 @@ defined('MOODLE_INTERNAL') || die();
 
 
 class edit extends moodleform {
+    /**
+     * Web analytics type.
+     * @var string
+     */
+    protected $type;
+
+    /**
+     * Web analytics record.
+     * @var \tool_webanalytics\record_interface
+     */
+    protected $record;
+
+    /**
+     * Web analytics tool of provided type.
+     * @var \tool_webanalytics\tool\tool_interface
+     */
+    protected $tool;
 
     /**
      * Return form object.
@@ -47,30 +64,32 @@ class edit extends moodleform {
      * @see moodleform::definition()
      */
     public function definition() {
+        $plugins = \core_plugin_manager::instance()->get_plugins_of_type('watool');
+
         $mform = $this->_form;
+        $this->record = $this->_customdata['record'];
+        $this->type = $this->record->get_property('type');
+        $this->tool = $plugins[$this->type]->get_tool_instance($this->record);
 
         $mform->addElement('hidden', 'id');
         $mform->setType('id', PARAM_INT);
 
-
         $choices = [];
-        $plugins = \core_plugin_manager::instance()->get_plugins_of_type('watool');
         foreach ($plugins as $plugin) {
             $choices[$plugin->name] = $plugin->displayname;
         }
 
         $mform->addElement('select', 'type', get_string('type', 'tool_webanalytics'), $choices);
-        $mform->addHelpButton('type', 'type', 'tool_webanalytics');
         $mform->setType('type', PARAM_TEXT);
+
+        $mform->addElement('checkbox', 'enabled', get_string('enabled', 'tool_webanalytics'));
+        $mform->addHelpButton('enabled', 'enabled', 'tool_webanalytics');
+        $mform->setDefault('enabled', 1);
 
         $mform->addElement('text', 'name', get_string('name', 'tool_webanalytics'));
         $mform->addHelpButton('name', 'name', 'tool_webanalytics');
         $mform->setType('name', PARAM_TEXT);
         $this->_form->addRule('name', get_string('required'), 'required', null, 'client');
-
-        $mform->addElement('checkbox', 'enabled', get_string('enabled', 'tool_webanalytics'));
-        $mform->addHelpButton('enabled', 'enabled', 'tool_webanalytics');
-        $mform->setDefault('enabled', 1);
 
         $choices = array(
             'head' => get_string('head', 'tool_webanalytics'),
@@ -82,6 +101,7 @@ class edit extends moodleform {
         $mform->addHelpButton('location', 'location', 'tool_webanalytics');
         $mform->setType('location', PARAM_TEXT);
 
+        $this->tool->form_add_settings_elements($mform);
 
         $this->add_action_buttons();
     }
@@ -93,8 +113,7 @@ class edit extends moodleform {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-
-        // TODO: check if we have the same record.
+        $this->tool->form_validate_($data, $files, $errors);
 
         return $errors;
     }
@@ -107,7 +126,21 @@ class edit extends moodleform {
     public function get_data() {
         $data = parent::get_data();
 
+        if (!empty($data)) {
+            $data->settings = $this->tool->form_build_settings($data);
+        }
+
         return $data;
+    }
+
+    /**
+     * @inheritdoc
+     *
+     * @see moodleform::set_data()
+     */
+    public function set_data($defaultvalues) {
+        $this->tool->form_set_data($defaultvalues);
+        parent::set_data($defaultvalues);
     }
 
     /**
@@ -117,11 +150,8 @@ class edit extends moodleform {
      */
     public function definition_after_data() {
         parent::definition_after_data();
-
-        $mform = $this->_form;
-
-        $mform->freeze(array('type'));
-
+        $this->_form->freeze(array('type'));
+        $this->tool->form_definition_after_data($this->_form);
     }
 
 }
