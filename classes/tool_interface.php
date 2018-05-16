@@ -15,17 +15,19 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Web analytics tool interface.
  *
- * @package   watool_ganalytics
+ * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+namespace tool_webanalytics;
 
-$plugin->version   = 2018051500;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2018051500;      // Same as version
-$plugin->requires  = 2017051500;      // Requires Moodle 3.3 or later.
-$plugin->component = "watool_ganalytics";
+defined('MOODLE_INTERNAL') || die();
+
+interface tool_interface {
+    public function insert_tracking();
+    public function form_settings_fields();
+}

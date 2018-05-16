@@ -19,7 +19,7 @@
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2016 Catalyst IT
+ * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -28,3 +28,25 @@ defined('MOODLE_INTERNAL') || die;
 $string['pluginname'] = 'Web Analytics';
 $string['subplugintype_watool'] = 'Web Analytics Tool';
 $string['subplugintype_watool_plural'] = 'Web Analytics Tools';
+$string['type'] = 'Web Analytics Tool';
+$string['type_help'] = 'Choose the type of Web Analytics';
+$string['manage_heading'] = 'Manage Analytics Tools';
+$string['edit_breadcrumb'] = 'Edit analytics tool';
+$string['create_breadcrumb'] = 'Create Analytics Tool';
+$string['delete_breadcrumb'] = 'Delete Analytics Tool';
+$string['edit_heading'] = 'Edit Analytics Tool';
+$string['create_heading'] = 'Create Analytics Tool';
+$string['delete_heading'] = 'Delete Analytics Tool';
+$string['delete_confirm'] = 'Are you sure you want to delete Analytics Tool with ID {$a}?';
+$string['add_tool'] = 'Add new Analytics Tool';
+$string['not_found'] = 'Analytics Tool not found';
+$string['name'] = 'Name';
+$string['name_help'] = 'Enter a name for Analytics Tool';
+$string['enabled'] = 'Enabled';
+$string['enabled_help'] = 'Enable Analytics for Moodle';
+$string['location'] = 'Tracking code location';
+$string['location_help'] = 'The place on the page where you want to place the code, header will yield the most reliable results, but footer gives the best performance. If you do not get correct results in Google/Piwik set this to "Header"';
+$string['head'] = 'Header';
+$string['topofbody'] = 'Top of body';
+$string['footer'] = 'Footer';
+$string['no_analytics'] = 'No Analytics Tools found.';

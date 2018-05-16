@@ -19,10 +19,10 @@
  *
  * @package   waprovider_ganalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2016 Catalyst IT
+ * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['pluginname'] = 'Google Analytics';
+$string['pluginname'] = 'Google Analytics (deprecated)';

@@ -15,17 +15,35 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Update status.
  *
- * @package   watool_ganalytics
+ * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+use tool_webanalytics\records_manager;
 
-$plugin->version   = 2018051500;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2018051500;      // Same as version
-$plugin->requires  = 2017051500;      // Requires Moodle 3.3 or later.
-$plugin->component = "watool_ganalytics";
+require_once(__DIR__.'/../../../config.php');
+require_once($CFG->libdir.'/adminlib.php');
+
+admin_externalpage_setup('tool_webanalytics_manage');
+
+$action = 'status';
+$id = required_param('id', PARAM_INT);
+
+$manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
+$manager = new records_manager();
+$record = $manager->get($id);
+
+if (empty($record)) {
+    print_error('not_found', 'tool_webanalytics', $manageurl);
+}
+
+$dbrecord = $record->export();
+$dbrecord->enabled = 1 - $dbrecord->enabled;
+$updatedrecord = new \tool_webanalytics\record($dbrecord);
+$manager->save($updatedrecord);
+
+redirect($manageurl);

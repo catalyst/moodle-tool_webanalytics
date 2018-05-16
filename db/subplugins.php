@@ -19,7 +19,7 @@
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2016 Catalyst IT
+ * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
