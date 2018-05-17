@@ -100,10 +100,6 @@ class record implements record_interface {
      * @throws coding_exception
      */
     public function __construct(stdClass $data) {
-        if (empty((array)$data)) {
-            throw new coding_exception('Empty $data object is provided.');
-        }
-
         foreach ($data as $name => $value) {
             if (property_exists($this, $name)) {
                 $this->$name = $value;
