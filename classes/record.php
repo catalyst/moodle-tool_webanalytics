@@ -72,6 +72,20 @@ class record implements record_interface {
     protected $type = null;
 
     /**
+     * Should track admins?
+     *
+     * @var string
+     */
+    protected $trackadmin = 0;
+
+    /**
+     * Should use a clean URL?
+     *
+     * @var string
+     */
+    protected $cleanurl = 0;
+
+    /**
      * Custom settings.
      *
      * @var array
@@ -141,6 +155,8 @@ class record implements record_interface {
         $dbrecord->enabled = $this->get_property('enabled');
         $dbrecord->location = $this->get_property('location');
         $dbrecord->type = $this->get_property('type');
+        $dbrecord->trackadmin = $this->get_property('trackadmin');
+        $dbrecord->cleanurl = $this->get_property('cleanurl');
         $dbrecord->settings = $this->get_settings();
 
         return $dbrecord;

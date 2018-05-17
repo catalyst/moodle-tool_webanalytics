@@ -101,6 +101,12 @@ class edit extends moodleform {
         $mform->addHelpButton('location', 'location', 'tool_webanalytics');
         $mform->setType('location', PARAM_TEXT);
 
+        $mform->addElement('checkbox', 'trackadmin', get_string('trackadmin', 'tool_webanalytics'));
+        $mform->addHelpButton('trackadmin', 'trackadmin', 'tool_webanalytics');
+
+        $mform->addElement('checkbox', 'cleanurl', get_string('cleanurl', 'local_analytics'));
+        $mform->addHelpButton('cleanurl', 'cleanurl', 'local_analytics');
+
         $this->tool->form_add_settings_elements($mform);
 
         $this->add_action_buttons();

@@ -50,3 +50,7 @@ $string['head'] = 'Header';
 $string['topofbody'] = 'Top of body';
 $string['footer'] = 'Footer';
 $string['no_analytics'] = 'No Analytics Tools found.';
+$string['trackadmin'] = 'Tracking Admins';
+$string['trackadmin_desc'] = 'Enable tracking of Admin users (not recommended)';
+$string['cleanurl'] = 'Clean URLs';
+$string['cleanurl_desc'] = 'Generate clean URL for in advanced tracking';

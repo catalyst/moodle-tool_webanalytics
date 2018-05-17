@@ -25,44 +25,31 @@
 
 namespace watool_ganalytics\tool;
 
-use tool_webanalytics\record_interface;
-use tool_webanalytics\tool\tool_interface;
+use tool_webanalytics\tool\tool_base;
 
 defined('MOODLE_INTERNAL') || die();
 
-class tool implements tool_interface {
-    /**
-     * @var \tool_webanalytics\record
-     */
-    protected $record;
-
-    /**
-     * @inheritdoc
-     */
-    public function __construct(record_interface $record) {
-        $this->record = $record;
-    }
-
+class tool extends tool_base {
     /**
      * @inheritdoc
      */
     public function insert_tracking() {
-        global $CFG, $OUTPUT, $USER;
-
-        $settings = $this->record->get_property('settings');
-
-        $template = new \stdClass();
-        $template->analyticsid = $settings['siteid'];
-        $template->page = "";
+        global $CFG, $OUTPUT;
 
         if ($this->should_track()) {
-            $location = "additionalhtml" . $this->record->get_property('location');
+            $settings = $this->record->get_property('settings');
+
+            $template = new \stdClass();
+            $template->analyticsid = $settings['siteid'];
+            $template->page = "";
+
+            if (!empty($settings->cleanurl)) {
+                $template->page = $this->trackurl(true, true);
+            }
+
+            $location = $this->build_location();
             $CFG->$location .= $OUTPUT->render_from_template('watool_ganalytics/tracking_code', $template);
         }
-    }
-
-    public function should_track() {
-        return true;
     }
 
     /**
@@ -73,10 +60,6 @@ class tool implements tool_interface {
         $mform->addHelpButton('siteid', 'siteid', 'watool_ganalytics');
         $mform->setType('siteid', PARAM_TEXT);
         $mform->addRule('siteid', get_string('required'), 'required', null, 'client');
-    }
-
-    public function form_definition_after_data(\MoodleQuickForm &$mform) {
-
     }
 
     /**

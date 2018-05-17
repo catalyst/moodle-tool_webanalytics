@@ -25,48 +25,40 @@
 
 namespace watool_guniversal\tool;
 
-use tool_webanalytics\record_interface;
-use tool_webanalytics\tool\tool_interface;
+use tool_webanalytics\tool\tool_base;
 
 defined('MOODLE_INTERNAL') || die();
 
-class tool implements tool_interface {
-    /**
-     * @var \tool_webanalytics\record
-     */
-    protected $record;
-
-    /**
-     * @inheritdoc
-     */
-    public function __construct(record_interface $record) {
-        $this->record = $record;
-    }
+class tool extends tool_base {
 
     /**
      * @inheritdoc
      */
     public function insert_tracking() {
-        global $CFG, $OUTPUT, $USER;
-
-        $settings = $this->record->get_property('settings');
-
-        $template = new \stdClass();
-        $template->analyticsid = $settings['siteid'];
-        $template->addition = "'pageview'";
-
-        if (!empty($settings['userid']) && !empty($USER->id)) {
-            $template->userid = $USER->id;
-        }
+        global $CFG, $OUTPUT, $USER, $PAGE;
 
         if ($this->should_track()) {
-            $location = "additionalhtml" . $this->record->get_property('location');
+            $settings = $this->record->get_property('settings');
+
+            $template = new \stdClass();
+            $template->analyticsid = $settings['siteid'];
+
+            if (!empty($settings->cleanurl)) {
+                $template->addition = "{'hitType' : 'pageview',
+                'page' : '" . $this->trackurl(true, true) . "',
+                'title' : '" . addslashes(format_string($PAGE->heading)) . "'
+                }";
+            } else {
+                $template->addition = "'pageview'";
+            }
+
+            if (!empty($settings['userid']) && !empty($USER->id)) {
+                $template->userid = $USER->id;
+            }
+
+            $location = $this->build_location();
             $CFG->$location .= $OUTPUT->render_from_template('watool_guniversal/tracking_code', $template);
         }
-    }
-
-    public function should_track() {
-        return true;
     }
 
     /**
@@ -80,10 +72,6 @@ class tool implements tool_interface {
 
         $mform->addElement('checkbox', 'userid', get_string('userid', 'watool_guniversal'));
         $mform->addHelpButton('userid', 'userid', 'watool_guniversal');
-    }
-
-    public function form_definition_after_data(\MoodleQuickForm &$mform) {
-
     }
 
     /**

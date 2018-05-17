@@ -25,47 +25,34 @@
 
 namespace watool_matomo\tool;
 
-use tool_webanalytics\record_interface;
-use tool_webanalytics\tool\tool_interface;
+use tool_webanalytics\tool\tool_base;
 
 defined('MOODLE_INTERNAL') || die();
 
-class tool implements tool_interface {
-    /**
-     * @var \tool_webanalytics\record
-     */
-    protected $record;
-
-    /**
-     * @inheritdoc
-     */
-    public function __construct(record_interface $record) {
-        $this->record = $record;
-    }
-
+class tool extends tool_base {
     /**
      * @inheritdoc
      */
     public function insert_tracking() {
         global $CFG, $OUTPUT, $USER;
 
-        $settings = $this->record->get_property('settings');
-
-        $template = new \stdClass();
-        $template->siteid = $settings['siteid'];
-        $template->siteurl = $settings['siteurl'];
-        $template->imagetrack = $settings['imagetrack'];
-        $template->userid = $USER->id;
-        $template->doctitle = "";
-
         if ($this->should_track()) {
-            $location = "additionalhtml" . $this->record->get_property('location');
+            $settings = $this->record->get_property('settings');
+
+            $template = new \stdClass();
+            $template->siteid = $settings['siteid'];
+            $template->siteurl = $settings['siteurl'];
+            $template->imagetrack = $settings['imagetrack'];
+            $template->userid = $USER->id;
+            $template->doctitle = "";
+
+            if ($settings->cleanurl) {
+                $template->doctitle = "_paq.push(['setDocumentTitle', '" . $this->trackurl() . "']);\n";
+            }
+
+            $location = $this->build_location();
             $CFG->$location .= $OUTPUT->render_from_template('watool_matomo/tracking_code', $template);
         }
-    }
-
-    public function should_track() {
-        return true;
     }
 
     /**
@@ -84,10 +71,6 @@ class tool implements tool_interface {
 
         $mform->addElement('checkbox', 'imagetrack', get_string('imagetrack', 'watool_matomo'));
         $mform->addHelpButton('imagetrack', 'imagetrack', 'watool_matomo');
-    }
-
-    public function form_definition_after_data(\MoodleQuickForm &$mform) {
-
     }
 
     /**
