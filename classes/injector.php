@@ -46,7 +46,7 @@ class injector {
 
         $manager = new records_manager();
         $records = $manager->get_all();
-        $plugins = \core_plugin_manager::instance()->get_plugins_of_type('watool');
+        $plugins = plugin_manager::instance()->get_enabled_plugins();
 
         if (!empty($records) && !empty($plugins)) {
             foreach ($records as $record) {

@@ -26,6 +26,7 @@
 namespace tool_webanalytics\form;
 
 use moodleform;
+use tool_webanalytics\plugin_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -64,7 +65,7 @@ class edit extends moodleform {
      * @see moodleform::definition()
      */
     public function definition() {
-        $plugins = \core_plugin_manager::instance()->get_plugins_of_type('watool');
+        $plugins = plugin_manager::instance()->get_enabled_plugins();
 
         $mform = $this->_form;
         $this->record = $this->_customdata['record'];

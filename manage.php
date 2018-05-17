@@ -25,6 +25,7 @@
 
 use tool_webanalytics\records_manager;
 use tool_webanalytics\table\tools_table;
+use tool_webanalytics\plugin_manager;
 
 require_once(__DIR__.'/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
@@ -41,7 +42,7 @@ $PAGE->set_url($manageurl);
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('manage_heading', 'tool_webanalytics'));
 
-$plugins = \core_plugin_manager::instance()->get_plugins_of_type('watool');
+$plugins = plugin_manager::instance()->get_enabled_plugins();
 
 $options = [];
 
