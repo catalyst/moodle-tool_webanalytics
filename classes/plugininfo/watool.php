@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
 class watool extends base {
 
     /**
-     * Return a configured web analytics tool instance.
+     * Return a configured web analytics tool instance for this plugin.
      *
      * @param \tool_webanalytics\record_interface $record
      *
