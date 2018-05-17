@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Injector class.
+ * Cache definition.
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -23,44 +23,12 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
-namespace tool_webanalytics;
-
 defined('MOODLE_INTERNAL') || die;
 
-class injector {
-    /**
-     * @var bool
-     */
-    private static $injected = false;
-
-    /**
-     * Inject Web analytics tracking code for all tools.
-     */
-    public static function inject() {
-        if (self::$injected) {
-            return;
-        }
-
-        self::$injected = true;
-
-        $manager = new records_manager();
-        $records = $manager->get_enabled();
-        $plugins = plugin_manager::instance()->get_enabled_plugins();
-
-        if (!empty($records) && !empty($plugins)) {
-            foreach ($records as $record) {
-                $type = $record->get_property('type');
-                $tool = $plugins[$type]->get_tool_instance($record);
-                $tool->insert_tracking();
-            }
-        }
-    }
-
-    /**
-     * Reset injected state.
-     */
-    public static function reset() {
-        self::$injected = false;
-    }
-}
+$definitions = array(
+    'records' => array(
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => false,
+    ),
+);

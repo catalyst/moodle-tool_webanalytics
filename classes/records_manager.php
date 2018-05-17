@@ -38,6 +38,26 @@ class records_manager implements records_manager_interface {
     const TABLE_NAME = 'tool_webanalytics';
 
     /**
+     * A name of the cache component.
+     */
+    const CACHE_COMPONENT = 'tool_webanalytics';
+
+    /**
+     * A name of the cache area.
+     */
+    const CACHE_AREA = 'records';
+
+    /**
+     * A cache key name to store all records.
+     */
+    const CACHE_ALL_RECORDS_KEY = 'allrecords';
+
+    /**
+     * A cache key name to store only enabled records.
+     */
+    const CACHE_ENABLED_RECORDS_KEY = 'enabledrecords';
+
+    /**
      * Global DB object.
      *
      * @var \moodle_database
@@ -59,12 +79,22 @@ class records_manager implements records_manager_interface {
     protected $enabledrecords = false;
 
     /**
+     * A a cache instance.
+     *
+     * @var \cache_application|\cache_session|\cache_store
+     */
+    protected $cache;
+
+    /**
      * Constructor.
      */
     public function __construct() {
         global $DB;
 
         $this->db = $DB;
+        $this->cache = \cache::make(self::CACHE_COMPONENT, self::CACHE_AREA);
+        $this->allrecords = $this->cache->get(self::CACHE_ALL_RECORDS_KEY);
+        $this->enabledrecords = $this->cache->get(self::CACHE_ENABLED_RECORDS_KEY);
     }
 
     /**
@@ -95,6 +125,7 @@ class records_manager implements records_manager_interface {
     public function get_all() {
         if ($this->allrecords === false) {
             $this->allrecords = $this->get_multiple();
+            $this->cache->set(self::CACHE_ALL_RECORDS_KEY, $this->allrecords);
         }
 
         return $this->allrecords;
@@ -108,6 +139,7 @@ class records_manager implements records_manager_interface {
     public function get_enabled() {
         if ($this->enabledrecords === false) {
             $this->enabledrecords = $this->get_multiple(array('enabled' => 1));
+            $this->cache->set(self::CACHE_ENABLED_RECORDS_KEY, $this->enabledrecords);
         }
 
         return $this->enabledrecords;
@@ -132,6 +164,8 @@ class records_manager implements records_manager_interface {
             $this->db->update_record(self::TABLE_NAME, $dbrecord);
         }
 
+        $this->clear_caches();
+
         return $dbrecord->id;
     }
 
@@ -145,6 +179,7 @@ class records_manager implements records_manager_interface {
      */
     public function delete($id) {
         $this->db->delete_records(self::TABLE_NAME, array('id' => $id));
+        $this->clear_caches();
     }
 
     /**
@@ -167,6 +202,16 @@ class records_manager implements records_manager_interface {
         }
 
         return $records;
+    }
+
+    /**
+     * Clear caches for records.
+     */
+    protected function clear_caches() {
+        $this->allrecords = false;
+        $this->enabledrecords = false;
+        $this->cache->delete(self::CACHE_ALL_RECORDS_KEY);
+        $this->cache->delete(self::CACHE_ENABLED_RECORDS_KEY);
     }
 
 }
