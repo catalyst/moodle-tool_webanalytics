@@ -7,7 +7,7 @@
     <TABLE NAME="tool_webanalytics" COMMENT="This table saves information about an instance of web analytics">
       <FIELDS>
         <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="" SEQUENCE="false" COMMENT="An admin name of the Analytics"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="An admin name of the Analytics"/>
         <FIELD NAME="enabled" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Enable Analytics"/>
         <FIELD NAME="location" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="head" SEQUENCE="false" COMMENT="Analytics location on a page"/>
         <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="A type of Analytics"/>
