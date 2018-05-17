@@ -128,7 +128,7 @@ class records_manager implements records_manager_interface {
         if (empty($dbrecord->id)) {
             $dbrecord->id = $this->db->insert_record(self::TABLE_NAME, $dbrecord, true);
         } else {
-            unset($dbrecord->type);
+            unset($dbrecord->type); // Never update type once it's set.
             $this->db->update_record(self::TABLE_NAME, $dbrecord);
         }
 
