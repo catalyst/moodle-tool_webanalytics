@@ -17,7 +17,7 @@
 /**
  * Lang strings
  *
- * @package   waprovider_guniversal
+ * @package   watool_guniversal
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
