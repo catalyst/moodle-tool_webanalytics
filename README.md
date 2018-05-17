@@ -1,3 +1,7 @@
+<a href="https://travis-ci.org/catalyst/moodle-tool_webanalytics">
+<img src="https://travis-ci.org/catalyst/moodle-tool_webanalytics.svg?branch=master">
+</a>
+
 # Web Analytics
 
 A Moodle admin tool adding Web Analytics to your Moodle site.
