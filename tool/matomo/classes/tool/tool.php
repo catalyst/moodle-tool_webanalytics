@@ -78,11 +78,23 @@ class tool extends tool_base {
      */
     public function form_validate_(&$data, &$files, &$errors) {
         if (empty($data['siteid'])) {
-            $errors['siteid'] = 'Site ID should be set';
+            $errors['siteid'] = get_string('error:siteid', 'watool_matomo');
         }
 
-        if (empty($data['siteurl'])) {
-            $errors['siteurl'] = 'Site URL should be set';
+        if (!isset($data['siteurl']) || empty($data['siteurl'])) {
+            $errors['siteurl'] = get_string('error:siteurl', 'watool_matomo');
+        } else {
+            if (empty(clean_param($data['siteurl'], PARAM_URL))) {
+                $errors['siteurl'] = get_string('error:siteurlinvalid', 'watool_matomo');
+            }
+
+            if (preg_match("/^(http|https):\/\//", $data['siteurl'])) {
+                $errors['siteurl'] = get_string('error:siteurlhttps', 'watool_matomo');
+            }
+
+            if (substr(trim($data['siteurl']), -1) == '/') {
+                $errors['siteurl'] = get_string('error:siteurltrailingslash', 'watool_matomo');
+            }
         }
     }
 
