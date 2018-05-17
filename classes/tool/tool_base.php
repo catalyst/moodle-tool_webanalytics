@@ -123,9 +123,9 @@ abstract class tool_base implements tool_interface {
                 $trackurl .= self::might_encode($pageinfo[1]->fullname, $urlencode);
                 $trackurl .= '/';
                 if ($PAGE->user_is_editing()) {
-                    $trackurl .= get_string('edit', 'local_analytics');
+                    $trackurl .= get_string('edit', 'tool_webanalytics');
                 } else {
-                    $trackurl .= get_string('view', 'local_analytics');
+                    $trackurl .= get_string('view', 'tool_webanalytics');
                 }
             }
         }

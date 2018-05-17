@@ -54,3 +54,5 @@ $string['trackadmin'] = 'Tracking Admins';
 $string['trackadmin_desc'] = 'Enable tracking of Admin users (not recommended)';
 $string['cleanurl'] = 'Clean URLs';
 $string['cleanurl_desc'] = 'Generate clean URL for in advanced tracking';
+$string['view'] = 'View';
+$string['edit'] = 'Edit';
