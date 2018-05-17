@@ -17,7 +17,7 @@
 /**
  * Lang strings
  *
- * @package   waprovider_piwik
+ * @package   watool_matomo
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,4 +25,10 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['pluginname'] = 'PIWIK Analytics';
+$string['pluginname'] = 'Matomo Analytics (formerly Piwik)';
+$string['siteurl'] = 'Analytics URL';
+$string['siteurl_help'] = 'Enter your Matomo URL without http(s) or a trailing slash';
+$string['siteid'] = 'Matomo Site ID';
+$string['siteid_help'] = 'Enter your Matomo Site ID';
+$string['imagetrack'] = 'Image Tracking';
+$string['imagetrack_help'] = 'Enable Image Tracking for Moodle for browsers with JavaScript disabled';

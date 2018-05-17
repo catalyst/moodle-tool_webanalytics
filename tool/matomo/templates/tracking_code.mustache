@@ -1,0 +1,68 @@
+{{!
+    This file is part the Local Analytics plugin for Moodle
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template watool_matomo/tracking_code
+
+    Template for adding the Matomo (Piwik).
+
+    Classes required for JS:
+    * none
+
+    Data attributes required for JS:
+    * none
+
+    Context variables required for this template:
+    * siteid The Google tracking code
+    * addition Page tracking info added by this plugin
+
+    Example context (json):
+    { "siteid": 222111, "imagetrack": true, "doctitle": 2, "userid": 3, "siteurl": url }
+}}
+
+<!-- Start Matomo Code -->
+{{#imagetrack}}
+    <noscript>
+        <p>
+            <img src="//{{{siteurl}}}/piwik.php?idsite={{{siteid}}}" style="border:0;" alt="" />
+        </p>
+    </noscript>
+{{/imagetrack}}
+
+<script type="text/javascript">
+    var _paq = _paq || [];
+    {{{doctitle}}}
+    {{#userid}}_paq.push(['setUserId', {{{userid}}}]);{{/userid}}
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
+    _paq.push(['enableHeartBeatTimer', 30]);
+
+    function embedTrackingCode() {
+        var u='//{{{siteurl}}}/';
+        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setSiteId', {{{siteid}}}]);
+        var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=u+'piwik.js'; s.parentNode.insertBefore(g,s);
+    }
+
+    if (window.addEventListener) {
+        window.addEventListener("load", embedTrackingCode, false);
+    } else if (window.attachEvent) {
+        window.attachEvent("onload", embedTrackingCode);
+    } else {
+        embedTrackingCode();
+    }
+</script>
+<!-- End Matomo Code -->
