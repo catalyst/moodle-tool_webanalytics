@@ -79,7 +79,7 @@ class tool extends tool_base {
      */
     public function form_validate_(&$data, &$files, &$errors) {
         if (empty($data['siteid'])) {
-            $errors['siteid'] = 'Site ID should be set';
+            $errors['siteid'] = get_string('error:siteid', 'watool_guniversal');
         }
     }
 

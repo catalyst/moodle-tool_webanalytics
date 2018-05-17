@@ -30,4 +30,4 @@ $string['siteid'] = 'Google Analytics ID';
 $string['siteid_help'] = 'Enter your Google Analytics ID';
 $string['userid'] = 'Track User ID';
 $string['userid_help'] = 'If enabled userId parameter will be sent for tracking';
-
+$string['error:siteid'] = 'You must provide Google Analytics ID';
