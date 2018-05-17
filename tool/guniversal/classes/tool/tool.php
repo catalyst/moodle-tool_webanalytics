@@ -77,7 +77,7 @@ class tool extends tool_base {
     /**
      * @inheritdoc
      */
-    public function form_validate_(&$data, &$files, &$errors) {
+    public function form_validate(&$data, &$files, &$errors) {
         if (empty($data['siteid'])) {
             $errors['siteid'] = get_string('error:siteid', 'watool_guniversal');
         }

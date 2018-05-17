@@ -120,7 +120,7 @@ class edit extends moodleform {
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
-        $this->tool->form_validate_($data, $files, $errors);
+        $this->tool->form_validate($data, $files, $errors);
 
         return $errors;
     }

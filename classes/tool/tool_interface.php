@@ -78,7 +78,7 @@ interface tool_interface {
      *
      * @return void
      */
-    public function form_validate_(&$data, &$files, &$errors);
+    public function form_validate(&$data, &$files, &$errors);
 
     /**
      * Build settings array from submitted form data.
