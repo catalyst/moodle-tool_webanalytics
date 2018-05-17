@@ -43,7 +43,7 @@ class tool extends tool_base {
             $template->analyticsid = $settings['siteid'];
             $template->page = "";
 
-            if (!empty($settings->cleanurl)) {
+            if (!empty($this->record->get_property('cleanurl'))) {
                 $template->page = $this->trackurl(true, true);
             }
 

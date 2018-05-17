@@ -43,7 +43,7 @@ class tool extends tool_base {
             $template = new \stdClass();
             $template->analyticsid = $settings['siteid'];
 
-            if (!empty($settings->cleanurl)) {
+            if (!empty($this->record->get_property('cleanurl'))) {
                 $template->addition = "{'hitType' : 'pageview',
                 'page' : '" . $this->trackurl(true, true) . "',
                 'title' : '" . addslashes(format_string($PAGE->heading)) . "'

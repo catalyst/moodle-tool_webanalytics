@@ -46,7 +46,7 @@ class tool extends tool_base {
             $template->userid = $USER->id;
             $template->doctitle = "";
 
-            if ($settings->cleanurl) {
+            if (!empty($this->record->get_property('cleanurl'))) {
                 $template->doctitle = "_paq.push(['setDocumentTitle', '" . $this->trackurl() . "']);\n";
             }
 
