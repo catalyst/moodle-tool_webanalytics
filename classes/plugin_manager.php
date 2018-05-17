@@ -36,7 +36,12 @@ class plugin_manager {
     /**
      * Required class for plugins.
      */
-    const TOOL_CLASS = 'tool/tool';
+    const TOOL_CLASS = 'tool\tool';
+
+    /**
+     * Required file for plugins.
+     */
+    const TOOL_FILE = 'classes/tool/tool.php';
 
     /**
      * Required interface to implement.
@@ -102,8 +107,8 @@ class plugin_manager {
     protected function build_plugins() {
         $plugins = [];
 
-        $pluginswithclass = \core_component::get_plugin_list_with_class(self::PLUGIN_TYPE, 'tool\tool');
-        $pluginswithfile = \core_component::get_plugin_list_with_file(self::PLUGIN_TYPE, 'classes/tool/tool.php');
+        $pluginswithclass = \core_component::get_plugin_list_with_class(self::PLUGIN_TYPE, self::TOOL_CLASS);
+        $pluginswithfile = \core_component::get_plugin_list_with_file(self::PLUGIN_TYPE, self::TOOL_FILE);
         $pluginsinstalled = \core_plugin_manager::instance()->get_plugins_of_type(self::PLUGIN_TYPE);
 
         foreach ($pluginsinstalled as $name => $plugin) {
