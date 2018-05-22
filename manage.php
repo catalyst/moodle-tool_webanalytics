@@ -51,6 +51,7 @@ foreach ($plugins as $plugin) {
 }
 
 $newtool = new single_select($createurl, 'type', $options);
+$newtool->method = 'post';
 $newtool->set_label(get_string('add_tool', 'tool_webanalytics'));
 
 echo $OUTPUT->render($newtool);

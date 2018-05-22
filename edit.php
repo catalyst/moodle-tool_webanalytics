@@ -26,6 +26,7 @@
 use tool_webanalytics\form\edit;
 use tool_webanalytics\record;
 use tool_webanalytics\records_manager;
+use \tool_webanalytics\plugin_manager;
 
 require_once(__DIR__.'/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
@@ -36,6 +37,10 @@ $type = required_param('type', PARAM_ALPHAEXT);
 $edit = optional_param('edit', 0, PARAM_INT);
 
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
+
+if (!plugin_manager::instance()->is_plugin_enabled($type)) {
+    print_error('not_enabled', 'tool_webanalytics', $manageurl);
+}
 
 $action = 'create';
 $record = new stdClass();

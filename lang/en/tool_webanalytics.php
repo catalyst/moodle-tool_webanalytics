@@ -40,6 +40,7 @@ $string['delete_heading'] = 'Delete Analytics Tool';
 $string['delete_confirm'] = 'Are you sure you want to delete Analytics Tool with ID {$a}?';
 $string['add_tool'] = 'Add new Analytics Tool';
 $string['not_found'] = 'Analytics Tool not found';
+$string['not_enabled'] = 'Analytics Tool is not enabled';
 $string['name'] = 'Name';
 $string['name_help'] = 'This name will help you to identify this Analytics Tool in the list.';
 $string['enabled'] = 'Enabled';

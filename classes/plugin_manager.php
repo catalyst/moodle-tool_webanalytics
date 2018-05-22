@@ -86,6 +86,19 @@ class plugin_manager {
     }
 
     /**
+     * Check if a plugin with provided name is enabled.
+     *
+     * @param string $name A name of the plugin.
+     *
+     * @return bool
+     */
+    public function is_plugin_enabled($name) {
+        $plugins = $this->get_enabled_plugins();
+
+        return isset($plugins[$name]);
+    }
+
+    /**
      * Return a list of all enabled plugins.
      *
      * @return \tool_webanalytics\plugininfo\watool[]
@@ -96,7 +109,6 @@ class plugin_manager {
         }
 
         return static::$plugins;
-
     }
 
     /**
