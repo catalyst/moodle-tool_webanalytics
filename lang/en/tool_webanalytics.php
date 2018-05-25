@@ -57,3 +57,4 @@ $string['cleanurl'] = 'Clean URLs';
 $string['cleanurl_help'] = 'Generate clean URL for in advanced tracking';
 $string['view'] = 'View';
 $string['edit'] = 'Edit';
+$string['cachedef_records'] = 'Web Analytics Tool records';
