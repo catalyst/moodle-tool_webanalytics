@@ -33,7 +33,9 @@ use core_privacy\local\legacy_polyfill;
  * Class provider
  * @package watool_matomo\privacy
  */
-class provider implements \core_privacy\local\metadata\provider {
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider {
 
     use legacy_polyfill;
 
