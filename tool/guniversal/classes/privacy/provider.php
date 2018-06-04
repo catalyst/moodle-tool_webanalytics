@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings
+ * Privacy provider.
  *
  * @package   watool_guniversal
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -23,13 +23,27 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace watool_guniversal\privacy;
+
 defined('MOODLE_INTERNAL') || die;
 
-$string['pluginname'] = 'Google Universal Analytics';
-$string['siteid'] = 'Google Analytics ID';
-$string['siteid_help'] = 'Enter your Google Analytics ID';
-$string['userid'] = 'Track User ID';
-$string['userid_help'] = 'If enabled userId parameter will be sent for tracking';
-$string['error:siteid'] = 'You must provide Google Analytics ID';
-$string['privacy:metadata:watool_guniversal'] = 'In order to track user activity, user data needs to be sent with that service.';
-$string['privacy:metadata:watool_guniversal:userid'] = 'The userid is sent from Moodle to personalise user activity.';
+use core_privacy\local\legacy_polyfill;
+
+/**
+ * Class provider
+ * @package watool_guniversal\privacy
+ */
+class provider implements \core_privacy\local\metadata\provider {
+
+    use legacy_polyfill;
+
+    public static function _get_metadata($collection) {
+
+        $collection->add_external_location_link('watool_guniversal', [
+            'userid' => 'privacy:metadata:watool_guniversal:userid',
+        ], 'privacy:metadata:watool_guniversal');
+
+        return $collection;
+    }
+
+}
