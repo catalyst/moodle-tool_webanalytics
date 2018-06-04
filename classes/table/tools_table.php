@@ -130,7 +130,10 @@ class tools_table extends flexible_table {
         }
 
         $buttons[] = self::format_icon_link(
-            new moodle_url('/admin/tool/webanalytics/status.php', ['id' => $record->get_property('id')]),
+            new moodle_url('/admin/tool/webanalytics/status.php', [
+                'id' => $record->get_property('id'),
+                'sesskey' => sesskey(),
+            ]),
             't/' . $action,
             get_string($title)
         );

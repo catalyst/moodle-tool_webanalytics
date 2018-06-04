@@ -41,9 +41,10 @@ if (empty($record)) {
     print_error('not_found', 'tool_webanalytics', $manageurl);
 }
 
-$dbrecord = $record->export();
-$dbrecord->enabled = 1 - $dbrecord->enabled;
-$updatedrecord = new \tool_webanalytics\record($dbrecord);
-$manager->save($updatedrecord);
-
-redirect($manageurl);
+if (confirm_sesskey()) {
+    $dbrecord = $record->export();
+    $dbrecord->enabled = 1 - $dbrecord->enabled;
+    $updatedrecord = new \tool_webanalytics\record($dbrecord);
+    $manager->save($updatedrecord);
+    redirect($manageurl);
+}
