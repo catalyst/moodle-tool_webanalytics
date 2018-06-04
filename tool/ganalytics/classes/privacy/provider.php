@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Lang strings
+ * Privacy provider.
  *
  * @package   watool_ganalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -23,10 +23,29 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace watool_ganalytics\privacy;
+
 defined('MOODLE_INTERNAL') || die;
 
-$string['pluginname'] = 'Google Analytics (deprecated)';
-$string['siteid'] = 'Google Analytics ID';
-$string['siteid_help'] = 'Enter your Google Analytics ID';
-$string['error:siteid'] = 'You must provide Google Analytics ID';
-$string['privacy:metadata'] = 'Google Analytics does not store or send any user data';
+use core_privacy\local\metadata\null_provider;
+use core_privacy\local\legacy_polyfill;
+
+/**
+ * Class provider
+ * @package watool_ganalytics\privacy
+ */
+class provider implements null_provider {
+
+    use legacy_polyfill;
+
+    /**
+     * Get the language string identifier with the component's language
+     * file to explain why this plugin stores no data.
+     *
+     * @return  string
+     */
+    public static function _get_reason() {
+        return 'privacy:metadata';
+    }
+
+}
