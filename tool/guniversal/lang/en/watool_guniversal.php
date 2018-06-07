@@ -31,3 +31,5 @@ $string['siteid_help'] = 'Enter your Google Analytics ID';
 $string['userid'] = 'Track User ID';
 $string['userid_help'] = 'If enabled userId parameter will be sent for tracking';
 $string['error:siteid'] = 'You must provide Google Analytics ID';
+$string['privacy:metadata:watool_guniversal'] = 'In order to track user activity, user data needs to be sent with that service.';
+$string['privacy:metadata:watool_guniversal:userid'] = 'The userid is sent from Moodle to personalise user activity.';

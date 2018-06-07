@@ -58,3 +58,4 @@ $string['cleanurl_help'] = 'Generate clean URL for in advanced tracking';
 $string['view'] = 'View';
 $string['edit'] = 'Edit';
 $string['cachedef_records'] = 'Web Analytics Tool records';
+$string['privacy:metadata'] = 'Web Analytics Tool does not store any personal data, however sub-plugins implement their own privacy policies.';

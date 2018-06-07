@@ -29,3 +29,4 @@ $string['pluginname'] = 'Google Analytics (deprecated)';
 $string['siteid'] = 'Google Analytics ID';
 $string['siteid_help'] = 'Enter your Google Analytics ID';
 $string['error:siteid'] = 'You must provide Google Analytics ID';
+$string['privacy:metadata'] = 'Google Analytics does not store or send any user data';

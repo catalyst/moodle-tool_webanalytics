@@ -37,3 +37,5 @@ $string['error:siteurl'] = 'You must provide site URL';
 $string['error:siteurlinvalid'] = 'You must provide valid site URL';
 $string['error:siteurlhttps'] = 'Please provide URL without http(s)';
 $string['error:siteurltrailingslash'] = 'Please provide URL without a trailing slash';
+$string['privacy:metadata:watool_matomo'] = 'In order to track user activity, user data needs to be sent with that service.';
+$string['privacy:metadata:watool_matomo:userid'] = 'The userid is sent from Moodle to personalise user activity.';

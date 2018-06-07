@@ -15,17 +15,37 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Privacy provider.
  *
- * @package   watool_matomo
+ * @package   watool_guniversal
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
  * @copyright 2018 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+namespace watool_guniversal\privacy;
+
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2018060400;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2018060400;      // Same as version
-$plugin->requires  = 2017051500;      // Requires Moodle 3.3 or later.
-$plugin->component = "watool_matomo";
+use core_privacy\local\legacy_polyfill;
+
+/**
+ * Class provider
+ * @package watool_guniversal\privacy
+ */
+class provider implements
+    \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\plugin\provider {
+
+    use legacy_polyfill;
+
+    public static function _get_metadata($collection) {
+
+        $collection->add_external_location_link('watool_guniversal', [
+            'userid' => 'privacy:metadata:watool_guniversal:userid',
+        ], 'privacy:metadata:watool_guniversal');
+
+        return $collection;
+    }
+
+}
