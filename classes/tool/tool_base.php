@@ -66,8 +66,55 @@ abstract class tool_base implements tool_interface {
      *
      * @return string
      */
-    protected function build_location() {
+    protected final function build_location() {
         return "additionalhtml" . $this->record->get_property('location');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public final function insert_tracking() {
+        global $CFG;
+
+        if ($this->should_track()) {
+            $location = $this->build_location();
+            $this->remove_existing_tracking_code();
+            $CFG->$location .= $this->get_start() . $this->get_tracking_code() . $this->get_end();
+        }
+    }
+
+    /**
+     * Remove existing tracking code to avoid duplicates.
+     */
+    protected function remove_existing_tracking_code() {
+        global $CFG;
+
+        $location = $this->build_location();
+
+        $re = '/' .$this->get_start() . '[\s\S]*' . $this->get_end() . '/m';
+        $replaced = preg_replace($re, '', $CFG->$location);
+
+        if ($CFG->$location != $replaced) {
+            set_config($location, $replaced);
+        }
+    }
+
+    /**
+     * Get a string snippet to be able to find where the code starts on the page.
+     *
+     * @return string
+     */
+    protected function get_start() {
+        return '<!-- WEB ANALYTICS ' . $this->record->get_property('id') . ' START -->';
+    }
+
+    /**
+     * Get a string snippet to be able to find where the code ends on the page.
+     *
+     * @return string
+     */
+    protected function get_end() {
+        return '<!-- WEB ANALYTICS ' . $this->record->get_property('id') . ' END -->';
     }
 
     /**

@@ -34,31 +34,28 @@ class tool extends tool_base {
     /**
      * @inheritdoc
      */
-    public function insert_tracking() {
-        global $CFG, $OUTPUT, $USER, $PAGE;
+    public function get_tracking_code() {
+        global $OUTPUT, $USER, $PAGE;
 
-        if ($this->should_track()) {
-            $settings = $this->record->get_property('settings');
+        $settings = $this->record->get_property('settings');
 
-            $template = new \stdClass();
-            $template->analyticsid = $settings['siteid'];
+        $template = new \stdClass();
+        $template->analyticsid = $settings['siteid'];
 
-            if (!empty($this->record->get_property('cleanurl'))) {
-                $template->addition = "{'hitType' : 'pageview',
+        if (!empty($this->record->get_property('cleanurl'))) {
+            $template->addition = "{'hitType' : 'pageview',
                 'page' : '" . $this->trackurl(true, true) . "',
                 'title' : '" . addslashes(format_string($PAGE->heading)) . "'
                 }";
-            } else {
-                $template->addition = "'pageview'";
-            }
-
-            if (!empty($settings['userid']) && !empty($USER->id)) {
-                $template->userid = $USER->id;
-            }
-
-            $location = $this->build_location();
-            $CFG->$location .= $OUTPUT->render_from_template('watool_guniversal/tracking_code', $template);
+        } else {
+            $template->addition = "'pageview'";
         }
+
+        if (!empty($settings['userid']) && !empty($USER->id)) {
+            $template->userid = $USER->id;
+        }
+
+        return $OUTPUT->render_from_template('watool_guniversal/tracking_code', $template);
     }
 
     /**

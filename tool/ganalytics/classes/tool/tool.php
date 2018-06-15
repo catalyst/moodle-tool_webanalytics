@@ -33,23 +33,20 @@ class tool extends tool_base {
     /**
      * @inheritdoc
      */
-    public function insert_tracking() {
-        global $CFG, $OUTPUT;
+    public function get_tracking_code() {
+        global $OUTPUT;
 
-        if ($this->should_track()) {
-            $settings = $this->record->get_property('settings');
+        $settings = $this->record->get_property('settings');
 
-            $template = new \stdClass();
-            $template->analyticsid = $settings['siteid'];
-            $template->page = "";
+        $template = new \stdClass();
+        $template->analyticsid = $settings['siteid'];
+        $template->page = "";
 
-            if (!empty($this->record->get_property('cleanurl'))) {
-                $template->page = $this->trackurl(true, true);
-            }
-
-            $location = $this->build_location();
-            $CFG->$location .= $OUTPUT->render_from_template('watool_ganalytics/tracking_code', $template);
+        if (!empty($this->record->get_property('cleanurl'))) {
+            $template->page = $this->trackurl(true, true);
         }
+
+        return $OUTPUT->render_from_template('watool_ganalytics/tracking_code', $template);
     }
 
     /**

@@ -134,7 +134,7 @@ class records_manager implements records_manager_interface {
     /**
      * Returns all existing enabled analytics records.
      *
-     * @return array
+     * @return \tool_webanalytics\record[]
      */
     public function get_enabled() {
         if ($this->enabledrecords === false) {
