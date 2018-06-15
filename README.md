@@ -34,6 +34,11 @@ The plugin currently supports following analytics tools.
 - Choose whether you want to send Clean URLs (not recommended): Google analytics will no longer be able to use overlays and linking back to your Moodle site
 - Choose whether you want to send User ID reference
 
+### Google Tag Manager
+- Tag Manager adds Analytics page view tags, AdWords Conversion Tracking tags, and others in the Tag Manager user interface.
+- Set your Tag Manager Container ID tracking ID
+- Choose whether you want to track admins
+
 ### Google Legacy Analytics (soon deprecated by Google)
 - Plugin modifies the page speed sample to have 50% of your visitors samples for page speed instead of 1% making it much more useful
 - Set your Google tracking ID
