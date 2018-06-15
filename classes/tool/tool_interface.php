@@ -45,6 +45,13 @@ interface tool_interface {
     public function should_track();
 
     /**
+     * Get tracking code to insert.
+     *
+     * @return string
+     */
+    public function get_tracking_code();
+
+    /**
      * Insert tracking code.
      *
      * @return void

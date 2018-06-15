@@ -33,26 +33,23 @@ class tool extends tool_base {
     /**
      * @inheritdoc
      */
-    public function insert_tracking() {
-        global $CFG, $OUTPUT, $USER;
+    public function get_tracking_code() {
+        global $OUTPUT, $USER;
 
-        if ($this->should_track()) {
-            $settings = $this->record->get_property('settings');
+        $settings = $this->record->get_property('settings');
 
-            $template = new \stdClass();
-            $template->siteid = $settings['siteid'];
-            $template->siteurl = $settings['siteurl'];
-            $template->imagetrack = $settings['imagetrack'];
-            $template->userid = $USER->id;
-            $template->doctitle = "";
+        $template = new \stdClass();
+        $template->siteid = $settings['siteid'];
+        $template->siteurl = $settings['siteurl'];
+        $template->imagetrack = $settings['imagetrack'];
+        $template->userid = $USER->id;
+        $template->doctitle = "";
 
-            if (!empty($this->record->get_property('cleanurl'))) {
-                $template->doctitle = "_paq.push(['setDocumentTitle', '" . $this->trackurl() . "']);\n";
-            }
-
-            $location = $this->build_location();
-            $CFG->$location .= $OUTPUT->render_from_template('watool_matomo/tracking_code', $template);
+        if (!empty($this->record->get_property('cleanurl'))) {
+            $template->doctitle = "_paq.push(['setDocumentTitle', '" . $this->trackurl() . "']);\n";
         }
+
+        return $OUTPUT->render_from_template('watool_matomo/tracking_code', $template);
     }
 
     /**
