@@ -94,7 +94,9 @@ class tools_table extends flexible_table {
      * @return string
      */
     public function col_type(record_interface $record) {
-        return $record->get_property('type');
+        $identifier = 'watool_' . $record->get_property('type');
+
+        return get_string('pluginname', $identifier);
     }
 
     /**
