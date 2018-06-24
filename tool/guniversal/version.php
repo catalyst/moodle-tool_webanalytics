@@ -25,7 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2018060400;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2018060400;      // Same as version
+$plugin->version   = 2018062400;      // The current plugin version (Date: YYYYMMDDXX).
+$plugin->release   = 2018062400;      // Same as version
 $plugin->requires  = 2017051500;      // Requires Moodle 3.3 or later.
 $plugin->component = "watool_guniversal";
