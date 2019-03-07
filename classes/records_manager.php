@@ -183,6 +183,15 @@ class records_manager implements records_manager_interface {
     }
 
     /**
+     * Check if records manager is ready for retrieving records.
+     *
+     * @return bool
+     */
+    public function is_ready() {
+        return $this->db->get_manager()->table_exists(self::TABLE_NAME);
+    }
+
+    /**
      * Get multiple records of the analytics.
      *
      * @param array $params Parameters to use in get_records functions.
