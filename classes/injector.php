@@ -35,6 +35,12 @@ class injector {
     private static $injected = false;
 
     /**
+     * Records manager.
+     * @var \tool_webanalytics\records_manager_interface
+     */
+    private static $recordsmanager;
+
+    /**
      * Inject Web analytics tracking code for all tools.
      */
     public static function inject() {
@@ -47,10 +53,13 @@ class injector {
             return;
         }
 
+        if (!self::get_records_manager()->is_ready()) {
+            return;
+        }
+
         self::$injected = true;
 
-        $manager = new records_manager();
-        $records = $manager->get_enabled();
+        $records = self::get_records_manager()->get_enabled();
         $plugins = plugin_manager::instance()->get_enabled_plugins();
 
         if (!empty($records) && !empty($plugins)) {
@@ -60,6 +69,19 @@ class injector {
                 $tool->insert_tracking();
             }
         }
+    }
+
+    /**
+     * Get a records manager.
+     *
+     * @return \tool_webanalytics\records_manager_interface
+     */
+    public static function get_records_manager() {
+        if (!isset(self::$recordsmanager)) {
+            self::$recordsmanager = new records_manager();
+        }
+
+        return self::$recordsmanager;
     }
 
     /**

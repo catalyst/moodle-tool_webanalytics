@@ -72,4 +72,11 @@ interface records_manager_interface {
      * @return void
      */
     public function delete($id);
+
+    /**
+     * Check if records manager is ready for retrieving records.
+     *
+     * @return bool
+     */
+    public function is_ready();
 }
