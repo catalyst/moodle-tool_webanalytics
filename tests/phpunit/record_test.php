@@ -52,6 +52,15 @@ class tool_webanalytics_record_test extends advanced_testcase {
     }
 
     /**
+     * Teardown unit tests.
+     */
+    public function tearDown() {
+        $this->data = null;
+        $this->record = null;
+        parent::tearDown();
+    }
+
+    /**
      * Test implements required interface.
      */
     public function test_implements_required_interface() {
