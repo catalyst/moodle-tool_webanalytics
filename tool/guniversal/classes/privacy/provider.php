@@ -28,8 +28,10 @@ namespace watool_guniversal\privacy;
 defined('MOODLE_INTERNAL') || die;
 
 use core_privacy\local\legacy_polyfill;
+use core_privacy\local\request\approved_userlist;
 use \core_privacy\local\request\contextlist;
 use \core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\userlist;
 
 /**
  * Class provider
@@ -37,6 +39,7 @@ use \core_privacy\local\request\approved_contextlist;
  */
 class provider implements
     \core_privacy\local\metadata\provider,
+    \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\request\plugin\provider {
 
     use legacy_polyfill;
@@ -84,4 +87,19 @@ class provider implements
     public static function _delete_data_for_user(approved_contextlist $contextlist) {
     }
 
+    /**
+     * Get the list of users who have data within a context.
+     *
+     * @param   userlist $userlist The userlist containing the list of users who have data in this context/plugin combination.
+     */
+    public static function get_users_in_context(userlist $userlist) {
+    }
+
+    /**
+     * Delete multiple users within a single context.
+     *
+     * @param   approved_userlist $userlist The approved context and user information to delete information for.
+     */
+    public static function delete_data_for_users(approved_userlist $userlist) {
+    }
 }
