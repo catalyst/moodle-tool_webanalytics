@@ -28,6 +28,8 @@ defined('MOODLE_INTERNAL') || die;
 $string['pluginname'] = 'Matomo Analytics (formerly Piwik)';
 $string['siteurl'] = 'Analytics URL';
 $string['siteurl_help'] = 'Enter your Matomo URL without http(s) or a trailing slash';
+$string['piwikjsurl'] = 'Alternative piwik.js URL';
+$string['piwikjsurl_help'] = 'Enter alternative piwik.js URL (optional) without http(s), piwik.js or a trailing slash, used when you host your own version of piwik.js';
 $string['siteid'] = 'Matomo Site ID';
 $string['siteid_help'] = 'Enter your Matomo Site ID';
 $string['imagetrack'] = 'Image Tracking';

@@ -41,6 +41,8 @@ class tool extends tool_base {
         $template = new \stdClass();
         $template->siteid = $settings['siteid'];
         $template->siteurl = $settings['siteurl'];
+        $custompiwikjs = (isset($settings['piwikjsurl']) && !empty($settings['piwikjsurl']));
+        $template->piwikjsurl = $custompiwikjs ? $settings['piwikjsurl'] : $settings['siteurl'];
         $template->imagetrack = $settings['imagetrack'];
         $template->userid = $USER->id;
         $template->doctitle = "";
@@ -60,6 +62,11 @@ class tool extends tool_base {
         $mform->addHelpButton('siteurl', 'siteurl', 'watool_matomo');
         $mform->setType('siteurl', PARAM_TEXT);
         $mform->addRule('siteurl', get_string('required'), 'required', null, 'client');
+
+        $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
+        $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
+        $mform->setType('piwikjsurl', PARAM_URL);
+        $mform->setDefault('piwikjsurl', '');
 
         $mform->addElement('text', 'siteid', get_string('siteid', 'watool_matomo'));
         $mform->addHelpButton('siteid', 'siteid', 'watool_matomo');
@@ -93,6 +100,14 @@ class tool extends tool_base {
                 $errors['siteurl'] = get_string('error:siteurltrailingslash', 'watool_matomo');
             }
         }
+
+        if (!empty($data['piwikjsurl']) && preg_match("/^(http|https):\/\//", $data['piwikjsurl'])) {
+            $errors['piwikjsurl'] = get_string('error:siteurlhttps', 'watool_matomo');
+        }
+
+        if (!empty($data['piwikjsurl']) && substr(trim($data['piwikjsurl']), -1) == '/') {
+            $errors['piwikjsurl'] = get_string('error:siteurltrailingslash', 'watool_matomo');
+        }
     }
 
     /**
@@ -102,6 +117,7 @@ class tool extends tool_base {
         $settings = [];
         $settings['siteid']  = isset($data->siteid) ? $data->siteid : '';
         $settings['siteurl'] = isset($data->siteurl) ? $data->siteurl : '';
+        $settings['piwikjsurl'] = isset($data->piwikjsurl) ? $data->piwikjsurl : '';
         $settings['imagetrack'] = isset($data->imagetrack) ? $data->imagetrack : 0;
 
         return $settings;
@@ -113,6 +129,7 @@ class tool extends tool_base {
     public function form_set_data(\stdClass &$data) {
         $data->siteid = isset($data->settings['siteid']) ? $data->settings['siteid'] : '';
         $data->siteurl = isset($data->settings['siteurl']) ? $data->settings['siteurl'] : '';
+        $data->piwikjsurl = isset($data->settings['piwikjsurl']) ? $data->settings['piwikjsurl'] : '';
         $data->imagetrack = isset($data->settings['imagetrack']) ? $data->settings['imagetrack'] : 0;
     }
 }

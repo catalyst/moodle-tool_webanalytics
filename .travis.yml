@@ -14,6 +14,9 @@ cache:
 addons:
    postgresql: "9.4"
 
+services:
+  - mysql
+
 matrix:
   include:
     # PHP 7.0
