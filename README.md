@@ -25,7 +25,9 @@ The plugin currently supports following analytics tools.
 - Choose whether you want image fallback tracking
 - Enter the URL to your Matomo install excluding http/https and trailing slashes
 - Choose whether you want to track admins (not recommended)
-- Choose whether you want to send Clean URLs (recommended): Matomo will aggregate Page Titles and show a nice waterfall cascade of all sites, including categories and action types
+- Choose whether you want to send Clean URLs (recommended): Matomo will aggregate Page Titles and show a nice waterfall cascade of all sites, 
+- Set alternative piwik.js URL for any purpose
+including categories and action types
 
 ### Google Universal Analytics
 - Plugin modifies the page speed sample to have 50% of your visitors samples for page speed instead of 1% making it much more useful
