@@ -55,6 +55,10 @@ class tool extends tool_base {
             $template->userid = $USER->id;
         }
 
+        if (!empty($settings['anonymizeip'])) {
+            $template->anonymizeip = true;
+        }
+
         return $OUTPUT->render_from_template('watool_guniversal/tracking_code', $template);
     }
 
@@ -69,6 +73,9 @@ class tool extends tool_base {
 
         $mform->addElement('checkbox', 'userid', get_string('userid', 'watool_guniversal'));
         $mform->addHelpButton('userid', 'userid', 'watool_guniversal');
+
+        $mform->addElement('checkbox', 'anonymizeip', get_string('anonymizeip', 'watool_guniversal'));
+        $mform->addHelpButton('anonymizeip', 'anonymizeip', 'watool_guniversal');
     }
 
     /**
@@ -87,6 +94,7 @@ class tool extends tool_base {
         $settings = [];
         $settings['siteid']  = isset($data->siteid) ? $data->siteid : '';
         $settings['userid'] = isset($data->userid) ? $data->userid : 0;
+        $settings['anonymizeip'] = isset($data->anonymizeip) ? $data->anonymizeip : 0;
 
         return $settings;
     }
@@ -97,5 +105,6 @@ class tool extends tool_base {
     public function form_set_data(\stdClass &$data) {
         $data->siteid = isset($data->settings['siteid']) ? $data->settings['siteid'] : '';
         $data->userid = isset($data->settings['userid']) ? $data->settings['userid'] : 0;
+        $data->anonymizeip = isset($data->settings['anonymizeip']) ? $data->settings['anonymizeip'] : 0;
     }
 }
