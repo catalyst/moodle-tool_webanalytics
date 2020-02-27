@@ -35,6 +35,7 @@ including categories and action types
 - Choose whether you want to track admins (not recommended)
 - Choose whether you want to send Clean URLs (not recommended): Google analytics will no longer be able to use overlays and linking back to your Moodle site
 - Choose whether you want to send User ID reference
+- Choose whether you want to anonymize the IP address of the hit sent to Google Analytics
 
 ### Google Tag Manager
 - Tag Manager adds Analytics page view tags, AdWords Conversion Tracking tags, and others in the Tag Manager user interface.
