@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Interface describes records manager behaviour.
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -29,6 +29,9 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Interface describes records manager behaviour.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface records_manager_interface {
 

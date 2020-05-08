@@ -29,6 +29,12 @@ use tool_webanalytics\record_interface;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Interface to describe WA tools.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 interface tool_interface {
     /**
      * Constructor.
@@ -99,7 +105,7 @@ interface tool_interface {
     /**
      * Set form data.
      *
-     * @param $data
+     * @param \stdClass $data Form data.
      *
      * @return void
      */

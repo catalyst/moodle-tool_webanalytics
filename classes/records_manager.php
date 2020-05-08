@@ -30,6 +30,9 @@ defined('MOODLE_INTERNAL') || die();
 
 /**
  * Class manages records in DB.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class records_manager implements records_manager_interface {
     /**

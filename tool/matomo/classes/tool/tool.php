@@ -29,9 +29,18 @@ use tool_webanalytics\tool\tool_base;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Web analytics tool.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class tool extends tool_base {
+
     /**
-     * @inheritdoc
+     * Get tracking code to insert.
+     *
+     * @return string
      */
     public function get_tracking_code() {
         global $OUTPUT, $USER;
@@ -55,7 +64,11 @@ class tool extends tool_base {
     }
 
     /**
-     * @inheritdoc
+     * Add settings elements to Web Analytics Tool form.
+     *
+     * @param \MoodleQuickForm $mform Web Analytics Tool form.
+     *
+     * @return void
      */
     public function form_add_settings_elements(\MoodleQuickForm &$mform) {
         $mform->addElement('text', 'siteurl', get_string('siteurl', 'watool_matomo'));
@@ -78,7 +91,13 @@ class tool extends tool_base {
     }
 
     /**
-     * @inheritdoc
+     * Validate submitted data to Web Analytics Tool form.
+     *
+     * @param array $data array of ("fieldname"=>value) of submitted data
+     * @param array $files array of uploaded files "element_name"=>tmp_file_path
+     * @param array $errors array of ("fieldname"=>error message)
+     *
+     * @return void
      */
     public function form_validate(&$data, &$files, &$errors) {
         if (empty($data['siteid'])) {
@@ -111,7 +130,11 @@ class tool extends tool_base {
     }
 
     /**
-     * @inheritdoc
+     * Build settings array from submitted form data.
+     *
+     * @param \stdClass $data
+     *
+     * @return array
      */
     public function form_build_settings(\stdClass $data) {
         $settings = [];
@@ -124,7 +147,11 @@ class tool extends tool_base {
     }
 
     /**
-     * @inheritdoc
+     * Set form data.
+     *
+     * @param \stdClass $data Form data.
+     *
+     * @return void
      */
     public function form_set_data(\stdClass &$data) {
         $data->siteid = isset($data->settings['siteid']) ? $data->settings['siteid'] : '';

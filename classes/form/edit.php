@@ -30,7 +30,12 @@ use tool_webanalytics\plugin_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
-
+/**
+ * Edit form.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class edit extends moodleform {
     /**
      * Web analytics type.
@@ -60,7 +65,7 @@ class edit extends moodleform {
     }
 
     /**
-     * @inheritdoc
+     * Form definition.
      *
      * @see moodleform::definition()
      */
@@ -114,9 +119,12 @@ class edit extends moodleform {
     }
 
     /**
-     * @inheritdoc
+     * Server side validation.
      *
-     * @see moodleform::validation()
+     * @param array $data array of ("fieldname"=>value) of submitted data
+     * @param array $files array of uploaded files "element_name"=>tmp_file_path
+     * @return array of "element_name"=>"error_description" if there are errors,
+     *         or an empty array if everything is OK (true allowed for backwards compatibility too).
      */
     public function validation($data, $files) {
         $errors = parent::validation($data, $files);
@@ -126,9 +134,12 @@ class edit extends moodleform {
     }
 
     /**
-     * @inheritdoc
+     * Return submitted data if properly submitted or returns NULL if validation fails or
+     * if there is no submitted data.
      *
-     * @see moodleform::get_data()
+     * note: $slashed param removed
+     *
+     * @return object submitted data; NULL if not valid or not submitted or cancelled
      */
     public function get_data() {
         $data = parent::get_data();
@@ -141,9 +152,13 @@ class edit extends moodleform {
     }
 
     /**
-     * @inheritdoc
+     * Load in existing data as form defaults. Usually new entry defaults are stored directly in
+     * form definition (new entry form); this function is used to load in data where values
+     * already exist and data is being edited (edit entry form).
      *
-     * @see moodleform::set_data()
+     * note: $slashed param removed
+     *
+     * @param \stdClass|array $default_values object or array of default values
      */
     public function set_data($defaultvalues) {
         $this->tool->form_set_data($defaultvalues);
@@ -151,9 +166,7 @@ class edit extends moodleform {
     }
 
     /**
-     * @inheritdoc
-     *
-     * @see moodleform::definition_after_data()
+     * Setup the form depending on current values.
      */
     public function definition_after_data() {
         parent::definition_after_data();

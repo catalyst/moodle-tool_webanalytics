@@ -29,7 +29,12 @@ use tool_webanalytics\record_interface;
 
 defined('MOODLE_INTERNAL') || die();
 
-
+/**
+ * Web analytics abstract tool class.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 abstract class tool_base implements tool_interface {
     /**
      * @var \tool_webanalytics\record
@@ -37,14 +42,18 @@ abstract class tool_base implements tool_interface {
     protected $record;
 
     /**
-     * @inheritdoc
+     * Constructor.
+     *
+     * @param \tool_webanalytics\record_interface $record
      */
     public function __construct(record_interface $record) {
         $this->record = $record;
     }
 
     /**
-     * @inheritdoc
+     * Check if we should track.
+     *
+     * @return bool
      */
     public function should_track() {
         if (!is_siteadmin()) {
@@ -55,7 +64,11 @@ abstract class tool_base implements tool_interface {
     }
 
     /**
-     * @inheritdoc
+     * Add settings elements to Web Analytics Tool form.
+     *
+     * @param \MoodleQuickForm $mform Web Analytics Tool form.
+     *
+     * @return void
      */
     public function form_definition_after_data(\MoodleQuickForm &$mform) {
 
@@ -71,7 +84,9 @@ abstract class tool_base implements tool_interface {
     }
 
     /**
-     * @inheritdoc
+     * Insert tracking code.
+     *
+     * @return void
      */
     public final function insert_tracking() {
         global $CFG;

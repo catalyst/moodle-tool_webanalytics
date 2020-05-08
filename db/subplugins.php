@@ -25,7 +25,4 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$subplugins = array(
-    'watool' => 'admin/tool/webanalytics/tool',
-);
-
+$subplugins = (array) json_decode(file_get_contents(__DIR__ . "/subplugins.json"))->plugintypes;

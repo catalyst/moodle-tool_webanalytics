@@ -18,17 +18,13 @@
 
     Template for adding the Google Universal Tracking script.
 
-    Classes required for JS:
-    * none
-
-    Data attributes required for JS:
-    * none
-
-    Context variables required for this template:
-    * analyticsid The Google tracking code
-    * addition Page tracking info added by this plugin
-    * userid Moodle User ID
-    * addition Page tracking info added by this plugin
+    Example context (json):
+    {
+        "analyticsid": "The Google tracking code",
+        "addition": "Page tracking info added by this plugin",
+        "userid": "Moodle User ID",
+        "anonymizeip": "Define if we need to anonymize user's ip"
+    }
 }}
 
 <script type="text/javascript">

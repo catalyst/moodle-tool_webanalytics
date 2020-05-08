@@ -30,6 +30,12 @@ use tool_webanalytics\record_interface;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Sub plugin class.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class watool extends base {
 
     /**

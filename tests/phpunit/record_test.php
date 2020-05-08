@@ -28,6 +28,12 @@ defined('MOODLE_INTERNAL') || die();
 use tool_webanalytics\record;
 
 
+/**
+ * Tests for record class.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Test data
@@ -89,8 +95,8 @@ class tool_webanalytics_record_test extends advanced_testcase {
      * Test correct default data.
      *
      * @dataProvider default_values_data_provider
-     * @param $name
-     * @param $value
+     * @param string $name Name.
+     * @param mixed $value Value.
      */
     public function test_has_correct_default_values($name, $value) {
         $this->assertEquals($value, $this->record->get_property($name));
@@ -204,6 +210,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
      * Test that return empty array of invalid settings set.
      *
      * @dataProvider not_array_settings_data_provider
+     * @param mixed $settings Test settings.
      */
     public function test_return_empty_settings_if_they_are_not_array($settings) {
         $this->data->settings = $settings;
@@ -216,6 +223,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
      * Test that return empty array of invalid settings set.
      *
      * @dataProvider not_array_settings_data_provider
+     * @param mixed $settings Test settings.
      */
     public function test_export_empty_settings_if_they_are_not_array($settings) {
         $this->data->settings = $settings;

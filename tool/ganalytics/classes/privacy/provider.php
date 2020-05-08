@@ -32,7 +32,9 @@ use core_privacy\local\legacy_polyfill;
 
 /**
  * Class provider
- * @package watool_ganalytics\privacy
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements null_provider {
 
