@@ -12,7 +12,7 @@ cache:
     - $HOME/.composer/cache
 
 addons:
-   postgresql: "9.4"
+   postgresql: "9.6"
 
 services:
   - mysql
