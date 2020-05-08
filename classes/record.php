@@ -30,9 +30,11 @@ use stdClass;
 
 defined('MOODLE_INTERNAL') || die();
 
-
 /**
  * Class analytics described single analytics built from DB record.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class record implements record_interface {
 

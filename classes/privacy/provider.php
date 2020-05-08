@@ -31,8 +31,10 @@ use core_privacy\local\metadata\null_provider;
 use core_privacy\local\legacy_polyfill;
 
 /**
- * Class provider
- * @package tool_webanalytics\privacy
+ * Privacy provider.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements null_provider {
 

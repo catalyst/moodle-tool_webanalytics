@@ -37,6 +37,9 @@ require_once($CFG->libdir.'/tablelib.php');
 
 /**
  * Class tools_table
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tools_table extends flexible_table {
     /**
@@ -203,7 +206,7 @@ class tools_table extends flexible_table {
 
 
     /**
-     * @inheritdoc
+     * Display no results.
      */
     public function print_nothing_to_display() {
         echo html_writer::div(get_string('no_analytics', 'tool_webanalytics'));

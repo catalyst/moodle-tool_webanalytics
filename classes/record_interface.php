@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Interface to describe records.
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
@@ -27,6 +27,12 @@ namespace tool_webanalytics;
 
 defined('MOODLE_INTERNAL') || die();
 
+/**
+ * Interface to describe records.
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 interface record_interface {
 
     /**
@@ -40,14 +46,13 @@ interface record_interface {
      * Return property value.
      *
      * @param string $name Property name.
-     *
      * @return mixed Property value.
-     *
-     * @throws \coding_exception If invalid property requested.
      */
     public function get_property($name);
 
     /**
+     * Export the record.
+     *
      * @return mixed
      */
     public function export();

@@ -35,7 +35,9 @@ use core_privacy\local\request\userlist;
 
 /**
  * Class provider
- * @package watool_guniversal\privacy
+ *
+ * @copyright  2020 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
     \core_privacy\local\metadata\provider,
