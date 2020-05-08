@@ -18,18 +18,15 @@
 
     Template for adding the Matomo (Piwik).
 
-    Classes required for JS:
-    * none
-
-    Data attributes required for JS:
-    * none
-
-    Context variables required for this template:
-    * siteid The Matomo site ID
-    * addition Page tracking info added by this plugin
-    * siteurl Matomo site URL
-    * doctitle Page title
-    * imagetrack Image track
+    Example context (json):
+    {
+        "siteid": "The Matomo site ID",
+        "addition": "Page tracking info added by this plugin",
+        "siteurl": "Matomo site URL",
+        "piwikjsurl": "Alternative piwik.js URL",
+        "doctitle": "Page title",
+        "imagetrack": "Image tracking"
+    }
 }}
 
 <!-- Start Matomo Code -->
