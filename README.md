@@ -28,6 +28,8 @@ The plugin currently supports following analytics tools.
 - Choose whether you want to send Clean URLs (recommended): Matomo will aggregate Page Titles and show a nice waterfall cascade of all sites, 
 - Set alternative piwik.js URL for any purpose
 including categories and action types
+- Optional tracking for User ID
+- User ID could be id or username
 
 ### Google Universal Analytics
 - Plugin modifies the page speed sample to have 50% of your visitors samples for page speed instead of 1% making it much more useful
