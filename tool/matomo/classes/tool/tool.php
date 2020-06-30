@@ -53,7 +53,13 @@ class tool extends tool_base {
         $custompiwikjs = (isset($settings['piwikjsurl']) && !empty($settings['piwikjsurl']));
         $template->piwikjsurl = $custompiwikjs ? $settings['piwikjsurl'] : $settings['siteurl'];
         $template->imagetrack = $settings['imagetrack'];
-        $template->userid = $USER->id;
+
+        $template->userid = false;
+
+        if (!empty($settings['userid']) && !empty($settings['usefield']) && !empty($USER->{$settings['usefield']})) {
+            $template->userid = $USER->{$settings['usefield']};
+        }
+
         $template->doctitle = "";
 
         if (!empty($this->record->get_property('cleanurl'))) {
@@ -88,6 +94,21 @@ class tool extends tool_base {
 
         $mform->addElement('checkbox', 'imagetrack', get_string('imagetrack', 'watool_matomo'));
         $mform->addHelpButton('imagetrack', 'imagetrack', 'watool_matomo');
+
+        $mform->addElement('checkbox', 'userid', get_string('userid', 'watool_matomo'));
+        $mform->addHelpButton('userid', 'userid', 'watool_matomo');
+        $mform->setDefault('userid', 1);
+
+        $choices = [
+            'id' => 'id',
+            'username' => 'username',
+        ];
+
+        $mform->addElement('select', 'usefield', get_string('usefield', 'watool_matomo'), $choices);
+        $mform->addHelpButton('usefield', 'usefield', 'watool_matomo');
+        $mform->setType('usefield', PARAM_TEXT);
+
+        $mform->disabledIf('usefield', 'userid');
     }
 
     /**
@@ -142,6 +163,8 @@ class tool extends tool_base {
         $settings['siteurl'] = isset($data->siteurl) ? $data->siteurl : '';
         $settings['piwikjsurl'] = isset($data->piwikjsurl) ? $data->piwikjsurl : '';
         $settings['imagetrack'] = isset($data->imagetrack) ? $data->imagetrack : 0;
+        $settings['userid'] = isset($data->userid) ? $data->userid : 0;
+        $settings['usefield'] = isset($data->usefield) ? $data->usefield : 'id';
 
         return $settings;
     }
@@ -158,5 +181,7 @@ class tool extends tool_base {
         $data->siteurl = isset($data->settings['siteurl']) ? $data->settings['siteurl'] : '';
         $data->piwikjsurl = isset($data->settings['piwikjsurl']) ? $data->settings['piwikjsurl'] : '';
         $data->imagetrack = isset($data->settings['imagetrack']) ? $data->settings['imagetrack'] : 0;
+        $data->userid = isset($data->settings['userid']) ? $data->settings['userid'] : 1;
+        $data->usefield = isset($data->settings['usefield']) ? $data->settings['usefield'] : 'id';
     }
 }
