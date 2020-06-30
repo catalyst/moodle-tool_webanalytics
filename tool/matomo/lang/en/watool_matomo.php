@@ -41,3 +41,7 @@ $string['error:siteurlhttps'] = 'Please provide URL without http(s)';
 $string['error:siteurltrailingslash'] = 'Please provide URL without a trailing slash';
 $string['privacy:metadata:watool_matomo'] = 'In order to track user activity, user data needs to be sent with that service.';
 $string['privacy:metadata:watool_matomo:userid'] = 'The userid is sent from Moodle to personalise user activity.';
+$string['userid'] = 'Track User ID';
+$string['userid_help'] = 'If enabled userId parameter will be sent for tracking';
+$string['usefield'] = 'User ID field';
+$string['usefield_help'] = 'Select a user field to be used as User ID when sending for tracking';
