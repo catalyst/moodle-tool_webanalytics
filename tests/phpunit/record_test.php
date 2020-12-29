@@ -51,7 +51,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Initial set up.
      */
-    public function setUp() {
+    public function setUp() : void {
         $this->resetAfterTest();
         $this->data = new stdClass();
         $this->record = new record($this->data);
@@ -60,7 +60,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Teardown unit tests.
      */
-    public function tearDown() {
+    public function tearDown() : void {
         $this->data = null;
         $this->record = null;
         parent::tearDown();
@@ -127,11 +127,10 @@ class tool_webanalytics_record_test extends advanced_testcase {
 
     /**
      * Test throw coding exception if request invalid property.
-     *
-     * @expectedException coding_exception
-     * @expectedExceptionMessage Requested invalid property
      */
     public function test_throw_exception_on_incorrect_property() {
+        $this->expectException('coding_exception');
+        $this->expectExceptionMessage('Requested invalid property.');
         $this->record->get_property('test random property');
     }
 
