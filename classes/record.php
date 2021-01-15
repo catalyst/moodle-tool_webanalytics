@@ -81,6 +81,20 @@ class record implements record_interface {
     protected $trackadmin = 0;
 
     /**
+     * only track students
+     *
+     * @var string
+     */
+    protected $track_only_students = 0;
+
+    /**
+     * only track these categories
+     *
+     * @var string
+     */
+    protected $categories = array();
+
+    /**
      * Should use a clean URL?
      *
      * @var string
@@ -154,6 +168,8 @@ class record implements record_interface {
         $dbrecord->location = $this->get_property('location');
         $dbrecord->type = $this->get_property('type');
         $dbrecord->trackadmin = $this->get_property('trackadmin');
+        $dbrecord->track_only_students = $this->get_property('track_only_students');
+        $dbrecord->categories = $this->get_property('categories');
         $dbrecord->cleanurl = $this->get_property('cleanurl');
         $dbrecord->settings = $this->get_settings();
 

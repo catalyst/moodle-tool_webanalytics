@@ -13,19 +13,24 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
- * Version information.
+ * Chat external functions and service definitions.
  *
- * @package   watool_ganalytics
- * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2018 Catalyst IT
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    tool_dataprivacy
+ * @category   external
+ * @copyright  2018 Jun Pataleta <jun@moodle.com>
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
 defined('MOODLE_INTERNAL') || die;
-
-$plugin->version   = 2018062400;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2018062400;      // Same as version
-$plugin->requires  = 2017051500;      // Requires Moodle 3.3 or later.
-$plugin->component = "watool_ganalytics";
+$functions = [
+    'tool_webanalytics_get_categories' => [
+        'classname'     => 'tool_webanalytics_external',
+        'methodname'    => 'get_categories',
+        'classpath' =>   null,
+        'description'   => 'Fetches a list of categories',
+        'type'          => 'read',
+        'capabilities'  => '',
+        'ajax'          => true,
+        'loginrequired' => true,
+    ]
+];
