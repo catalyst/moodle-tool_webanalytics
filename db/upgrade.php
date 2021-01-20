@@ -35,6 +35,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 function xmldb_tool_webanalytics_upgrade($oldversion) {
     global $CFG, $DB;
+    $dbman = $DB->get_manager();
 
     if ($oldversion < 2020063001) {
         // Apply new matomo settings for existing matomo tools.
@@ -48,8 +49,47 @@ function xmldb_tool_webanalytics_upgrade($oldversion) {
             $DB->update_record(records_manager::TABLE_NAME, $record);
         }
 
+        // add new fields
+        // field: track_only_students
+        $table = new xmldb_table('tool_webanalytics');
+        $fieldStudents = new xmldb_field('track_only_students', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'trackadmin');
+
+        if (!$dbman->field_exists($table, $fieldStudents)) {
+            $dbman->add_field($table, $fieldStudents);
+        }
+
+        // field: categories
+        $fieldCategories = new xmldb_field('categories', XMLDB_TYPE_TEXT, null, null, null, null, null, 'track_only_students');
+
+        if (!$dbman->field_exists($table, $fieldCategories)) {
+            $dbman->add_field($table, $fieldCategories);
+        }
+
+
         upgrade_plugin_savepoint(true, 2020063001, 'tool', 'webanalytics');
     }
+
+    if ($oldversion < 2021011201) {
+        // add new fields
+        // field: track_only_students
+        $table = new xmldb_table('tool_webanalytics');
+        $fieldStudents = new xmldb_field('track_only_students', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, '0', 'trackadmin');
+
+        if (!$dbman->field_exists($table, $fieldStudents)) {
+            $dbman->add_field($table, $fieldStudents);
+        }
+
+        // field: categories
+        $fieldCategories = new xmldb_field('categories', XMLDB_TYPE_TEXT, null, null, null, null, null, 'track_only_students');
+
+        if (!$dbman->field_exists($table, $fieldCategories)) {
+            $dbman->add_field($table, $fieldCategories);
+        }
+
+
+        upgrade_plugin_savepoint(true, 2021011201, 'tool', 'webanalytics');
+    }
+
 
     return true;
 }

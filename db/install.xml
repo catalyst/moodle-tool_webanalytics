@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<XMLDB PATH="admin/tool/webanalytics/db" VERSION="2018051500" COMMENT="XMLDB file for Moodle tool/webanalytics"
+<XMLDB PATH="admin/tool/webanalytics/db" VERSION="20210108" COMMENT="XMLDB file for Moodle tool/webanalytics"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="../../../../lib/xmldb/xmldb.xsd"
 >
@@ -12,6 +12,8 @@
         <FIELD NAME="location" TYPE="char" LENGTH="255" NOTNULL="true" DEFAULT="head" SEQUENCE="false" COMMENT="Analytics location on a page"/>
         <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="A type of Analytics"/>
         <FIELD NAME="trackadmin" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Enable tracking of Admin users"/>
+        <FIELD NAME="track_only_students" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Enable only tracking of students"/>
+        <FIELD NAME="categories" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="restrict to these categories"/>
         <FIELD NAME="cleanurl" TYPE="int" LENGTH="1" NOTNULL="true" DEFAULT="1" SEQUENCE="false" COMMENT="Generate clean URL for in advanced tracking"/>
         <FIELD NAME="settings" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Serialized settings used for Analytic"/>
       </FIELDS>

@@ -35,7 +35,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-abstract class tool_base implements tool_interface {
+abstract class tool_base implements tool_interface
+{
     /**
      * @var \tool_webanalytics\record
      */
@@ -46,7 +47,8 @@ abstract class tool_base implements tool_interface {
      *
      * @param \tool_webanalytics\record_interface $record
      */
-    public function __construct(record_interface $record) {
+    public function __construct(record_interface $record)
+    {
         $this->record = $record;
     }
 
@@ -55,12 +57,34 @@ abstract class tool_base implements tool_interface {
      *
      * @return bool
      */
-    public function should_track() {
-        if (!is_siteadmin()) {
-            return true;
+    public function should_track()
+    {
+        // check if user is currently inside a category which has to be tracked
+        $is_in_category = false;
+        $check_categories = $this->record->get_property('categories');
+        if (!empty($check_categories)) {
+            $is_in_category = $this->is_in_category(explode(",", $check_categories));
         }
 
-        return $this->record->get_property('trackadmin') == 1;
+        // check if user is a student and currently on a course site?
+        $is_student = false;
+        $check_track_only_students = $this->record->get_property('track_only_students');
+        if ($check_track_only_students) {
+            $is_student = $this->is_student();
+        }
+
+        if ($check_categories && !$check_track_only_students) {
+            return $is_in_category && $this->is_site_admin();
+
+        } else if (!$check_categories && $check_track_only_students) {
+            return $is_student && $this->is_site_admin();
+
+        } else if ($check_categories && $check_track_only_students) {
+            return $is_in_category && $is_student && $this->is_site_admin();
+
+        } else {
+            return $this->is_site_admin();
+        }
     }
 
     /**
@@ -70,7 +94,8 @@ abstract class tool_base implements tool_interface {
      *
      * @return void
      */
-    public function form_definition_after_data(\MoodleQuickForm &$mform) {
+    public function form_definition_after_data(\MoodleQuickForm &$mform)
+    {
 
     }
 
@@ -79,7 +104,8 @@ abstract class tool_base implements tool_interface {
      *
      * @return string
      */
-    protected final function build_location() {
+    protected final function build_location()
+    {
         return "additionalhtml" . $this->record->get_property('location');
     }
 
@@ -88,7 +114,8 @@ abstract class tool_base implements tool_interface {
      *
      * @return void
      */
-    public final function insert_tracking() {
+    public final function insert_tracking()
+    {
         global $CFG;
 
         if ($this->should_track()) {
@@ -99,14 +126,77 @@ abstract class tool_base implements tool_interface {
     }
 
     /**
+     * check if siteadmins should be tracked
+     *
+     * @return boolean
+     */
+    private function is_site_admin()
+    {
+        if (!is_siteadmin()) {
+            return true;
+        }
+
+
+        return $this->record->get_property('trackadmin') == 1;
+    }
+
+
+    /**
+     * check if user is currently inside one of the selected categories
+     *
+     * @param $categories
+     * @return boolean
+     */
+    private function is_in_category($categories)
+    {
+        global $COURSE, $DB;
+
+        $category = $DB->get_record('course_categories', array('id' => $COURSE->category));
+
+        if (!is_object($category)) {
+            return;
+        }
+
+        $categories_path = array_values(array_filter(explode("/", $category->path)));
+        foreach ($categories as $c) {
+            if (in_array($c, $categories_path)) {
+                return true;
+            }
+        }
+        return;
+    }
+
+    /**
+     * checks if user is inside a course and is a student
+     *
+     * @return  boolean
+     */
+    private function is_student()
+    {
+        global $PAGE, $USER;
+
+        // is user inside a course page right now?
+        if (!in_array($PAGE->pagelayout, ['course', 'incourse'])) {
+            return;
+        }
+
+        // is user a student inside course
+        $context = $PAGE->context;
+        $roles = array_values(get_user_roles($context, $USER->id));
+        return in_array("student", array_column($roles, 'shortname'));
+    }
+
+    /**
      * Remove existing tracking code to avoid duplicates.
      */
-    protected function remove_existing_tracking_code() {
+    protected
+    function remove_existing_tracking_code()
+    {
         global $CFG;
 
         $location = $this->build_location();
 
-        $re = '/' .$this->get_start() . '[\s\S]*' . $this->get_end() . '/m';
+        $re = '/' . $this->get_start() . '[\s\S]*' . $this->get_end() . '/m';
         $replaced = preg_replace($re, '', $CFG->$location);
 
         if ($CFG->$location != $replaced) {
@@ -119,7 +209,9 @@ abstract class tool_base implements tool_interface {
      *
      * @return string
      */
-    protected function get_start() {
+    protected
+    function get_start()
+    {
         return '<!-- WEB ANALYTICS ' . $this->record->get_property('id') . ' START -->';
     }
 
@@ -128,18 +220,22 @@ abstract class tool_base implements tool_interface {
      *
      * @return string
      */
-    protected function get_end() {
+    protected
+    function get_end()
+    {
         return '<!-- WEB ANALYTICS ' . $this->record->get_property('id') . ' END -->';
     }
 
     /**
      * Encode a substring if required.
      *
-     * @param string  $input  The string that might be encoded.
+     * @param string $input The string that might be encoded.
      * @param boolean $encode Whether to encode the URL.
      * @return string
      */
-    protected function might_encode($input, $encode) {
+    protected
+    function might_encode($input, $encode)
+    {
         if (!$encode) {
             return str_replace("'", "\'", $input);
         }
@@ -150,11 +246,13 @@ abstract class tool_base implements tool_interface {
     /**
      * Helper function to get the Tracking URL for the request.
      *
-     * @param bool|int $urlencode    Whether to encode URLs.
+     * @param bool|int $urlencode Whether to encode URLs.
      * @param bool|int $leadingslash Whether to add a leading slash to the URL.
      * @return string A URL to use for tracking.
      */
-    public function trackurl($urlencode = false, $leadingslash = false) {
+    public
+    function trackurl($urlencode = false, $leadingslash = false)
+    {
         global $DB, $PAGE;
 
         $pageinfo = get_context_info_array($PAGE->context->id);
@@ -171,7 +269,7 @@ abstract class tool_base implements tool_interface {
                 $cats = explode("/", $category->path);
                 foreach (array_filter($cats) as $cat) {
                     if ($categorydepth = $DB->get_record("course_categories", ["id" => $cat])) {
-                        $trackurl .= self::might_encode($categorydepth->name, $urlencode).'/';
+                        $trackurl .= self::might_encode($categorydepth->name, $urlencode) . '/';
                     }
                 }
             }
@@ -180,7 +278,7 @@ abstract class tool_base implements tool_interface {
         // Adds course full name.
         if (isset($pageinfo[1]->fullname)) {
             if (isset($pageinfo[2]->name)) {
-                $trackurl .= self::might_encode($pageinfo[1]->fullname, $urlencode).'/';
+                $trackurl .= self::might_encode($pageinfo[1]->fullname, $urlencode) . '/';
             } else {
                 $trackurl .= self::might_encode($pageinfo[1]->fullname, $urlencode);
                 $trackurl .= '/';

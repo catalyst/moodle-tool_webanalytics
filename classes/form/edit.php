@@ -36,7 +36,8 @@ defined('MOODLE_INTERNAL') || die();
  * @copyright  2020 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class edit extends moodleform {
+class edit extends moodleform
+{
     /**
      * Web analytics type.
      * @var string
@@ -60,7 +61,8 @@ class edit extends moodleform {
      *
      * @return \MoodleQuickForm
      */
-    public function get_form() {
+    public function get_form()
+    {
         return $this->_form;
     }
 
@@ -69,7 +71,10 @@ class edit extends moodleform {
      *
      * @see moodleform::definition()
      */
-    public function definition() {
+    public function definition()
+    {
+        global $DB;
+
         $plugins = plugin_manager::instance()->get_enabled_plugins();
 
         $mform = $this->_form;
@@ -110,6 +115,34 @@ class edit extends moodleform {
         $mform->addElement('checkbox', 'trackadmin', get_string('trackadmin', 'tool_webanalytics'));
         $mform->addHelpButton('trackadmin', 'trackadmin', 'tool_webanalytics');
 
+        $mform->addElement('checkbox', 'track_only_students', get_string('track_only_students', 'tool_webanalytics'));
+        $mform->addHelpButton('track_only_students', 'track_only_students', 'tool_webanalytics');
+
+        $attributes = array(
+            'multiple' => true,
+            'noselectionstring' => get_string('no_categories', 'tool_webanalytics'),
+            'ajax' => 'tool_webanalytics/categories'
+        );
+
+        $selection = [];
+        $record_id = $this->record->get_property('id');
+
+        if ($record_id) {
+            $categories_selected = $this->record->get_property('categories');
+            if ($categories_selected) {
+                list($insql, $inparams) = $DB->get_in_or_equal(explode(",", $categories_selected));
+                $sql = "SELECT * FROM {course_categories} WHERE id $insql";
+                $categories = $DB->get_records_sql($sql, $inparams);
+
+                foreach ($categories as $category) {
+                    $selection[$category->id] = $category->name;
+                }
+            }
+        }
+
+        $mform->addElement('autocomplete', 'categories', get_string('categories', 'tool_webanalytics'), $selection, $attributes);
+        $mform->addHelpButton('categories', 'categories', 'tool_webanalytics');
+
         $mform->addElement('checkbox', 'cleanurl', get_string('cleanurl', 'tool_webanalytics'));
         $mform->addHelpButton('cleanurl', 'cleanurl', 'tool_webanalytics');
 
@@ -126,7 +159,8 @@ class edit extends moodleform {
      * @return array of "element_name"=>"error_description" if there are errors,
      *         or an empty array if everything is OK (true allowed for backwards compatibility too).
      */
-    public function validation($data, $files) {
+    public function validation($data, $files)
+    {
         $errors = parent::validation($data, $files);
         $this->tool->form_validate($data, $files, $errors);
 
@@ -141,11 +175,16 @@ class edit extends moodleform {
      *
      * @return object submitted data; NULL if not valid or not submitted or cancelled
      */
-    public function get_data() {
+    public function get_data()
+    {
         $data = parent::get_data();
 
         if (!empty($data)) {
             $data->settings = $this->tool->form_build_settings($data);
+            // single
+//            $data->categories = empty($data->categories) ? null : $data->categories;
+            // multiple
+            $data->categories = empty($data->categories) ? null : implode(",", array_filter($data->categories));
         }
 
         return $data;
@@ -160,7 +199,8 @@ class edit extends moodleform {
      *
      * @param \stdClass|array $default_values object or array of default values
      */
-    public function set_data($defaultvalues) {
+    public function set_data($defaultvalues)
+    {
         $this->tool->form_set_data($defaultvalues);
         parent::set_data($defaultvalues);
     }
@@ -168,7 +208,8 @@ class edit extends moodleform {
     /**
      * Setup the form depending on current values.
      */
-    public function definition_after_data() {
+    public function definition_after_data()
+    {
         parent::definition_after_data();
         $this->_form->freeze(array('type'));
         $this->tool->form_definition_after_data($this->_form);
