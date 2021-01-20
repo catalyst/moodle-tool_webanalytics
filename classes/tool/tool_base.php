@@ -80,7 +80,7 @@ abstract class tool_base implements tool_interface
             return $is_student && $this->is_site_admin();
 
         } else if ($check_categories && $check_track_only_students) {
-            return $is_in_category && $is_in_category && $this->is_site_admin();
+            return $is_in_category && $is_student && $this->is_site_admin();
 
         } else {
             return $this->is_site_admin();
