@@ -28,7 +28,6 @@ namespace watool_gtagmanager\privacy;
 defined('MOODLE_INTERNAL') || die;
 
 use core_privacy\local\metadata\null_provider;
-use core_privacy\local\legacy_polyfill;
 
 /**
  * Class provider
@@ -38,15 +37,13 @@ use core_privacy\local\legacy_polyfill;
  */
 class provider implements null_provider {
 
-    use legacy_polyfill;
-
     /**
      * Get the language string identifier with the component's language
      * file to explain why this plugin stores no data.
      *
      * @return  string
      */
-    public static function _get_reason() {
+    public static function get_reason(): string {
         return 'privacy:metadata';
     }
 

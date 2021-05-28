@@ -39,7 +39,7 @@ $edit = optional_param('edit', 0, PARAM_INT);
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
 
 if (!plugin_manager::instance()->is_plugin_enabled($type)) {
-    print_error('not_enabled', 'tool_webanalytics', $manageurl);
+    throw new moodle_exception('not_enabled', 'tool_webanalytics', $manageurl);
 }
 
 $action = 'create';
@@ -52,7 +52,7 @@ $manager = new records_manager();
 if ($edit) {
     $record = $manager->get($edit);
     if (empty($record)) {
-        print_error('not_found', 'tool_webanalytics', $manageurl);
+        throw new moodle_exception('not_found', 'tool_webanalytics', $manageurl);
     }
 
     $action = 'edit';
