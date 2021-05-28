@@ -40,7 +40,7 @@ $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
 $manager = new records_manager();
 
 if (empty($manager->get($id))) {
-    print_error('not_found', 'tool_webanalytics', $manageurl);
+    throw new moodle_exception('not_found', 'tool_webanalytics', $manageurl);
 }
 
 if ($confirm != md5($id)) {

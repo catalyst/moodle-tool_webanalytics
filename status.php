@@ -38,7 +38,7 @@ $manager = new records_manager();
 $record = $manager->get($id);
 
 if (empty($record)) {
-    print_error('not_found', 'tool_webanalytics', $manageurl);
+    throw new moodle_exception('not_found', 'tool_webanalytics', $manageurl);
 }
 
 if (confirm_sesskey()) {

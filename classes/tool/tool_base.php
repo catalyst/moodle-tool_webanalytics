@@ -79,7 +79,7 @@ abstract class tool_base implements tool_interface {
      *
      * @return string
      */
-    protected final function build_location() {
+    final protected function build_location() {
         return "additionalhtml" . $this->record->get_property('location');
     }
 
@@ -88,7 +88,7 @@ abstract class tool_base implements tool_interface {
      *
      * @return void
      */
-    public final function insert_tracking() {
+    final public function insert_tracking() {
         global $CFG;
 
         if ($this->should_track()) {

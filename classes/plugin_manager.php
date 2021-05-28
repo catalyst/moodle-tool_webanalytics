@@ -68,7 +68,7 @@ class plugin_manager {
 
 
     /**
-     * Direct initiation not allowed, use the factory method {@link self::instance()}
+     * Direct initiation not allowed, use the factory method {@see self::instance()}
      */
     protected function __construct() {
     }

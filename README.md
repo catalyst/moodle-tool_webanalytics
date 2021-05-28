@@ -1,6 +1,5 @@
-<a href="https://travis-ci.org/catalyst/moodle-tool_webanalytics">
-<img src="https://travis-ci.org/catalyst/moodle-tool_webanalytics.svg?branch=master">
-</a>
+![Build Status](https://github.com/catalyst/moodle-tool_webanalytics/actions/workflows/ci.yml/badge.svg?branch=master)
+
 
 # Web Analytics
 

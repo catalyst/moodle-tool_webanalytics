@@ -27,10 +27,10 @@ namespace watool_guniversal\privacy;
 
 defined('MOODLE_INTERNAL') || die;
 
-use core_privacy\local\legacy_polyfill;
+use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_userlist;
-use \core_privacy\local\request\contextlist;
-use \core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\userlist;
 
 /**
@@ -44,9 +44,13 @@ class provider implements
     \core_privacy\local\request\core_userlist_provider,
     \core_privacy\local\request\plugin\provider {
 
-    use legacy_polyfill;
-
-    public static function _get_metadata($collection) {
+    /**
+     * Returns information about the user data stored in this component.
+     *
+     * @param  collection $collection A list of information about this component
+     * @return collection The collection object filled out with information about this component.
+     */
+    public static function get_metadata(collection $collection): collection {
 
         $collection->add_external_location_link('watool_guniversal', [
             'userid' => 'privacy:metadata:watool_guniversal:userid',
@@ -61,7 +65,7 @@ class provider implements
      * @param   int         $userid     The user to search.
      * @return  contextlist $contextlist  The contextlist containing the list of contexts used in this plugin.
      */
-    public static function _get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid) : contextlist {
         return new contextlist();
     }
 
@@ -70,7 +74,7 @@ class provider implements
      *
      * @param approved_contextlist $contextlist The approved contexts to export information for.
      */
-    public static function _export_user_data(approved_contextlist $contextlist) {
+    public static function export_user_data(approved_contextlist $contextlist) {
     }
 
     /**
@@ -78,7 +82,7 @@ class provider implements
      *
      * @param \context $context A user context.
      */
-    public static function _delete_data_for_all_users_in_context(\context $context) {
+    public static function delete_data_for_all_users_in_context(\context $context) {
     }
 
     /**
@@ -86,7 +90,7 @@ class provider implements
      *
      * @param   approved_contextlist    $contextlist    The approved contexts and user information to delete information for.
      */
-    public static function _delete_data_for_user(approved_contextlist $contextlist) {
+    public static function delete_data_for_user(approved_contextlist $contextlist) {
     }
 
     /**
