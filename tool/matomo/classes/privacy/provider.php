@@ -28,9 +28,10 @@ namespace watool_matomo\privacy;
 defined('MOODLE_INTERNAL') || die;
 
 use core_privacy\local\legacy_polyfill;
+use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_userlist;
-use \core_privacy\local\request\contextlist;
-use \core_privacy\local\request\approved_contextlist;
+use core_privacy\local\request\contextlist;
+use core_privacy\local\request\approved_contextlist;
 use core_privacy\local\request\userlist;
 
 
@@ -47,6 +48,12 @@ class provider implements
 
     use legacy_polyfill;
 
+    /**
+     * Returns information about the user data stored in this component.
+     *
+     * @param  collection $collection A list of information about this component
+     * @return collection The collection object filled out with information about this component.
+     */
     public static function _get_metadata($collection) {
 
         $collection->add_external_location_link('watool_matomo', [

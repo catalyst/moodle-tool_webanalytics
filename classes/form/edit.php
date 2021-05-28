@@ -158,7 +158,7 @@ class edit extends moodleform {
      *
      * note: $slashed param removed
      *
-     * @param \stdClass|array $default_values object or array of default values
+     * @param \stdClass|array $defaultvalues object or array of default values
      */
     public function set_data($defaultvalues) {
         $this->tool->form_set_data($defaultvalues);
