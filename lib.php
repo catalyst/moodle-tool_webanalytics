@@ -29,7 +29,8 @@ use tool_webanalytics\injector;
 
 /**
  * This hook was introduced in moodle 3.3.
+ * @return string
  */
-function tool_webanalytics_before_http_headers() {
-    injector::inject();
+function tool_webanalytics_before_standard_html_head(): string {
+    return injector::render_tracking_code();
 }

@@ -55,7 +55,7 @@ abstract class tool_base implements tool_interface {
      *
      * @return bool
      */
-    public function should_track() {
+    public function should_track(): bool {
         if (!is_siteadmin()) {
             return true;
         }
@@ -75,71 +75,13 @@ abstract class tool_base implements tool_interface {
     }
 
     /**
-     * A helper to build location config string.
-     *
-     * @return string
-     */
-    final protected function build_location() {
-        return "additionalhtml" . $this->record->get_property('location');
-    }
-
-    /**
-     * Insert tracking code.
-     *
-     * @return void
-     */
-    final public function insert_tracking() {
-        global $CFG;
-
-        if ($this->should_track()) {
-            $location = $this->build_location();
-            $this->remove_existing_tracking_code();
-            $CFG->$location .= $this->get_start() . $this->get_tracking_code() . $this->get_end();
-        }
-    }
-
-    /**
-     * Remove existing tracking code to avoid duplicates.
-     */
-    protected function remove_existing_tracking_code() {
-        global $CFG;
-
-        $location = $this->build_location();
-
-        $re = '/' .$this->get_start() . '[\s\S]*' . $this->get_end() . '/m';
-        $replaced = preg_replace($re, '', $CFG->$location);
-
-        if ($CFG->$location != $replaced) {
-            set_config($location, $replaced);
-        }
-    }
-
-    /**
-     * Get a string snippet to be able to find where the code starts on the page.
-     *
-     * @return string
-     */
-    protected function get_start() {
-        return '<!-- WEB ANALYTICS ' . $this->record->get_property('id') . ' START -->';
-    }
-
-    /**
-     * Get a string snippet to be able to find where the code ends on the page.
-     *
-     * @return string
-     */
-    protected function get_end() {
-        return '<!-- WEB ANALYTICS ' . $this->record->get_property('id') . ' END -->';
-    }
-
-    /**
      * Encode a substring if required.
      *
      * @param string  $input  The string that might be encoded.
      * @param boolean $encode Whether to encode the URL.
      * @return string
      */
-    protected function might_encode($input, $encode) {
+    protected function might_encode($input, $encode): string {
         if (!$encode) {
             return str_replace("'", "\'", $input);
         }
@@ -154,7 +96,7 @@ abstract class tool_base implements tool_interface {
      * @param bool|int $leadingslash Whether to add a leading slash to the URL.
      * @return string A URL to use for tracking.
      */
-    public function trackurl($urlencode = false, $leadingslash = false) {
+    public function trackurl($urlencode = false, $leadingslash = false): string {
         global $DB, $PAGE;
 
         $pageinfo = get_context_info_array($PAGE->context->id);

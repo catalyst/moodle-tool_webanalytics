@@ -45,7 +45,7 @@ if (empty($manager->get($id))) {
 
 if ($confirm != md5($id)) {
     $confirmstring = get_string($action . '_confirm', 'tool_webanalytics', $id);
-    $cinfirmoptions = array('action' => $action, 'id' => $id, 'confirm' => md5($id), 'sesskey' => sesskey());
+    $cinfirmoptions = ['action' => $action, 'id' => $id, 'confirm' => md5($id), 'sesskey' => sesskey()];
     $deleteurl = new moodle_url('/admin/tool/webanalytics/delete.php', $cinfirmoptions);
 
     $PAGE->navbar->add(get_string($action . '_breadcrumb', 'tool_webanalytics'));

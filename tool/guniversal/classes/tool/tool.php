@@ -42,7 +42,7 @@ class tool extends tool_base {
      *
      * @return string
      */
-    public function get_tracking_code() {
+    public function get_tracking_code(): string {
         global $OUTPUT, $USER, $PAGE;
 
         $settings = $this->record->get_property('settings');
@@ -112,7 +112,7 @@ class tool extends tool_base {
      *
      * @return array
      */
-    public function form_build_settings(\stdClass $data) {
+    public function form_build_settings(\stdClass $data): array {
         $settings = [];
         $settings['siteid']  = isset($data->siteid) ? $data->siteid : '';
         $settings['userid'] = isset($data->userid) ? $data->userid : 0;

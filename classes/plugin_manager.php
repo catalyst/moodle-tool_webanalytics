@@ -84,7 +84,7 @@ class plugin_manager {
      *
      * @return \tool_webanalytics\plugin_manager the singleton instance
      */
-    public static function instance() {
+    public static function instance(): plugin_manager {
         if (is_null(static::$instance)) {
             static::$instance = new static();
         }
@@ -98,7 +98,7 @@ class plugin_manager {
      *
      * @return bool
      */
-    public function is_plugin_enabled($name) {
+    public function is_plugin_enabled($name): bool {
         $plugins = $this->get_enabled_plugins();
 
         return isset($plugins[$name]);
@@ -109,7 +109,7 @@ class plugin_manager {
      *
      * @return \tool_webanalytics\plugininfo\watool[]
      */
-    public function get_enabled_plugins() {
+    public function get_enabled_plugins(): array {
         if (is_null(static::$plugins)) {
             static::$plugins = $this->build_plugins();
         }
@@ -122,7 +122,7 @@ class plugin_manager {
      *
      * @return \core\plugininfo\base[]
      */
-    protected function build_plugins() {
+    protected function build_plugins(): array {
         $plugins = [];
 
         $pluginswithclass = \core_component::get_plugin_list_with_class(self::PLUGIN_TYPE, self::TOOL_CLASS);

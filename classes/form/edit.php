@@ -97,11 +97,11 @@ class edit extends moodleform {
         $mform->setType('name', PARAM_TEXT);
         $this->_form->addRule('name', get_string('required'), 'required', null, 'client');
 
-        $choices = array(
+        $choices = [
             'head' => get_string('head', 'tool_webanalytics'),
             'topofbody' => get_string('topofbody', 'tool_webanalytics'),
             'footer' => get_string('footer', 'tool_webanalytics'),
-        );
+        ];
 
         $mform->addElement('select', 'location', get_string('location', 'tool_webanalytics'), $choices);
         $mform->addHelpButton('location', 'location', 'tool_webanalytics');
@@ -170,7 +170,7 @@ class edit extends moodleform {
      */
     public function definition_after_data() {
         parent::definition_after_data();
-        $this->_form->freeze(array('type'));
+        $this->_form->freeze(['type']);
         $this->tool->form_definition_after_data($this->_form);
     }
 

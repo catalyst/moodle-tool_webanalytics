@@ -107,10 +107,10 @@ class records_manager implements records_manager_interface {
      *
      * @param int $id record ID.
      *
-     * @return \tool_webanalytics\record
+     * @return false|\tool_webanalytics\record
      */
     public function get($id) {
-        $record = $this->db->get_record(self::TABLE_NAME, array('id' => $id));
+        $record = $this->db->get_record(self::TABLE_NAME, ['id' => $id]);
 
         if (!empty($record)) {
             $record->settings = unserialize($record->settings);
@@ -125,7 +125,7 @@ class records_manager implements records_manager_interface {
      *
      * @return \tool_webanalytics\record_interface[]
      */
-    public function get_all() {
+    public function get_all(): array {
         if ($this->allrecords === false) {
             $this->allrecords = $this->get_multiple();
             $this->cache->set(self::CACHE_ALL_RECORDS_KEY, $this->allrecords);
@@ -139,9 +139,9 @@ class records_manager implements records_manager_interface {
      *
      * @return \tool_webanalytics\record[]
      */
-    public function get_enabled() {
+    public function get_enabled(): array {
         if ($this->enabledrecords === false) {
-            $this->enabledrecords = $this->get_multiple(array('enabled' => 1));
+            $this->enabledrecords = $this->get_multiple(['enabled' => 1]);
             $this->cache->set(self::CACHE_ENABLED_RECORDS_KEY, $this->enabledrecords);
         }
 
@@ -181,7 +181,7 @@ class records_manager implements records_manager_interface {
      * @return void
      */
     public function delete($id) {
-        $this->db->delete_records(self::TABLE_NAME, array('id' => $id));
+        $this->db->delete_records(self::TABLE_NAME, ['id' => $id]);
         $this->clear_caches();
     }
 
@@ -190,7 +190,7 @@ class records_manager implements records_manager_interface {
      *
      * @return bool
      */
-    public function is_ready() {
+    public function is_ready(): bool {
         return $this->db->get_manager()->table_exists(self::TABLE_NAME);
     }
 
@@ -199,9 +199,9 @@ class records_manager implements records_manager_interface {
      *
      * @param array $params Parameters to use in get_records functions.
      *
-     * @return array A list of analytics.
+     * @return \tool_webanalytics\record[] A list of analytics.
      */
-    protected function get_multiple($params = array()) {
+    protected function get_multiple(array $params = []): array {
         $records = $this->db->get_records(self::TABLE_NAME, $params, 'id');
 
         if (!empty($records)) {

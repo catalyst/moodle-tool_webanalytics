@@ -98,8 +98,6 @@ class record implements record_interface {
      * Constructor.
      *
      * @param stdClass $data Data to build an analytics from.
-     *
-     * @throws coding_exception
      */
     public function __construct(stdClass $data) {
         foreach ($data as $name => $value) {
@@ -114,7 +112,7 @@ class record implements record_interface {
      *
      * @return bool
      */
-    public function is_enabled() {
+    public function is_enabled(): bool {
         return !empty($this->get_property('enabled'));
     }
 
@@ -124,8 +122,6 @@ class record implements record_interface {
      * @param string $name Property name.
      *
      * @return mixed Property value.
-     *
-     * @throws \coding_exception If invalid property requested.
      */
     public function get_property($name) {
         if (!property_exists($this, $name)) {
@@ -145,7 +141,7 @@ class record implements record_interface {
      *
      * @return \stdClass
      */
-    public function export() {
+    public function export(): stdClass {
         $dbrecord = new stdClass();
 
         $dbrecord->id = $this->get_property('id');
@@ -165,9 +161,9 @@ class record implements record_interface {
      *
      * @return array Settings array.
      */
-    protected function get_settings() {
+    protected function get_settings(): array {
         if (!is_array($this->settings)) {
-            $this->settings = array();
+            $this->settings = [];
         }
 
         return $this->settings;

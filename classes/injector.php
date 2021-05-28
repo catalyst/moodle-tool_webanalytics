@@ -36,11 +36,6 @@ defined('MOODLE_INTERNAL') || die;
  */
 class injector {
     /**
-     * @var bool
-     */
-    private static $injected = false;
-
-    /**
      * Records manager.
      * @var \tool_webanalytics\records_manager_interface
      */
@@ -48,22 +43,20 @@ class injector {
 
     /**
      * Inject Web analytics tracking code for all tools.
+     *
+     * @return string
      */
-    public static function inject() {
-        if (self::$injected) {
-            return;
-        }
+    public static function render_tracking_code(): string {
+        $result = '';
 
         // Do not inject if being called in an ajax or cli script unless it's a unit test.
         if ((CLI_SCRIPT or AJAX_SCRIPT) && !PHPUNIT_TEST) {
-            return;
+            return $result;
         }
 
         if (!self::get_records_manager()->is_ready()) {
-            return;
+            return $result;
         }
-
-        self::$injected = true;
 
         $records = self::get_records_manager()->get_enabled();
         $plugins = plugin_manager::instance()->get_enabled_plugins();
@@ -72,9 +65,14 @@ class injector {
             foreach ($records as $record) {
                 $type = $record->get_property('type');
                 $tool = $plugins[$type]->get_tool_instance($record);
-                $tool->insert_tracking();
+
+                if ($tool->should_track()) {
+                    $result .= $tool->get_tracking_code();
+                }
             }
         }
+
+        return $result;
     }
 
     /**
@@ -82,7 +80,7 @@ class injector {
      *
      * @return \tool_webanalytics\records_manager_interface
      */
-    public static function get_records_manager() {
+    public static function get_records_manager(): records_manager_interface {
         if (!isset(self::$recordsmanager)) {
             self::$recordsmanager = new records_manager();
         }
@@ -90,10 +88,4 @@ class injector {
         return self::$recordsmanager;
     }
 
-    /**
-     * Reset injected state.
-     */
-    public static function reset() {
-        self::$injected = false;
-    }
 }

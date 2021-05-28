@@ -33,7 +33,7 @@ defined('MOODLE_INTERNAL') || die();
  * @param int $oldversion The old version of the plugin
  * @return bool
  */
-function xmldb_tool_webanalytics_upgrade($oldversion) {
+function xmldb_tool_webanalytics_upgrade($oldversion): bool {
     global $CFG, $DB;
 
     if ($oldversion < 2020063001) {

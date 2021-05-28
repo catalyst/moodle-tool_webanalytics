@@ -42,52 +42,15 @@ class tool extends tool_base {
      *
      * @return string
      */
-    public function get_tracking_code() {
+    public function get_tracking_code(): string {
         global $OUTPUT;
 
         $settings = $this->record->get_property('settings');
 
         $template = new \stdClass();
         $template->analyticsid = $settings['siteid'];
-
-        $this->add_no_script_code();
 
         return $OUTPUT->render_from_template('watool_gtagmanager/tracking_code', $template);
-    }
-
-    /**
-     * Additionally, paste no script code immediately after the opening <body> tag as suggested in docs.
-     */
-    protected function add_no_script_code() {
-        global $CFG;
-
-        if ($this->should_track()) {
-            // Remove existing code to avoid duplicates.
-            $re = '/' .$this->get_start() . '[\s\S]*' . $this->get_end() . '/m';
-            $replaced = preg_replace($re, '', $CFG->additionalhtmltopofbody);
-
-            if ($CFG->additionalhtmltopofbody != $replaced) {
-                set_config('additionalhtmltopofbody', $replaced);
-            }
-
-            $CFG->additionalhtmltopofbody .= $this->get_start() . $this->get_noscript_code()  . $this->get_end();
-        }
-    }
-
-    /**
-     * Build noscript code.
-     *
-     * @return string
-     */
-    protected function get_noscript_code() {
-        global $OUTPUT;
-
-        $settings = $this->record->get_property('settings');
-
-        $template = new \stdClass();
-        $template->analyticsid = $settings['siteid'];
-
-        return $OUTPUT->render_from_template('watool_gtagmanager/noscript_code', $template);
     }
 
     /**
@@ -105,9 +68,9 @@ class tool extends tool_base {
         // Let's allow a head location only.
         $mform->removeElement('location');
 
-        $choices = array(
+        $choices = [
             'head' => get_string('head', 'tool_webanalytics'),
-        );
+        ];
 
         $element = $mform->createElement('select', 'location', get_string('location', 'tool_webanalytics'), $choices);
         $mform->insertElementBefore($element, 'trackadmin');
@@ -151,7 +114,7 @@ class tool extends tool_base {
      *
      * @return array
      */
-    public function form_build_settings(\stdClass $data) {
+    public function form_build_settings(\stdClass $data): array {
         $settings = [];
         $settings['siteid']  = isset($data->siteid) ? $data->siteid : '';
 

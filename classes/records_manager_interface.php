@@ -40,7 +40,7 @@ interface records_manager_interface {
      *
      * @param int $id Analytics record ID.
      *
-     * @return mixed
+     * @return false|\tool_webanalytics\record
      */
     public function get($id);
 
@@ -49,14 +49,14 @@ interface records_manager_interface {
      *
      * @return array
      */
-    public function get_all();
+    public function get_all(): array;
 
     /**
      * Returns all existing enabled web analytics records.
      *
      * @return array
      */
-    public function get_enabled();
+    public function get_enabled(): array;
 
     /**
      * Saves web analytics data.
@@ -81,5 +81,5 @@ interface records_manager_interface {
      *
      * @return bool
      */
-    public function is_ready();
+    public function is_ready(): bool;
 }
