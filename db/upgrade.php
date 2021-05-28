@@ -36,6 +36,8 @@ defined('MOODLE_INTERNAL') || die();
 function xmldb_tool_webanalytics_upgrade($oldversion): bool {
     global $CFG, $DB;
 
+    $dbman = $DB->get_manager();
+
     if ($oldversion < 2020063001) {
         // Apply new matomo settings for existing matomo tools.
 
@@ -49,6 +51,18 @@ function xmldb_tool_webanalytics_upgrade($oldversion): bool {
         }
 
         upgrade_plugin_savepoint(true, 2020063001, 'tool', 'webanalytics');
+    }
+
+    if ($oldversion < 2021052800) {
+        // Drop location as we render everything in the head.
+        $table = new xmldb_table('tool_webanalytics');
+        $field = new xmldb_field('location');
+
+        if ($dbman->field_exists($table, $field)) {
+            $dbman->drop_field($table, $field);
+        }
+
+        upgrade_plugin_savepoint(true, 2021052800, 'tool', 'webanalytics');
     }
 
     return true;

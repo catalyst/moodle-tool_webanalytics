@@ -60,13 +60,6 @@ class record implements record_interface {
     protected $name = '';
 
     /**
-     * Analytics location on the page.
-     *
-     * @var string
-     */
-    protected $location = 'head';
-
-    /**
      * Type of an analytics.
      *
      * @var string
@@ -147,7 +140,6 @@ class record implements record_interface {
         $dbrecord->id = $this->get_property('id');
         $dbrecord->name = $this->get_property('name');
         $dbrecord->enabled = $this->get_property('enabled');
-        $dbrecord->location = $this->get_property('location');
         $dbrecord->type = $this->get_property('type');
         $dbrecord->trackadmin = $this->get_property('trackadmin');
         $dbrecord->cleanurl = $this->get_property('cleanurl');

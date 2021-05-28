@@ -103,10 +103,6 @@ class edit extends moodleform {
             'footer' => get_string('footer', 'tool_webanalytics'),
         ];
 
-        $mform->addElement('select', 'location', get_string('location', 'tool_webanalytics'), $choices);
-        $mform->addHelpButton('location', 'location', 'tool_webanalytics');
-        $mform->setType('location', PARAM_TEXT);
-
         $mform->addElement('checkbox', 'trackadmin', get_string('trackadmin', 'tool_webanalytics'));
         $mform->addHelpButton('trackadmin', 'trackadmin', 'tool_webanalytics');
 

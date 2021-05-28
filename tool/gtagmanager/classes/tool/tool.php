@@ -63,19 +63,6 @@ class tool extends tool_base {
     public function form_definition_after_data(\MoodleQuickForm &$mform) {
         // We don't use this setting as well. Safe to remove and have default value in DB.
         $mform->removeElement('cleanurl');
-
-        // Documentation suggests to have the code as high in the <head> of the page as possible.
-        // Let's allow a head location only.
-        $mform->removeElement('location');
-
-        $choices = [
-            'head' => get_string('head', 'tool_webanalytics'),
-        ];
-
-        $element = $mform->createElement('select', 'location', get_string('location', 'tool_webanalytics'), $choices);
-        $mform->insertElementBefore($element, 'trackadmin');
-        $mform->addHelpButton('location', 'location', 'tool_webanalytics');
-        $mform->setType('location', PARAM_TEXT);
     }
 
     /**

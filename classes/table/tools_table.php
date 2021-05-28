@@ -64,14 +64,12 @@ class tools_table extends flexible_table {
         $this->define_columns([
             'name',
             'type',
-            'location',
             'actions'
         ]);
 
         $this->define_headers([
             get_string('name', 'tool_webanalytics'),
             get_string('type', 'tool_webanalytics'),
-            get_string('location', 'tool_webanalytics'),
             get_string('actions'),
         ]);
 
@@ -99,17 +97,6 @@ class tools_table extends flexible_table {
 
         return get_string('pluginname', $identifier);
     }
-
-    /**
-     * Display column.
-     *
-     * @param record_interface $record
-     * @return string
-     */
-    public function col_location(record_interface $record) {
-        return get_string($record->get_property('location'), 'tool_webanalytics');
-    }
-
 
     /**
      * Display column.
