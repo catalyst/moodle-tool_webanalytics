@@ -72,10 +72,11 @@ class tool_webanalytics_injector_test extends advanced_testcase {
         $manager->save($record2);
 
         $actual = injector::render_tracking_code();
-        $this->assertStringContainsString('GoogleAnalyticsObject', $actual);
-        $this->assertStringContainsString('Test GA', $actual);
-        $this->assertStringContainsString('googletagmanager', $actual);
-        $this->assertStringContainsString('Test GTM', $actual);
+
+        $this->assertTrue(strpos($actual, 'GoogleAnalyticsObject') !== false);
+        $this->assertTrue(strpos($actual, 'Test GA') !== false);
+        $this->assertTrue(strpos($actual, 'googletagmanager') !== false);
+        $this->assertTrue(strpos($actual, 'Test GTM') !== false);
     }
 
     /**
@@ -103,10 +104,11 @@ class tool_webanalytics_injector_test extends advanced_testcase {
         $manager->save($enabled);
 
         $actual = injector::render_tracking_code();
-        $this->assertStringNotContainsString('GoogleAnalyticsObject', $actual);
-        $this->assertStringNotContainsString('Test GA', $actual);
-        $this->assertStringContainsString('googletagmanager', $actual);
-        $this->assertStringContainsString('Test GTM', $actual);
+
+        $this->assertFalse(strpos($actual, 'GoogleAnalyticsObject') !== false);
+        $this->assertFalse(strpos($actual, 'Test GA') !== false);
+        $this->assertTrue(strpos($actual, 'googletagmanager') !== false);
+        $this->assertTrue(strpos($actual, 'Test GTM') !== false);
     }
 
 }
