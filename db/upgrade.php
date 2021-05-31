@@ -23,7 +23,6 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use \tool_webanalytics\records_manager;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -41,13 +40,13 @@ function xmldb_tool_webanalytics_upgrade($oldversion): bool {
     if ($oldversion < 2020063001) {
         // Apply new matomo settings for existing matomo tools.
 
-        $records = $DB->get_records(records_manager::TABLE_NAME, ['type' => 'matomo']);
+        $records = $DB->get_records('tool_webanalytics', ['type' => 'matomo']);
         foreach ($records as $record) {
             $settings = unserialize($record->settings);
             $settings['userid'] = 1;
             $settings['usefield'] = 'id';
             $record->settings = serialize($settings);
-            $DB->update_record(records_manager::TABLE_NAME, $record);
+            $DB->update_record('tool_webanalytics', $record);
         }
 
         upgrade_plugin_savepoint(true, 2020063001, 'tool', 'webanalytics');
@@ -63,6 +62,27 @@ function xmldb_tool_webanalytics_upgrade($oldversion): bool {
         }
 
         upgrade_plugin_savepoint(true, 2021052800, 'tool', 'webanalytics');
+    }
+
+    if ($oldversion < 2021053100) {
+        // Switching to a new CFG manager.
+        $config = [];
+
+        $records = $DB->get_records('tool_webanalytics');
+        foreach ($records as $record) {
+            $record->settings = unserialize($record->settings);
+            $config[$record->id] = $record;
+        }
+
+        set_config('tool_anaylytics_records', serialize($config));
+
+        // Clean up table.
+        $table = new xmldb_table('tool_webanalytics');
+        if ($dbman->table_exists($table)) {
+            $dbman->drop_table($table);
+        }
+
+        upgrade_plugin_savepoint(true, 2021053100, 'tool', 'webanalytics');
     }
 
     return true;

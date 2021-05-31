@@ -23,7 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use tool_webanalytics\records_manager;
+use tool_webanalytics\records_manager_cfg;
 
 require_once(__DIR__.'/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
@@ -34,7 +34,7 @@ $action = 'status';
 $id = required_param('id', PARAM_INT);
 
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
-$manager = new records_manager();
+$manager = new records_manager_cfg();
 $record = $manager->get($id);
 
 if (empty($record)) {

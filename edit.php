@@ -25,7 +25,7 @@
 
 use tool_webanalytics\form\edit;
 use tool_webanalytics\record;
-use tool_webanalytics\records_manager;
+use tool_webanalytics\records_manager_cfg;
 use \tool_webanalytics\plugin_manager;
 
 require_once(__DIR__.'/../../../config.php');
@@ -34,7 +34,7 @@ require_once($CFG->libdir.'/adminlib.php');
 admin_externalpage_setup('tool_webanalytics_manage');
 
 $type = required_param('type', PARAM_ALPHAEXT);
-$edit = optional_param('edit', 0, PARAM_INT);
+$edit = optional_param('edit', 0, PARAM_RAW);
 
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
 
@@ -47,7 +47,7 @@ $record = new stdClass();
 $record->type = $type;
 $tool = null;
 $dimensions = null;
-$manager = new records_manager();
+$manager = new records_manager_cfg();
 
 if ($edit) {
     $record = $manager->get($edit);

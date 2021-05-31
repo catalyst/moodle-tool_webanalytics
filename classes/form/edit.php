@@ -78,7 +78,7 @@ class edit extends moodleform {
         $this->tool = $plugins[$this->type]->get_tool_instance($this->record);
 
         $mform->addElement('hidden', 'id');
-        $mform->setType('id', PARAM_INT);
+        $mform->setType('id', PARAM_RAW);
 
         $choices = [];
         foreach ($plugins as $plugin) {

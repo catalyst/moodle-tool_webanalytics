@@ -64,10 +64,11 @@ class injector {
         if (!empty($records) && !empty($plugins)) {
             foreach ($records as $record) {
                 $type = $record->get_property('type');
-                $tool = $plugins[$type]->get_tool_instance($record);
-
-                if ($tool->should_track()) {
-                    $result .= $tool->get_tracking_code();
+                if (key_exists($type, $plugins)) {
+                    $tool = $plugins[$type]->get_tool_instance($record);
+                    if ($tool->should_track()) {
+                        $result .= $tool->get_tracking_code();
+                    }
                 }
             }
         }
@@ -82,7 +83,7 @@ class injector {
      */
     public static function get_records_manager(): records_manager_interface {
         if (!isset(self::$recordsmanager)) {
-            self::$recordsmanager = new records_manager();
+            self::$recordsmanager = new records_manager_cfg();
         }
 
         return self::$recordsmanager;

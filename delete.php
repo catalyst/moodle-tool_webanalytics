@@ -23,7 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use tool_webanalytics\records_manager;
+use tool_webanalytics\records_manager_cfg;
 
 require_once(__DIR__.'/../../../config.php');
 require_once($CFG->libdir.'/adminlib.php');
@@ -32,12 +32,12 @@ require_once($CFG->libdir.'/formslib.php');
 admin_externalpage_setup('tool_webanalytics_manage');
 
 $action = 'delete';
-$id = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_RAW);
 $confirm = optional_param('confirm', '', PARAM_ALPHANUM);
 
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
 
-$manager = new records_manager();
+$manager = new records_manager_cfg();
 
 if (empty($manager->get($id))) {
     throw new moodle_exception('not_found', 'tool_webanalytics', $manageurl);
