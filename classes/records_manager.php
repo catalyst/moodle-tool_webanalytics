@@ -25,8 +25,6 @@
 
 namespace tool_webanalytics;
 
-use \core\uuid;
-
 defined('MOODLE_INTERNAL') || die();
 
 
@@ -142,7 +140,7 @@ class records_manager implements records_manager_interface {
 
         if (empty($datarecord->id)) {
             do {
-                $datarecord->id = uuid::generate();
+                $datarecord->id = uniqid();
             } while (key_exists($datarecord->id, $this->data));
         }
 

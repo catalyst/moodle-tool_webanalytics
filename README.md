@@ -12,7 +12,6 @@ A Moodle admin tool adding Web Analytics to your Moodle site.
 
 ## The plugin features the following options
 - multiple unlimited instances of different types of analytics in one Moodle site
-- tracking code can go to Header, Top of body or Footer of any page
 - exclude tracking of admin users
 
 ## Supported Web Analytics Tools 
