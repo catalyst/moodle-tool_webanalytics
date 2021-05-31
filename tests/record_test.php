@@ -83,7 +83,6 @@ class tool_webanalytics_record_test extends advanced_testcase {
             ['id', null],
             ['enabled', 0],
             ['name', ''],
-            ['location', 'head'],
             ['type', null],
             ['trackadmin', 0],
             ['cleanurl', 0],
@@ -109,7 +108,6 @@ class tool_webanalytics_record_test extends advanced_testcase {
         $this->data->id = 2;
         $this->data->enabled = 1;
         $this->data->name = "Test name";
-        $this->data->location = 'Test loc';
         $this->data->type = 'Test type';
         $this->data->trackadmin = 1;
         $this->data->cleanurl = 1;
@@ -161,7 +159,6 @@ class tool_webanalytics_record_test extends advanced_testcase {
         $expected->id = null;
         $expected->enabled = 0;
         $expected->name = '';
-        $expected->location = 'head';
         $expected->type = '';
         $expected->trackadmin = 0;
         $expected->cleanurl = 0;
@@ -178,7 +175,6 @@ class tool_webanalytics_record_test extends advanced_testcase {
         $expected->id = 1;
         $expected->enabled = 1;
         $expected->name = 'Test';
-        $expected->location = 'footer';
         $expected->type = 'Type';
         $expected->trackadmin = 1;
         $expected->cleanurl = 1;
@@ -231,7 +227,6 @@ class tool_webanalytics_record_test extends advanced_testcase {
         $expected->id = null;
         $expected->enabled = 0;
         $expected->name = '';
-        $expected->location = 'head';
         $expected->type = '';
         $expected->trackadmin = 0;
         $expected->cleanurl = 0;

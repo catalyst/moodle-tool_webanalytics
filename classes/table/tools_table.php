@@ -61,21 +61,17 @@ class tools_table extends flexible_table {
         $this->define_baseurl($PAGE->url);
         $this->set_attribute('class', 'generaltable admintable');
 
-        $this->define_columns(array(
-                'name',
-                'type',
-                'location',
-                'actions'
-            )
-        );
+        $this->define_columns([
+            'name',
+            'type',
+            'actions'
+        ]);
 
-        $this->define_headers(array(
-                get_string('name', 'tool_webanalytics'),
-                get_string('type', 'tool_webanalytics'),
-                get_string('location', 'tool_webanalytics'),
-                get_string('actions'),
-            )
-        );
+        $this->define_headers([
+            get_string('name', 'tool_webanalytics'),
+            get_string('type', 'tool_webanalytics'),
+            get_string('actions'),
+        ]);
 
         $this->setup();
     }
@@ -101,17 +97,6 @@ class tools_table extends flexible_table {
 
         return get_string('pluginname', $identifier);
     }
-
-    /**
-     * Display column.
-     *
-     * @param record_interface $record
-     * @return string
-     */
-    public function col_location(record_interface $record) {
-        return get_string($record->get_property('location'), 'tool_webanalytics');
-    }
-
 
     /**
      * Display column.
@@ -172,7 +157,7 @@ class tools_table extends flexible_table {
      *
      * @return  string
      */
-    public static function format_icon_link($url, $icon, $alt, $iconcomponent = 'moodle', $options = array()) {
+    public static function format_icon_link($url, $icon, $alt, $iconcomponent = 'moodle', $options = []) {
         global $OUTPUT;
 
         return $OUTPUT->action_icon(

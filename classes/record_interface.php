@@ -40,7 +40,7 @@ interface record_interface {
      *
      * @return bool
      */
-    public function is_enabled();
+    public function is_enabled(): bool;
 
     /**
      * Return property value.
@@ -53,8 +53,8 @@ interface record_interface {
     /**
      * Export the record.
      *
-     * @return mixed
+     * @return \stdClass
      */
-    public function export();
+    public function export(): \stdClass;
 
 }

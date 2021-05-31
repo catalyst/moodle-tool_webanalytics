@@ -48,21 +48,14 @@ interface tool_interface {
      *
      * @return bool
      */
-    public function should_track();
+    public function should_track(): bool;
 
     /**
      * Get tracking code to insert.
      *
      * @return string
      */
-    public function get_tracking_code();
-
-    /**
-     * Insert tracking code.
-     *
-     * @return void
-     */
-    public function insert_tracking();
+    public function get_tracking_code(): string;
 
     /**
      * Add settings elements to Web Analytics Tool form.
@@ -100,7 +93,7 @@ interface tool_interface {
      *
      * @return array
      */
-    public function form_build_settings(\stdClass $data);
+    public function form_build_settings(\stdClass $data): array;
 
     /**
      * Set form data.
