@@ -38,23 +38,23 @@ interface records_manager_interface {
     /**
      * Returns single web analytics record.
      *
-     * @param int $id Analytics record ID.
+     * @param string $id Analytics record ID.
      *
      * @return false|\tool_webanalytics\record
      */
-    public function get($id);
+    public function get(string $id): ?record;
 
     /**
      * Returns all existing web analytics records.
      *
-     * @return array
+     * @return \tool_webanalytics\record_interface[]
      */
     public function get_all(): array;
 
     /**
      * Returns all existing enabled web analytics records.
      *
-     * @return array
+     * @return \tool_webanalytics\record_interface[]
      */
     public function get_enabled(): array;
 
@@ -63,18 +63,18 @@ interface records_manager_interface {
      *
      * @param \tool_webanalytics\record_interface $tool
      *
-     * @return int ID of the analytics.
+     * @return string Unique ID of the analytics.
      */
-    public function save(record_interface $tool);
+    public function save(record_interface $tool) : string;
 
     /**
      * Delete analytics.
      *
-     * @param int $id Analytics record ID.
+     * @param string $id Analytics record ID.
      *
      * @return void
      */
-    public function delete($id);
+    public function delete(string $id);
 
     /**
      * Check if records manager is ready for retrieving records.

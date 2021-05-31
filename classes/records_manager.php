@@ -15,89 +15,65 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Record manager.
+ * Record manager that uses global CFG for storing records.
  *
  * @package   tool_webanalytics
  * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2018 Catalyst IT
+ * @copyright 2021 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_webanalytics;
 
+use \core\uuid;
+
 defined('MOODLE_INTERNAL') || die();
 
 
 /**
- * Class manages records in DB.
+ * Record manager that uses global CFG for storing records.
  *
- * @copyright  2020 Catalyst IT
+ * @copyright  2021 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class records_manager implements records_manager_interface {
     /**
      * An analytics table name table name.
      */
-    const TABLE_NAME = 'tool_webanalytics';
+    const CONFIG_NAME = 'tool_anaylytics_records';
 
     /**
-     * A name of the cache component.
-     */
-    const CACHE_COMPONENT = 'tool_webanalytics';
-
-    /**
-     * A name of the cache area.
-     */
-    const CACHE_AREA = 'records';
-
-    /**
-     * A cache key name to store all records.
-     */
-    const CACHE_ALL_RECORDS_KEY = 'allrecords';
-
-    /**
-     * A cache key name to store only enabled records.
-     */
-    const CACHE_ENABLED_RECORDS_KEY = 'enabledrecords';
-
-    /**
-     * Global DB object.
+     * Row data.
      *
-     * @var \moodle_database
+     * @var \stdClass[]
      */
-    protected $db;
-
-    /**
-     * A list of all records.
-     *
-     * @var bool|false|mixed
-     */
-    protected $allrecords = false;
-
-    /**
-     * A list of enabled records.
-     *
-     * @var bool|false|mixed
-     */
-    protected $enabledrecords = false;
-
-    /**
-     * A a cache instance.
-     *
-     * @var \cache_application|\cache_session|\cache_store
-     */
-    protected $cache;
+    private $data;
 
     /**
      * Constructor.
      */
     public function __construct() {
-        global $DB;
+        $this->load_data();
+    }
 
-        $this->db = $DB;
-        $this->cache = \cache::make(self::CACHE_COMPONENT, self::CACHE_AREA);
-        $this->allrecords = $this->cache->get(self::CACHE_ALL_RECORDS_KEY);
-        $this->enabledrecords = $this->cache->get(self::CACHE_ENABLED_RECORDS_KEY);
+    /**
+     * Load data from the config.
+     */
+    private function load_data() {
+        global $CFG;
+
+        if (!isset($CFG->{self::CONFIG_NAME})) {
+            $CFG->{self::CONFIG_NAME} = serialize([]);
+        }
+
+        $this->data = unserialize($CFG->{self::CONFIG_NAME});
+    }
+
+    /**
+     * Save data to the config.
+     */
+    private function save_data() {
+        set_config(self::CONFIG_NAME, serialize($this->data));
     }
 
     /**
@@ -105,15 +81,15 @@ class records_manager implements records_manager_interface {
      *
      * Note: we don't want to use cache here.
      *
-     * @param int $id record ID.
+     * @param string $id record ID.
      *
      * @return false|\tool_webanalytics\record
      */
-    public function get($id) {
-        $record = $this->db->get_record(self::TABLE_NAME, ['id' => $id]);
+    public function get(string $id) : ?record {
+        $record = null;
 
-        if (!empty($record)) {
-            $record->settings = unserialize($record->settings);
+        if (!empty($this->data[$id])) {
+            $record = $this->data[$id];
             $record = new record($record);
         }
 
@@ -126,12 +102,15 @@ class records_manager implements records_manager_interface {
      * @return \tool_webanalytics\record_interface[]
      */
     public function get_all(): array {
-        if ($this->allrecords === false) {
-            $this->allrecords = $this->get_multiple();
-            $this->cache->set(self::CACHE_ALL_RECORDS_KEY, $this->allrecords);
+        $records = [];
+
+        foreach ($this->data as $record) {
+            if (!empty($record)) {
+                $records[$record->id] = new record($record);
+            }
         }
 
-        return $this->allrecords;
+        return $records;
     }
 
     /**
@@ -140,12 +119,15 @@ class records_manager implements records_manager_interface {
      * @return \tool_webanalytics\record[]
      */
     public function get_enabled(): array {
-        if ($this->enabledrecords === false) {
-            $this->enabledrecords = $this->get_multiple(['enabled' => 1]);
-            $this->cache->set(self::CACHE_ENABLED_RECORDS_KEY, $this->enabledrecords);
+        $records = [];
+
+        foreach ($this->get_all() as $record) {
+            if ($record->is_enabled()) {
+                $records[$record->get_property('id')] = $record;
+            }
         }
 
-        return $this->enabledrecords;
+        return $records;
     }
 
     /**
@@ -153,23 +135,21 @@ class records_manager implements records_manager_interface {
      *
      * @param \tool_webanalytics\record_interface $record
      *
-     * @return int ID of the analytics.
+     * @return string Unique ID of the analytics.
      */
-    public function save(record_interface $record) {
-        $dbrecord = $record->export();
+    public function save(record_interface $record) : string {
+        $datarecord = $record->export();
 
-        $dbrecord->settings = serialize($dbrecord->settings);
-
-        if (empty($dbrecord->id)) {
-            $dbrecord->id = $this->db->insert_record(self::TABLE_NAME, $dbrecord, true);
-        } else {
-            unset($dbrecord->type); // Never update type once it's set.
-            $this->db->update_record(self::TABLE_NAME, $dbrecord);
+        if (empty($datarecord->id)) {
+            do {
+                $datarecord->id = uuid::generate();
+            } while (key_exists($datarecord->id, $this->data));
         }
 
-        $this->clear_caches();
+        $this->data[$datarecord->id] = $datarecord;
+        $this->save_data();
 
-        return $dbrecord->id;
+        return $datarecord->id;
     }
 
 
@@ -181,8 +161,10 @@ class records_manager implements records_manager_interface {
      * @return void
      */
     public function delete($id) {
-        $this->db->delete_records(self::TABLE_NAME, ['id' => $id]);
-        $this->clear_caches();
+        if (isset($this->data[$id])) {
+            unset($this->data[$id]);
+            $this->save_data();
+        }
     }
 
     /**
@@ -191,39 +173,9 @@ class records_manager implements records_manager_interface {
      * @return bool
      */
     public function is_ready(): bool {
-        return $this->db->get_manager()->table_exists(self::TABLE_NAME);
-    }
+        global $CFG;
 
-    /**
-     * Get multiple records of the analytics.
-     *
-     * @param array $params Parameters to use in get_records functions.
-     *
-     * @return \tool_webanalytics\record[] A list of analytics.
-     */
-    protected function get_multiple(array $params = []): array {
-        $records = $this->db->get_records(self::TABLE_NAME, $params, 'id');
-
-        if (!empty($records)) {
-            foreach ($records as $record) {
-                if (!empty($record)) {
-                    $record->settings = unserialize($record->settings);
-                    $records[$record->id] = new record($record);
-                }
-            }
-        }
-
-        return $records;
-    }
-
-    /**
-     * Clear caches for records.
-     */
-    protected function clear_caches() {
-        $this->allrecords = false;
-        $this->enabledrecords = false;
-        $this->cache->delete(self::CACHE_ALL_RECORDS_KEY);
-        $this->cache->delete(self::CACHE_ENABLED_RECORDS_KEY);
+        return isset($CFG->tool_anaylytics_records);
     }
 
 }

@@ -32,7 +32,7 @@ require_once($CFG->libdir.'/formslib.php');
 admin_externalpage_setup('tool_webanalytics_manage');
 
 $action = 'delete';
-$id = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_RAW);
 $confirm = optional_param('confirm', '', PARAM_ALPHANUM);
 
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
