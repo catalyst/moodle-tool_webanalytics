@@ -35,7 +35,7 @@ use tool_webanalytics\records_manager;
  * @copyright  2021 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class records_manager__test extends advanced_testcase {
+class tool_webanalytics_records_manager_test extends advanced_testcase {
 
     /**
      * A helper function for setting some test records to a config.
