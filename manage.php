@@ -23,7 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use tool_webanalytics\records_manager_cfg;
+use tool_webanalytics\records_manager;
 use tool_webanalytics\table\tools_table;
 use tool_webanalytics\plugin_manager;
 
@@ -35,7 +35,7 @@ admin_externalpage_setup('tool_webanalytics_manage');
 $createurl = new moodle_url('/admin/tool/webanalytics/edit.php');
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
 
-$manager = new records_manager_cfg();
+$manager = new records_manager();
 
 $PAGE->set_url($manageurl);
 

@@ -83,7 +83,7 @@ class injector {
      */
     public static function get_records_manager(): records_manager_interface {
         if (!isset(self::$recordsmanager)) {
-            self::$recordsmanager = new records_manager_cfg();
+            self::$recordsmanager = new records_manager();
         }
 
         return self::$recordsmanager;

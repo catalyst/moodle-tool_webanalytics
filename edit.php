@@ -25,7 +25,7 @@
 
 use tool_webanalytics\form\edit;
 use tool_webanalytics\record;
-use tool_webanalytics\records_manager_cfg;
+use tool_webanalytics\records_manager;
 use \tool_webanalytics\plugin_manager;
 
 require_once(__DIR__.'/../../../config.php');
@@ -47,7 +47,7 @@ $record = new stdClass();
 $record->type = $type;
 $tool = null;
 $dimensions = null;
-$manager = new records_manager_cfg();
+$manager = new records_manager();
 
 if ($edit) {
     $record = $manager->get($edit);

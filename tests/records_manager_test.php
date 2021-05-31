@@ -27,7 +27,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 use tool_webanalytics\record;
-use tool_webanalytics\records_manager_cfg;
+use tool_webanalytics\records_manager;
 
 /**
  * Tests for record class.
@@ -35,7 +35,7 @@ use tool_webanalytics\records_manager_cfg;
  * @copyright  2020 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class records_manager_cfg_test extends advanced_testcase {
+class records_manager__test extends advanced_testcase {
 
     /**
      * A helper function for setting some test records to a config.
@@ -78,7 +78,7 @@ class records_manager_cfg_test extends advanced_testcase {
      * Test expected global config name.
      */
     public function test_config_name() {
-        $this->assertSame('tool_anaylytics_records', records_manager_cfg::CONFIG_NAME);
+        $this->assertSame('tool_anaylytics_records', records_manager::CONFIG_NAME);
     }
 
     /**
@@ -87,7 +87,7 @@ class records_manager_cfg_test extends advanced_testcase {
     public function test_is_ready() {
         global $CFG;
         $this->resetAfterTest();
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
 
         $this->assertTrue($manager->is_ready());
 
@@ -101,12 +101,12 @@ class records_manager_cfg_test extends advanced_testcase {
     public function test_get_all_records() {
         $this->resetAfterTest();
 
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $this->assertCount(0, $manager->get_all());
 
         $this->set_test_records();
 
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $this->assertCount(3, $manager->get_all());
     }
 
@@ -116,11 +116,11 @@ class records_manager_cfg_test extends advanced_testcase {
     public function test_get_enabled() {
         $this->resetAfterTest();
 
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $this->assertCount(0, $manager->get_enabled());
 
         $this->set_test_records();
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $records = $manager->get_enabled();
         $this->assertCount(1, $records);
         $record = reset($records);
@@ -133,14 +133,14 @@ class records_manager_cfg_test extends advanced_testcase {
     public function test_get() {
         $this->resetAfterTest();
 
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $this->assertNull($manager->get('test1'));
         $this->assertNull($manager->get('test2'));
         $this->assertNull($manager->get('test3'));
 
         $this->set_test_records();
 
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $this->assertSame($manager->get('test1')->get_property('id'), 'test1');
         $this->assertSame($manager->get('test2')->get_property('id'), 'test2');
         $this->assertSame($manager->get('test3')->get_property('id'), 'test3');
@@ -154,7 +154,7 @@ class records_manager_cfg_test extends advanced_testcase {
         global $CFG;
 
         $this->resetAfterTest();
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $this->assertCount(0, $manager->get_all());
 
         $record1 = new record((object)[
@@ -208,7 +208,7 @@ class records_manager_cfg_test extends advanced_testcase {
         $this->resetAfterTest();
         $this->set_test_records();
 
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $record = $manager->get('test2');
         $this->assertSame('', $record->get_property('name'));
 
@@ -271,7 +271,7 @@ class records_manager_cfg_test extends advanced_testcase {
         $this->resetAfterTest();
         $this->set_test_records();
 
-        $manager = new records_manager_cfg();
+        $manager = new records_manager();
         $manager->delete('test1');
 
         $this->assertEquals([
