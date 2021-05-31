@@ -35,11 +35,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class injector {
-    /**
-     * Records manager.
-     * @var \tool_webanalytics\records_manager_interface
-     */
-    private static $recordsmanager;
 
     /**
      * Inject Web analytics tracking code for all tools.
@@ -82,11 +77,7 @@ class injector {
      * @return \tool_webanalytics\records_manager_interface
      */
     public static function get_records_manager(): records_manager_interface {
-        if (!isset(self::$recordsmanager)) {
-            self::$recordsmanager = new records_manager();
-        }
-
-        return self::$recordsmanager;
+        return new records_manager();
     }
 
 }
