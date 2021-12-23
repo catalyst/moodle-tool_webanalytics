@@ -85,5 +85,12 @@ function xmldb_tool_webanalytics_upgrade($oldversion): bool {
         upgrade_plugin_savepoint(true, 2021053100, 'tool', 'webanalytics');
     }
 
+    if ($oldversion < 2021122300) {
+        set_config('tool_webanalytics_records', $CFG->tool_anaylytics_records);
+        unset_config('tool_anaylytics_records');
+
+        upgrade_plugin_savepoint(true, 2021122300, 'tool', 'webanalytics');
+    }
+
     return true;
 }

@@ -38,7 +38,7 @@ class records_manager implements records_manager_interface {
     /**
      * An analytics table name table name.
      */
-    const CONFIG_NAME = 'tool_anaylytics_records';
+    const CONFIG_NAME = 'tool_webanalytics_records';
 
     /**
      * Row data.
@@ -173,7 +173,7 @@ class records_manager implements records_manager_interface {
     public function is_ready(): bool {
         global $CFG;
 
-        return isset($CFG->tool_anaylytics_records);
+        return isset($CFG->tool_webanalytics_records);
     }
 
 }
