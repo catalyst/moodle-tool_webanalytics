@@ -43,7 +43,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
     protected function set_test_records() {
         global $CFG;
 
-        $CFG->tool_anaylytics_records = serialize([
+        $CFG->tool_webanalytics_records = serialize([
             'test1' => (object) [
                 'id' => 'test1',
                 'name' => '',
@@ -78,7 +78,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
      * Test expected global config name.
      */
     public function test_config_name() {
-        $this->assertSame('tool_anaylytics_records', records_manager::CONFIG_NAME);
+        $this->assertSame('tool_webanalytics_records', records_manager::CONFIG_NAME);
     }
 
     /**
@@ -91,7 +91,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
 
         $this->assertTrue($manager->is_ready());
 
-        unset($CFG->tool_anaylytics_records);
+        unset($CFG->tool_webanalytics_records);
         $this->assertFalse($manager->is_ready());
     }
 
@@ -196,7 +196,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
                 'cleanurl' => 0,
                 'settings' => [],
             ]
-        ], unserialize($CFG->tool_anaylytics_records));
+        ], unserialize($CFG->tool_webanalytics_records));
     }
 
     /**
@@ -258,7 +258,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
                 'cleanurl' => 0,
                 'settings' => [],
             ]
-        ], unserialize($CFG->tool_anaylytics_records));
+        ], unserialize($CFG->tool_webanalytics_records));
 
     }
 
@@ -293,7 +293,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
                 'cleanurl' => 0,
                 'settings' => [],
             ]
-        ], unserialize($CFG->tool_anaylytics_records));
+        ], unserialize($CFG->tool_webanalytics_records));
     }
 
 }
