@@ -154,11 +154,11 @@ class records_manager implements records_manager_interface {
     /**
      * Delete analytics.
      *
-     * @param int $id Analytics record ID.
+     * @param string $id Analytics record ID.
      *
      * @return void
      */
-    public function delete($id) {
+    public function delete(string $id) {
         if (isset($this->data[$id])) {
             unset($this->data[$id]);
             $this->save_data();
