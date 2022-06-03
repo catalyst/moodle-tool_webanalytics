@@ -51,7 +51,7 @@ class provider implements
      * @param  collection $collection A list of information about this component
      * @return collection The collection object filled out with information about this component.
      */
-    public static function get_metadata($collection): collection {
+    public static function get_metadata(collection $collection): collection {
 
         $collection->add_external_location_link('watool_matomo', [
             'userid' => 'privacy:metadata:watool_matomo:userid',
