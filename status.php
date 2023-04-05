@@ -31,7 +31,7 @@ require_once($CFG->libdir.'/adminlib.php');
 admin_externalpage_setup('tool_webanalytics_manage');
 
 $action = 'status';
-$id = required_param('id', PARAM_INT);
+$id = required_param('id', PARAM_ALPHANUM);
 
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
 $manager = new records_manager();
