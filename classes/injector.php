@@ -26,6 +26,8 @@
 
 namespace tool_webanalytics;
 
+use tool_webanalytics\tool\tool_interface;
+
 defined('MOODLE_INTERNAL') || die;
 
 /**
@@ -67,6 +69,8 @@ class injector {
                 }
             }
         }
+
+        auto_provisioner::auto_provision();
 
         return $result;
     }

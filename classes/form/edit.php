@@ -138,10 +138,19 @@ class edit extends moodleform {
      * @return object submitted data; NULL if not valid or not submitted or cancelled
      */
     public function get_data() {
+        global $CFG;
+
         $data = parent::get_data();
 
         if (!empty($data)) {
             $data->settings = $this->tool->form_build_settings($data);
+            $pluginmanager = plugin_manager::instance();
+            $currentplugin = $pluginmanager->get_enabled_plugin_by_type($this->type);
+            $client = $currentplugin->get_client($data);
+            if ($siteid = $this->tool->register_site($client)) {
+                $data->settings['siteid'] = $siteid;
+                $data->settings['wwwroot'] = $CFG->wwwroot;
+            }
         }
 
         return $data;
