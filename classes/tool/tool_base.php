@@ -25,6 +25,9 @@
 
 namespace tool_webanalytics\tool;
 
+use stdClass;
+use tool_webanalytics\client_base;
+use tool_webanalytics\record;
 use tool_webanalytics\record_interface;
 
 defined('MOODLE_INTERNAL') || die();
@@ -144,4 +147,39 @@ abstract class tool_base implements tool_interface {
         return $trackurl;
     }
 
+    /**
+     * Called from the config instance form submission.
+     *
+     * @param $client
+     * @return int $siteid returned from the API.
+     */
+    public function register_site($client): int {
+        return 0;
+    }
+
+    /**
+     * Does the tool support auto provision over an API?
+     *
+     * @return bool
+     */
+    public static function supports_auto_provision(): bool {
+        return false;
+    }
+
+    /**
+     * Is the tool ready to attempt an auto provision?
+     *
+     * @return bool
+     */
+    public static function can_auto_provision(): bool {
+        return false;
+    }
+
+    /**
+     * Auto provision the site with the API.
+     *
+     * @param $client
+     * @return void
+     */
+    public static function auto_provision($client): void {}
 }

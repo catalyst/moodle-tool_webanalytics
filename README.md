@@ -29,6 +29,16 @@ including categories and action types
 - Optional tracking for User ID
 - User ID could be id or username
 
+#### Matomo auto-provisioning
+- Set the watool_matomo global config settings 'apitoken' and 'apiurl' to enable auto provisioning. These can also be set in config.php e.g:
+    - `$CFG->forced_plugin_settings['watool_matomo']['siteurl'] = 'https://matomo.org';` The url of the matomo server.
+    - `$CFG->forced_plugin_settings['watool_matomo']['apitoken'] = 'xxxx';` The token to allow use of the API at the server.
+- An attempt to auto provision will be made the first time a page is loaded when the API config above is set.
+- A successfully auto-provisioned site will have an entry in the management page `admin/tool/webanalytics/manage.php` prefixed with 'auto-provisioned'.
+- If the Moodle site url changes after an auto provisioned site has been stored, the next page load will attempt to update the instance on the configured Matomo instance with the new url.
+- If autoprovisioning failed, the instance will be set with the name 'auto-provisioned:FAILED' to stop continuing attempts per page load. Delete the instance to attempt an autoprovision again.
+- You can register with Matomo on manually creating/updating an instance at `admin/tool/webanalytics/manage.php` also. When submitting the form, if the `siteurl` and `apitoken` fields are set and the instance is being created, an attempt to register with the API will be made and the site id will be stored against the instance. If editing an instance, on save the plugin will check the API to see if the  Moodle DNS has changed since the instance was last saved and if so it will attempt to register the current URL against that site id in Matomo.
+
 ### Google Universal Analytics
 - Plugin modifies the page speed sample to have 50% of your visitors samples for page speed instead of 1% making it much more useful
 - Set your Google tracking ID

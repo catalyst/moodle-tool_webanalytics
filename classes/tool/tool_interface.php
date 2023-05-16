@@ -103,4 +103,36 @@ interface tool_interface {
      * @return void
      */
     public function form_set_data(\stdClass &$data);
+
+    /**
+     * Register the instance with an external API.
+     * Called from the config instance form submission.
+     * Return 0 as the siteid if the tool does not support it.
+     *
+     * @param $client
+     * @return int $siteid returned from the API.
+     */
+    public function register_site($client): int;
+
+    /**
+     * Does the tool support auto provision over an API?
+     *
+     * @return bool
+     */
+    public static function supports_auto_provision(): bool;
+
+    /**
+     * Is the tool ready to attempt an auto provision?
+     *
+     * @return bool
+     */
+    public static function can_auto_provision(): bool;
+
+    /**
+     * Auto provision the site with the API.
+     *
+     * @param $client
+     * @return void
+     */
+    public static function auto_provision($client): void;
 }
