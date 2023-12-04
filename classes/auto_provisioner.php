@@ -41,7 +41,7 @@ class auto_provisioner {
         foreach ($autoprovisionable as $tool) {
             $class = $tool->get_tool_classname();
             if ($class::can_auto_provision()) {
-                $class::auto_provision($tool->get_client(get_config("watool_{$tool->name}")));
+                $class::auto_provision();
             }
         }
     }

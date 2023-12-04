@@ -27,14 +27,24 @@ namespace watool_matomo;
 use core_date;
 use curl;
 use Exception;
-use moodle_url;
 use stdClass;
 use Throwable;
 
 /**
  * Wrap Http client.
  */
-class client extends \tool_webanalytics\client_base {
+class client extends curl {
+    /**
+     * Simple wrapper HTTP client used for API communication.
+     *
+     * @param stdClass $config global settings to allow the API to function
+     * @param array $settings optional settings for the curl client to use.
+     */
+    public function __construct(stdClass $config, array $settings = []) {
+        $this->config = $config;
+        $this->settings = $settings;
+        parent::__construct($settings);
+    }
 
     /**
      * @return string
@@ -166,8 +176,6 @@ class client extends \tool_webanalytics\client_base {
      * @return mixed
      */
     protected function validate_response_body(string $responsebody, array $request) {
-        global $DB;
-
         try {
             $responsebody = json_decode($responsebody, false, 512, JSON_THROW_ON_ERROR);
         } catch (Throwable $t) {
@@ -175,11 +183,6 @@ class client extends \tool_webanalytics\client_base {
         }
 
         if (!empty($responsebody->result) && $responsebody->result === 'error') {
-            $todb = new stdClass();
-            $todb->endpoint = $request['method'];
-            $todb->error = $responsebody->message;
-            $todb->timecreated = time();
-            $DB->insert_record('watool_matomo_api_error_log', $todb);
             debugging($responsebody->message);
         }
 

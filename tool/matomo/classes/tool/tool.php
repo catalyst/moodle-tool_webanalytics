@@ -52,7 +52,7 @@ class tool extends tool_base {
         $settings = $this->record->get_property('settings');
 
         $template = new stdClass();
-        $template->siteid = $settings['siteid'] ?? '';
+        $template->siteid = $settings['siteid'];
         $template->siteurl = $settings['siteurl'];
         $custompiwikjs = (isset($settings['piwikjsurl']) && !empty($settings['piwikjsurl']));
         $template->piwikjsurl = $custompiwikjs ? $settings['piwikjsurl'] : $settings['siteurl'];
@@ -86,10 +86,6 @@ class tool extends tool_base {
         $mform->setType('siteurl', PARAM_TEXT);
         $mform->addRule('siteurl', get_string('required'), 'required', null, 'client');
 
-        $mform->addElement('password', 'apitoken', get_string('apitoken', 'watool_matomo'));
-        $mform->setType('apitoken', PARAM_TEXT);
-        $mform->addHelpButton('apitoken', 'apitoken', 'watool_matomo');
-
         $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
         $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
         $mform->setType('piwikjsurl', PARAM_URL);
@@ -107,8 +103,8 @@ class tool extends tool_base {
         $mform->setDefault('userid', 1);
 
         $choices = [
-                'id' => 'id',
-                'username' => 'username',
+            'id' => 'id',
+            'username' => 'username',
         ];
 
         $mform->addElement('select', 'usefield', get_string('usefield', 'watool_matomo'), $choices);
@@ -128,7 +124,7 @@ class tool extends tool_base {
      * @return void
      */
     public function form_validate(&$data, &$files, &$errors) {
-        if (empty($data['siteid']) && empty($data['apitoken'])) {
+        if (empty($data['siteid'])) {
             $errors['siteid'] = get_string('error:siteid', 'watool_matomo');
         }
 
@@ -172,7 +168,6 @@ class tool extends tool_base {
         $settings['imagetrack'] = isset($data->imagetrack) ? $data->imagetrack : 0;
         $settings['userid'] = isset($data->userid) ? $data->userid : 0;
         $settings['usefield'] = isset($data->usefield) ? $data->usefield : 'id';
-        $settings['apitoken'] = isset($data->apitoken) ? $data->apitoken : '';
 
         return $settings;
     }
@@ -191,33 +186,6 @@ class tool extends tool_base {
         $data->imagetrack = isset($data->settings['imagetrack']) ? $data->settings['imagetrack'] : 0;
         $data->userid = isset($data->settings['userid']) ? $data->settings['userid'] : 1;
         $data->usefield = isset($data->settings['usefield']) ? $data->settings['usefield'] : 'id';
-        $data->apitoken = isset($data->settings['apitoken']) ? $data->settings['apitoken'] : '';
-    }
-
-    /**
-     * Register a site with the configured Matomo instance, called from the instance form submission.
-     * If the Moodle site url has changed since this setting was last saved then update the Matomo instance over the API.
-     * Otherwise, create a new instance over the API.
-     *
-     * @param $client
-     * @return int siteid if successful, 0 if not.
-     */
-    public function register_site($client): int {
-        global $CFG;
-
-        $settings = $this->record->get_property('settings');
-        $hasdnschanged = !empty($settings['wwwroot']) && $settings['wwwroot'] !== $CFG->wwwroot;
-        $siteid = $client->get_siteid_from_url($CFG->wwwroot);
-
-        if ($hasdnschanged && $siteid) {
-            return $client->update_site($siteid);
-        }
-
-        if (!$siteid) {
-            return $client->add_site();
-        }
-
-        return $siteid;
     }
 
     /**
@@ -259,13 +227,13 @@ class tool extends tool_base {
      * If the DNS has changed since the current auto provisioned site was added...
      * then attempt to update the matomo instance with the new URL. Otherwise, just provision a new site.
      *
-     * @param $client
      * @return void
      */
-    public static function auto_provision($client): void {
+    public static function auto_provision(): void {
         global $CFG;
 
         $config = get_config('watool_matomo');
+        $client = new \watool_matomo\client($config);
         $rm = new records_manager();
 
         // Try and find an existing auto provisioned record.

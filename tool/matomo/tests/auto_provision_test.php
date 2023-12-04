@@ -53,45 +53,6 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
     /**
      * @return void
      */
-    public function test_register_site(): void {
-        global $CFG;
-
-        // Setup the stub return ids.
-        $clientstub = $this->get_client_stub(0, 1, 2);
-        $record = new record(new stdClass());
-        $tool = new \watool_matomo\tool\tool($record);
-
-        // First time registering so expect id 2.
-        $id = $tool->register_site($clientstub);
-        $this->assertEquals(2, $id);
-
-        $data = new stdClass();
-        $data->name = uniqid();
-        $data->type = 'matomo';
-        $settings['siteid'] = 2;
-        $settings['wwwroot'] = $CFG->wwwroot;
-        $data->settings = $settings;
-        $record = new record($data);
-
-        $clientstub = $this->get_client_stub(2, 1, 3);
-        $tool = new \watool_matomo\tool\tool($record);
-
-        // Site already registered with same url so siteid stays the same and nothing is updated.
-        $id = $tool->register_site($clientstub);
-        $this->assertEquals(2, $id);
-
-        $settings['wwwroot'] = 'https://example.com';
-        $record->set_property('settings', $settings);
-        $tool = new \watool_matomo\tool\tool($record);
-
-        // Site already registered but DNS has changed since last update.
-        $id = $tool->register_site($clientstub);
-        $this->assertEquals(1, $id);
-    }
-
-    /**
-     * @return void
-     */
     public function test_supports_auto_provision(): void {
         $this->resetAfterTest(true);
 
