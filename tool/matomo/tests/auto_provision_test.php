@@ -28,9 +28,17 @@ use tool_webanalytics\records_manager;
 use tool_webanalytics\record;
 use watool_matomo\client;
 
+/**
+ * Tests for Matomo auto provisioning.
+ *
+ * @copyright  2023 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class watool_matomo_autoprovision_test extends advanced_testcase {
 
     /**
+     * Sets the required config.
+     *
      * @return void
      */
     private function set_ap_config() {
@@ -39,9 +47,15 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
     }
 
     /**
-     * @return client stub
+     *
+     * Returns a client with stub methods.
+     *
+     * @param integer $siteidfromurl
+     * @param bool $updatesite
+     * @param integer $addsite
+     * @return client
      */
-    private function get_client_stub($siteidfromurl = 1, $updatesite = 1, $addsite = 1): client {
+    private function get_client_stub($siteidfromurl = 1, $updatesite = true, $addsite = 1): client {
         $clientstub = $this->createStub('\watool_matomo\client');
         $clientstub->method('get_siteid_from_url')->willReturn($siteidfromurl);
         $clientstub->method('update_site')->willReturn($updatesite);
@@ -51,6 +65,8 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
     }
 
     /**
+     * Tests support for auto provision.
+     *
      * @return void
      */
     public function test_supports_auto_provision(): void {
@@ -65,6 +81,8 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
     }
 
     /**
+     * Tests scenarios where auto provision is required.
+     *
      * @return void
      */
     public function test_can_auto_provision(): void {
@@ -112,6 +130,8 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
     }
 
     /**
+     * Tests auto provision and updating.
+     *
      * @return void
      */
     public function test_auto_provision(): void {

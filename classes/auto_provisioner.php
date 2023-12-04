@@ -27,6 +27,12 @@ namespace tool_webanalytics;
 
 use tool_webanalytics\plugininfo\watool;
 
+/**
+ * Class that allows for Auto-provisioning.
+ *
+ * @copyright  2023 Catalyst IT
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
 class auto_provisioner {
 
     /**

@@ -131,8 +131,8 @@ class record implements record_interface {
     /**
      * Set the property value.
      *
-     * @param $name
-     * @param $value
+     * @param string $name
+     * @param mixed $value
      * @return void
      */
     public function set_property($name, $value): void {

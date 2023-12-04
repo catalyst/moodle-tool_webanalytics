@@ -17,7 +17,7 @@
 /**
  * Settings
  *
- * @package   tool_webanalytics
+ * @package   watool_matomo
  * @author    Simon Adams (simon.adams@catalyst-eu.net)
  * @copyright 2023 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -26,28 +26,22 @@
 defined('MOODLE_INTERNAL') || die;
 
 if ($hassiteconfig) {
-    $settings->add(
-            new admin_setting_heading(
-                    'watool_matomo_autoprovision',
-                    get_string('autoprovision_heading', 'watool_matomo'),
-                    ''
-            )
-    );
-    $settings->add(
-            new admin_setting_configtext(
-                    'watool_matomo_siteurl',
-                    get_string('apiurl', 'watool_matomo'),
-                    get_string('apiurl_help', 'watool_matomo'),
-                    $CFG->forced_plugin_settings['watool_matomo']['url'] ?? '',
-                    PARAM_URL
-            )
-    );
-    $settings->add(
-            new admin_setting_configpasswordunmask(
-                    'watool_matomo_token',
-                    get_string('apitoken', 'watool_matomo'),
-                    get_string('apitoken_desc', 'watool_matomo'),
-                    $CFG->forced_plugin_settings['watool_matomo']['token'] ?? '',
-            )
-    );
+    $settings->add(new admin_setting_heading(
+        'watool_matomo_autoprovision',
+        get_string('autoprovision_heading', 'watool_matomo'),
+        ''
+    ));
+    $settings->add(new admin_setting_configtext(
+        'watool_matomo/siteurl',
+        get_string('apiurl', 'watool_matomo'),
+        get_string('apiurl_help', 'watool_matomo'),
+        '',
+        PARAM_URL
+    ));
+    $settings->add(new admin_setting_configpasswordunmask(
+        'watool_matomo/apitoken',
+        get_string('apitoken', 'watool_matomo'),
+        get_string('apitoken_desc', 'watool_matomo'),
+        '',
+    ));
 }

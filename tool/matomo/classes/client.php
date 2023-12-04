@@ -35,6 +35,20 @@ use Throwable;
  */
 class client extends curl {
     /**
+     * Global config settings to allow the API to function.
+     *
+     * @var stdClass
+     */
+    protected $config;
+
+    /**
+     * Optional settings for the curl client to use.
+     *
+     * @var array
+     */
+    protected $settings;
+
+    /**
      * Simple wrapper HTTP client used for API communication.
      *
      * @param stdClass $config global settings to allow the API to function
@@ -47,6 +61,8 @@ class client extends curl {
     }
 
     /**
+     * Gets the api url from config.
+     *
      * @return string
      * @throws Exception
      */
@@ -59,7 +75,7 @@ class client extends curl {
         if (!empty($url['scheme'])) {
             return $this->config->siteurl;
         }
-        return "https://{$url['path']}";
+        return "https://{$this->config->siteurl}";
     }
 
     /**
@@ -69,10 +85,10 @@ class client extends curl {
      */
     private function build_request(): array {
         return [
-                'module' => 'API',
-                'method' => '',
-                'format' => 'JSON',
-                'token_auth' => $this->config->apitoken
+            'module' => 'API',
+            'method' => '',
+            'format' => 'JSON',
+            'token_auth' => $this->config->apitoken,
         ];
     }
 
@@ -116,18 +132,16 @@ class client extends curl {
      * @param string $sitename
      * @param string[] $urls
      * @param string $timezone
-     * @param string $currency
      * @return int Site id on success, or 0 on failure.
      * @throws Exception
      */
-    public function add_site(string $sitename = '', array $urls = [], string $timezone = '', string $currency = ''): int {
+    public function add_site(string $sitename = '', array $urls = [], string $timezone = ''): int {
         global $SITE;
 
         $request = $this->build_request();
         $request['method'] = 'SitesManager.addSite';
         $request['siteName'] = !empty($sitename) ? $sitename : $SITE->fullname;
         $request['timezone'] = !empty($timezone) ? $timezone : core_date::get_server_timezone();
-        $request['currency'] = !empty($currency) ? $currency : 'GBP';
         $request = array_merge($request, $this->build_urls_for_request($urls));
         $rawresponse = $this->post($this->get_api_url(), $request);
         $responsebody = $this->validate_response_body($rawresponse, $request);
@@ -140,32 +154,25 @@ class client extends curl {
      *
      * @param int $siteid
      * @param string $sitename
-     * @param array $urls
+     * @param array $urls A list of all urls for the site. This should include the current urls.
      * @param string $timezone
-     * @param string $currency
-     * @return int
+     * @return bool true for success, false for error
      * @throws Exception
      */
-    public function update_site(
-            int $siteid,
-            string $sitename = '',
-            array $urls = [],
-            string $timezone = '',
-            string $currency = ''
-    ): int {
+    public function update_site(int $siteid, string $sitename = '', array $urls = [], string $timezone = ''): bool {
         global $SITE;
 
         $request = $this->build_request();
         $request['method'] = 'SitesManager.updateSite';
         $request['idSite'] = $siteid;
-        $request['siteName'] = !empty($sitename) ? $sitename : $SITE->fullname;
-        $request['timezone'] = !empty($timezone) ? $timezone : core_date::get_server_timezone();
-        $request['currency'] = !empty($currency) ? $currency : 'GBP';
+        $request['siteName'] = $sitename;
+        $request['timezone'] = $timezone;
+        $request = array_filter($request);
         $request = array_merge($request, $this->build_urls_for_request($urls));
         $rawresponse = $this->post($this->get_api_url(), $request);
         $responsebody = $this->validate_response_body($rawresponse, $request);
 
-        return !empty($responsebody->value) ? $responsebody->value : 0;
+        return !empty($responsebody->result) && $responsebody->result === 'success';
     }
 
     /**
@@ -179,11 +186,13 @@ class client extends curl {
         try {
             $responsebody = json_decode($responsebody, false, 512, JSON_THROW_ON_ERROR);
         } catch (Throwable $t) {
-            $responsebody = $t->getMessage();
+            $responsebody = new stdClass();
+            $responsebody->result = 'error';
+            $responsebody->message = $t->getMessage();
         }
 
         if (!empty($responsebody->result) && $responsebody->result === 'error') {
-            debugging($responsebody->message);
+            debugging('tool_webanalytics: Matomo API error: ' . $responsebody->message);
         }
 
         return $responsebody;
@@ -198,7 +207,7 @@ class client extends curl {
     private function build_urls_for_request(array $urls): array {
         global $CFG;
 
-        $urls = !empty($urls) ? $urls : [$CFG->wwwroot];
+        $urls = !empty($urls) ? array_unique($urls) : [$CFG->wwwroot];
         $associative = [];
         $count = 0;
         foreach ($urls as $url) {

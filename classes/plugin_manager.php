@@ -120,6 +120,8 @@ class plugin_manager {
     }
 
     /**
+     * Return a list of all enabled plugins by type.
+     *
      * @param string $type
      * @return watool|null
      */

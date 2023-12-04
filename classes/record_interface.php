@@ -54,6 +54,7 @@ interface record_interface {
      * Set the property value.
      *
      * @param string $name Property name.
+     * @param mixed $value Property value.
      */
     public function set_property($name, $value);
 

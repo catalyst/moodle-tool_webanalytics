@@ -40,6 +40,17 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool extends tool_base {
+    /**
+     * Default settings used when creating a new instance.
+     */
+    const SETTINGS_DEFAULTS = [
+        'siteid' => '',
+        'siteurl' => '',
+        'piwikjsurl' => '',
+        'imagetrack' => 0,
+        'userid' => 0,
+        'usefield' => 'id',
+    ];
 
     /**
      * Get tracking code to insert.
@@ -161,15 +172,10 @@ class tool extends tool_base {
      * @return array
      */
     public function form_build_settings(stdClass $data): array {
-        $settings = [];
-        $settings['siteid'] = isset($data->siteid) ? $data->siteid : '';
-        $settings['siteurl'] = isset($data->siteurl) ? $data->siteurl : '';
-        $settings['piwikjsurl'] = isset($data->piwikjsurl) ? $data->piwikjsurl : '';
-        $settings['imagetrack'] = isset($data->imagetrack) ? $data->imagetrack : 0;
-        $settings['userid'] = isset($data->userid) ? $data->userid : 0;
-        $settings['usefield'] = isset($data->usefield) ? $data->usefield : 'id';
-
-        return $settings;
+        return array_merge(
+            self::SETTINGS_DEFAULTS,
+            array_intersect_key(get_object_vars($data), self::SETTINGS_DEFAULTS),
+        );
     }
 
     /**
@@ -224,8 +230,7 @@ class tool extends tool_base {
 
     /**
      * Auto provision based on config 'siteurl' and 'apitoken'.
-     * If the DNS has changed since the current auto provisioned site was added...
-     * then attempt to update the matomo instance with the new URL. Otherwise, just provision a new site.
+     * This can either create a new Matomo instance, or update an existing one.
      *
      * @return void
      */

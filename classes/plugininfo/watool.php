@@ -54,7 +54,7 @@ class watool extends base {
     }
 
     /**
-     * Gt the classname of the tool to aid in calling methods dynamically.
+     * Get the classname of the tool to aid in calling methods dynamically.
      *
      * @return string
      */
@@ -63,12 +63,11 @@ class watool extends base {
     }
 
     /**
-     * Load tool specific settings.
+     * Loads plugin settings to the settings tree
      *
      * @param \part_of_admin_tree $adminroot
-     * @param $parentnodename
-     * @param $hassiteconfig
-     * @return void
+     * @param string $parentnodename
+     * @param bool $hassiteconfig whether the current user has moodle/site:config capability
      */
     public function load_settings(\part_of_admin_tree $adminroot, $parentnodename, $hassiteconfig) {
         global $CFG, $USER, $DB, $OUTPUT, $PAGE; // In case settings.php wants to refer to them.
