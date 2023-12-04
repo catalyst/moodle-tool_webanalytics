@@ -51,11 +51,10 @@ class client extends curl {
     /**
      * Simple wrapper HTTP client used for API communication.
      *
-     * @param stdClass $config global settings to allow the API to function
      * @param array $settings optional settings for the curl client to use.
      */
-    public function __construct(stdClass $config, array $settings = []) {
-        $this->config = $config;
+    public function __construct(array $settings = []) {
+        $this->config = get_config('watool_matomo');
         $this->settings = $settings;
         parent::__construct($settings);
     }
@@ -94,6 +93,7 @@ class client extends curl {
 
     /**
      * Get the site id by url of any site registered on Matomo.
+     * If there are multiple, the API will only return the first instance.
      *
      * @param string $url
      * @return int 0 Means it doesn't exist.
@@ -142,6 +142,7 @@ class client extends curl {
         $request['method'] = 'SitesManager.addSite';
         $request['siteName'] = !empty($sitename) ? $sitename : $SITE->fullname;
         $request['timezone'] = !empty($timezone) ? $timezone : core_date::get_server_timezone();
+        $request['excludeUnknownUrls'] = $this->config->matomostricttracking;
         $request = array_merge($request, $this->build_urls_for_request($urls));
         $rawresponse = $this->post($this->get_api_url(), $request);
         $responsebody = $this->validate_response_body($rawresponse, $request);
@@ -160,8 +161,6 @@ class client extends curl {
      * @throws Exception
      */
     public function update_site(int $siteid, string $sitename = '', array $urls = [], string $timezone = ''): bool {
-        global $SITE;
-
         $request = $this->build_request();
         $request['method'] = 'SitesManager.updateSite';
         $request['idSite'] = $siteid;
@@ -185,10 +184,10 @@ class client extends curl {
     protected function validate_response_body(string $responsebody, array $request) {
         try {
             $responsebody = json_decode($responsebody, false, 512, JSON_THROW_ON_ERROR);
-        } catch (Throwable $t) {
+        } catch (Throwable $e) {
             $responsebody = new stdClass();
             $responsebody->result = 'error';
-            $responsebody->message = $t->getMessage();
+            $responsebody->message = $e->getMessage();
         }
 
         if (!empty($responsebody->result) && $responsebody->result === 'error') {

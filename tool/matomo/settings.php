@@ -44,4 +44,16 @@ if ($hassiteconfig) {
         get_string('apitoken_desc', 'watool_matomo'),
         '',
     ));
+    $settings->add(new admin_setting_configcheckbox(
+        'watool_matomo/defaultautoupdate',
+        get_string('defaultautoupdate', 'watool_matomo'),
+        get_string('defaultautoupdate_help', 'watool_matomo'),
+        1
+    ));
+    $settings->add(new admin_setting_configcheckbox(
+        'watool_matomo/matomostricttracking',
+        get_string('matomostricttracking', 'watool_matomo'),
+        get_string('matomostricttracking_help', 'watool_matomo'),
+        0
+    ));
 }

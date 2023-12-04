@@ -26,10 +26,8 @@
 namespace watool_matomo\tool;
 
 use stdClass;
-use Throwable;
-use tool_webanalytics\record;
-use tool_webanalytics\records_manager;
 use tool_webanalytics\tool\tool_base;
+use watool_matomo\auto_provision;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -50,7 +48,14 @@ class tool extends tool_base {
         'imagetrack' => 0,
         'userid' => 0,
         'usefield' => 'id',
+        'autoupdate' => 0,
+        'autoupdateurls' => [],
     ];
+
+    /**
+     * The type of the web analytics tool.
+     */
+    const TYPE = 'matomo';
 
     /**
      * Get tracking code to insert.
@@ -95,16 +100,18 @@ class tool extends tool_base {
         $mform->addElement('text', 'siteurl', get_string('siteurl', 'watool_matomo'));
         $mform->addHelpButton('siteurl', 'siteurl', 'watool_matomo');
         $mform->setType('siteurl', PARAM_TEXT);
-        $mform->addRule('siteurl', get_string('required'), 'required', null, 'client');
+        $mform->disabledIf('siteurl', 'autoupdate', 'checked');
 
         $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
         $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
         $mform->setType('piwikjsurl', PARAM_URL);
         $mform->setDefault('piwikjsurl', '');
+        $mform->disabledIf('piwikjsurl', 'autoupdate', 'checked');
 
         $mform->addElement('text', 'siteid', get_string('siteid', 'watool_matomo'));
         $mform->addHelpButton('siteid', 'siteid', 'watool_matomo');
         $mform->setType('siteid', PARAM_TEXT);
+        $mform->disabledIf('siteid', 'autoupdate', 'checked');
 
         $mform->addElement('checkbox', 'imagetrack', get_string('imagetrack', 'watool_matomo'));
         $mform->addHelpButton('imagetrack', 'imagetrack', 'watool_matomo');
@@ -123,6 +130,19 @@ class tool extends tool_base {
         $mform->setType('usefield', PARAM_TEXT);
 
         $mform->disabledIf('usefield', 'userid');
+
+        if (auto_provision::matching_siteurl($this->record)) {
+            $mform->addElement('checkbox', 'autoupdate', get_string('autoupdate', 'watool_matomo'));
+            $mform->addHelpButton('autoupdate', 'autoupdate', 'watool_matomo');
+        }
+
+        $settings = $this->record->get_property('settings');
+        if (!empty($settings['autoupdate'])) {
+            $mform->addElement('textarea', 'autoupdateurls', get_string('autoupdateurls', 'watool_matomo'));
+            $mform->addHelpButton('autoupdateurls', 'autoupdateurls', 'watool_matomo');
+            $mform->setType('autoupdateurls', PARAM_TEXT);
+            $mform->hardFreeze('autoupdateurls');
+        }
     }
 
     /**
@@ -162,6 +182,13 @@ class tool extends tool_base {
         if (!empty($data['piwikjsurl']) && substr(trim($data['piwikjsurl']), -1) == '/') {
             $errors['piwikjsurl'] = get_string('error:siteurltrailingslash', 'watool_matomo');
         }
+
+        if (!empty($data['autoupdate'])) {
+            $ap = new auto_provision();
+            if (!$ap->validate_record($this->record)) {
+                $errors['autoupdate'] = get_string('error:autoupdatevalidation', 'watool_matomo');
+            }
+        }
     }
 
     /**
@@ -172,6 +199,9 @@ class tool extends tool_base {
      * @return array
      */
     public function form_build_settings(stdClass $data): array {
+        // If auto updating is enabled, convert urls back to array. autoupdateurls is not a user input.
+        $data->autoupdateurls = (!empty($data->autoupdate) && !empty($data->autoupdateurls))
+            ? explode(PHP_EOL, $data->autoupdateurls) : [];
         return array_merge(
             self::SETTINGS_DEFAULTS,
             array_intersect_key(get_object_vars($data), self::SETTINGS_DEFAULTS),
@@ -192,6 +222,9 @@ class tool extends tool_base {
         $data->imagetrack = isset($data->settings['imagetrack']) ? $data->settings['imagetrack'] : 0;
         $data->userid = isset($data->settings['userid']) ? $data->settings['userid'] : 1;
         $data->usefield = isset($data->settings['usefield']) ? $data->settings['usefield'] : 'id';
+        $data->autoupdate = isset($data->settings['autoupdate']) ? $data->settings['autoupdate'] : 0;
+        $data->autoupdateurls = isset($data->settings['autoupdateurls'])
+            ? implode(PHP_EOL, $data->settings['autoupdateurls']) : '';
     }
 
     /**
@@ -206,26 +239,17 @@ class tool extends tool_base {
     }
 
     /**
-     * Has the current siteurl changed based on any stored instances?
+     * Is there a need to create or update an auto provision?
+     * This will be called often, so don't perform any heavy actions.
      *
      * @return bool
      */
     public static function can_auto_provision(): bool {
-        global $CFG;
         if (!self::supports_auto_provision()) {
             return false;
         }
-        $canprovision = true;
-        $rm = new records_manager();
-        $records = $rm->get_all();
-        foreach ($records as $record) {
-            $settings = $record->get_property('settings');
-            $name = $record->get_property('name');
-            if ((!empty($settings['wwwroot']) && $settings['wwwroot'] === $CFG->wwwroot) || $name === 'auto-provisioned:FAILED') {
-                $canprovision = false;
-            }
-        }
-        return $canprovision;
+        $action = auto_provision::get_action();
+        return !empty($action->type);
     }
 
     /**
@@ -235,48 +259,7 @@ class tool extends tool_base {
      * @return void
      */
     public static function auto_provision(): void {
-        global $CFG;
-
-        $config = get_config('watool_matomo');
-        $client = new \watool_matomo\client($config);
-        $rm = new records_manager();
-
-        // Try and find an existing auto provisioned record.
-        $allrecords = $rm->get_all();
-        $autoprovisioned = array_filter($allrecords, function($record) {
-            return preg_match("/^auto-provisioned:/", $record->get_property('name'));
-        });
-
-        if ($autoprovisioned = reset($autoprovisioned)) {
-            $apsettings = $autoprovisioned->get_property('settings');
-            $data = $autoprovisioned->export();
-        } else {
-            $data = new stdClass();
-            $data->name = 'auto-provisioned:' . uniqid();
-        }
-
-        $hasdnschanged = !empty($apsettings['wwwroot']) && $apsettings['wwwroot'] !== $CFG->wwwroot;
-
-        try {
-            // If the DNS has changed, let's try to update an existing site.
-            if ($hasdnschanged && $siteid = $client->get_siteid_from_url($apsettings['wwwroot'])) {
-                $client->update_site($siteid, '', [$CFG->wwwroot]);
-            } else {
-                // No site provisioned yet, create a new one.
-                $siteid = $client->add_site();
-            }
-        } catch (Throwable $t) {
-            $data->name = 'auto-provisioned:FAILED';
-            $siteid = null;
-        }
-
-        $settings['siteid'] = $siteid;
-        $settings['wwwroot'] = $CFG->wwwroot;
-        $settings['siteurl'] = preg_replace("/^(http|https):\/\//", '', $config->siteurl);
-        $settings['apitoken'] = $config->apitoken;
-        $data->type = 'matomo';
-        $data->settings = $settings;
-        $record = new record($data);
-        $rm->save($record);
+        $ap = new auto_provision();
+        $ap->attempt();
     }
 }

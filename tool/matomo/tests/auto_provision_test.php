@@ -60,6 +60,7 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
         $clientstub->method('get_siteid_from_url')->willReturn($siteidfromurl);
         $clientstub->method('update_site')->willReturn($updatesite);
         $clientstub->method('add_site')->willReturn($addsite);
+        $clientstub->method('get_urls_from_siteid')->willReturn([]);
 
         return $clientstub;
     }
@@ -89,43 +90,58 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
         global $CFG;
 
         $this->resetAfterTest(true);
+        $rm = new records_manager();
 
         // With no auto-prov API config.
         $this->assertFalse(\watool_matomo\tool\tool::can_auto_provision());
 
-        $this->set_ap_config();
         // With auto-prov API config.
+        $this->set_ap_config();
         $this->assertTrue(\watool_matomo\tool\tool::can_auto_provision());
 
+        // With an existing manual record.
         $data = new stdClass();
-        $data->name = 'auto-provisioned:' . uniqid();
+        $data->name = 'Manual Instance';
         $data->type = 'matomo';
+        $data->enabled = true;
         $settings['siteid'] = 1;
-        $settings['wwwroot'] = $CFG->wwwroot;
         $settings['siteurl'] = "https://example.com";
-        $settings['apitoken'] = "1234567ABCDEFG";
         $data->settings = $settings;
         $record = new record($data);
-
-        $rm = new records_manager();
         $id = $rm->save($record);
 
+        $this->assertFalse(\watool_matomo\tool\tool::can_auto_provision());
+        $rm->delete($id);
+
         // With an existing record that has the same DNS as the site currently.
+        $data = new stdClass();
+        $data->name = get_string('autoprovision_name', 'watool_matomo') . uniqid();
+        $data->type = 'matomo';
+        $data->enabled = true;
+        $settings['autoupdate'] = true;
+        $settings['siteid'] = 1;
+        $settings['autoupdateurls'] = [$CFG->wwwroot];
+        $settings['siteurl'] = "https://example.com";
+        $data->settings = $settings;
+        $record = new record($data);
+        $id = $rm->save($record);
+
         $this->assertFalse(\watool_matomo\tool\tool::can_auto_provision());
 
+        // The site DNS has been changed.
         $record = $rm->get($id);
         $settings = $record->get_property('settings');
-        $settings['wwwroot'] = "https://newexample.com";
+        $settings['autoupdateurls'] = ['https://newexample.com'];
         $record->set_property('settings', $settings);
         $rm->save($record);
 
-        // The site DNS has been changed.
         $this->assertTrue(\watool_matomo\tool\tool::can_auto_provision());
 
-        $record->set_property('name', 'auto-provisioned:FAILED');
+        // An auto provision attempt failed so don't keep trying.
+        $record->set_property('name', get_string('autoprovision_failed_name', 'watool_matomo'));
+        $record->set_property('enabled', false);
         $rm->save($record);
 
-        // An auto provision attempt failed so don't keep trying.
         $this->assertFalse(\watool_matomo\tool\tool::can_auto_provision());
     }
 
@@ -143,27 +159,29 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
         // Setup the stub return ids.
         $clientstub = $this->get_client_stub();
 
-        \watool_matomo\tool\tool::auto_provision($clientstub);
+        $ap = new \watool_matomo\auto_provision($clientstub);
+        $ap->attempt();
+
         $rm = new records_manager();
         $allrecords = $rm->get_all();
         $this->assertCount(1, $allrecords);
 
+        // Check that auto provision can update the urls.
         $record = reset($allrecords);
         $settings = $record->get_property('settings');
-        $settings['wwwroot'] = "https://newexample.com";
+        $settings['autoupdateurls'] = ["https://newexample.com"];
         $record->set_property('settings', $settings);
         $id = $record->get_property('id');
         $rm->save($record);
 
-        \watool_matomo\tool\tool::auto_provision($clientstub);
+        $ap->attempt();
 
         $rm = new records_manager();
         $allrecords = $rm->get_all();
         $this->assertCount(1, $allrecords);
         $record = reset($allrecords);
         $settings = $record->get_property('settings');
-        // Check the existing record had its DNS flag updated.
-        $this->assertEquals($CFG->wwwroot, $settings['wwwroot']);
+        $this->assertContains($CFG->wwwroot, $settings['autoupdateurls']);
         $this->assertEquals($id, $record->get_property('id'));
 
         $rm->delete($record->get_property('id'));
@@ -171,15 +189,18 @@ class watool_matomo_autoprovision_test extends advanced_testcase {
         $allrecords = $rm->get_all();
         $this->assertCount(0, $allrecords);
 
-        $clientstub->method('add_site')->willThrowException(new Exception());
+        // Check that failed auto provisions are renamed correctly.
+        $clientstub2 = $this->createStub('\watool_matomo\client');
+        $clientstub2->method('get_siteid_from_url')->willReturn(0);
+        $clientstub2->method('add_site')->willThrowException(new Exception());
 
-        \watool_matomo\tool\tool::auto_provision($clientstub);
+        $ap2 = new \watool_matomo\auto_provision($clientstub2);
+        $ap2->attempt();
 
         $rm = new records_manager();
         $allrecords = $rm->get_all();
         $this->assertCount(1, $allrecords);
         $record = reset($allrecords);
-        // Make sure failed provisions get marked accordingly.
-        $this->assertEquals('auto-provisioned:FAILED', $record->get_property('name'));
+        $this->assertEquals(get_string('autoprovision_failed_name', 'watool_matomo'), $record->get_property('name'));
     }
 }
