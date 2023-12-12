@@ -5,6 +5,13 @@
 
 A Moodle admin tool adding Web Analytics to your Moodle site.
 
+## Branches
+
+| Moodle version    | Branch              | PHP       |
+| ----------------- | ------------------- |-----------|
+| Moodle 4.1 +      | `MOODLE_401_STABLE` | 7.4+      |
+| Moodle 3.5 - 4.0  | `master`            | 7.2+      |
+
 ## Install instructions
 1. Copy the code to admin/tool/webanalytics directory of your Moodle instance
 2. Visit the notifications page and install the plugin
