@@ -128,6 +128,20 @@ class record implements record_interface {
         return $this->$name;
     }
 
+    /**
+     * Set the property value.
+     *
+     * @param $name
+     * @param $value
+     * @return void
+     */
+    public function set_property($name, $value): void {
+        if (!property_exists($this, $name)) {
+            throw new coding_exception('Property does not exist.', $name);
+        }
+
+        $this->$name = $value;
+    }
 
     /**
      * Export record for inserting/updating it in DB.
