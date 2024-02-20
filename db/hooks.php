@@ -15,19 +15,20 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version information.
+ * Hook callbacks for Webanalytics
  *
  * @package   tool_webanalytics
- * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2018 Catalyst IT
+ * @author    Benjamin Walker (benjaminwalker@catalyst-au.net)
+ * @copyright 2024 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die;
+defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2024022000;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2024022000;      // Same as version.
-$plugin->requires  = 2022112800;      // Requires Moodle 4.1 or later.
-$plugin->component = "tool_webanalytics";
-$plugin->supported = [401, 403];  // Available as of Moodle 4.1.0 or later.
-$plugin->maturity  = MATURITY_STABLE;
+$callbacks = [
+    [
+        'hook' => core\hook\output\standard_head_html_prepend::class,
+        'callback' => 'tool_webanalytics\local\hooks\output\standard_head_html_prepend::callback',
+        'priority' => 0,
+    ],
+];
