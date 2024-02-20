@@ -14,20 +14,26 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace tool_webanalytics\local\hooks\output;
+
+use tool_webanalytics\injector;
+
 /**
- * Version information.
+ * Allows plugins to add any elements to the page <head> html tag
  *
  * @package   tool_webanalytics
- * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2018 Catalyst IT
+ * @author    Benjamin Walker (benjaminwalker@catalyst-au.net)
+ * @copyright 2024 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class standard_head_html_prepend {
 
-defined('MOODLE_INTERNAL') || die;
-
-$plugin->version   = 2024022000;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2024022000;      // Same as version.
-$plugin->requires  = 2022112800;      // Requires Moodle 4.1 or later.
-$plugin->component = "tool_webanalytics";
-$plugin->supported = [401, 403];  // Available as of Moodle 4.1.0 or later.
-$plugin->maturity  = MATURITY_STABLE;
+    /**
+     * Render tracking code.
+     *
+     * @param \core\hook\output\standard_head_html_prepend $hook
+     */
+    public static function callback(\core\hook\output\standard_head_html_prepend $hook): void {
+        $hook->add_html(injector::render_tracking_code());
+    }
+}
