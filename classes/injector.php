@@ -68,6 +68,8 @@ class injector {
             }
         }
 
+        auto_provisioner::auto_provision();
+
         return $result;
     }
 

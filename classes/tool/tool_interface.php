@@ -103,4 +103,25 @@ interface tool_interface {
      * @return void
      */
     public function form_set_data(\stdClass &$data);
+
+    /**
+     * Does the tool support auto provision over an API?
+     *
+     * @return bool
+     */
+    public static function supports_auto_provision(): bool;
+
+    /**
+     * Is the tool ready to attempt an auto provision?
+     *
+     * @return bool
+     */
+    public static function can_auto_provision(): bool;
+
+    /**
+     * Auto provision the site with the API.
+     *
+     * @return void
+     */
+    public static function auto_provision(): void;
 }

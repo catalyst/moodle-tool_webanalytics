@@ -130,7 +130,7 @@ class tools_table extends flexible_table {
 
         $buttons[] = self::format_icon_link(
             new moodle_url('/admin/tool/webanalytics/edit.php', [
-                'edit' => $record->get_property('id'),
+                'id' => $record->get_property('id'),
                 'type' => $record->get_property('type')
             ]),
             't/edit',
