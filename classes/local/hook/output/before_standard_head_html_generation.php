@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace tool_webanalytics\local\hooks\output;
+namespace tool_webanalytics\local\hook\output;
 
 use tool_webanalytics\injector;
 
@@ -26,14 +26,14 @@ use tool_webanalytics\injector;
  * @copyright 2024 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class standard_head_html_prepend {
+class before_standard_head_html_generation {
 
     /**
      * Render tracking code.
      *
-     * @param \core\hook\output\standard_head_html_prepend $hook
+     * @param \core\hook\output\standard_head_html_generation $hook
      */
-    public static function callback(\core\hook\output\standard_head_html_prepend $hook): void {
+    public static function callback(\core\hook\output\before_standard_head_html_generation $hook): void {
         $hook->add_html(injector::render_tracking_code());
     }
 }
