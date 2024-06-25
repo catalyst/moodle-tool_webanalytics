@@ -144,4 +144,29 @@ abstract class tool_base implements tool_interface {
         return $trackurl;
     }
 
+    /**
+     * Does the tool support auto provision over an API?
+     *
+     * @return bool
+     */
+    public static function supports_auto_provision(): bool {
+        return false;
+    }
+
+    /**
+     * Is the tool ready to attempt an auto provision?
+     *
+     * @return bool
+     */
+    public static function can_auto_provision(): bool {
+        return false;
+    }
+
+    /**
+     * Auto provision the site with the API.
+     *
+     * @return void
+     */
+    public static function auto_provision(): void {
+    }
 }

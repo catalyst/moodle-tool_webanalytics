@@ -25,7 +25,9 @@
 
 namespace watool_matomo\tool;
 
+use stdClass;
 use tool_webanalytics\tool\tool_base;
+use watool_matomo\auto_provision;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -36,6 +38,24 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool extends tool_base {
+    /**
+     * Default settings used when creating a new instance.
+     */
+    const SETTINGS_DEFAULTS = [
+        'siteid' => '',
+        'siteurl' => '',
+        'piwikjsurl' => '',
+        'imagetrack' => 0,
+        'userid' => 0,
+        'usefield' => 'id',
+        'autoupdate' => 0,
+        'autoupdateurls' => [],
+    ];
+
+    /**
+     * The type of the web analytics tool.
+     */
+    const TYPE = 'matomo';
 
     /**
      * Get tracking code to insert.
@@ -47,12 +67,12 @@ class tool extends tool_base {
 
         $settings = $this->record->get_property('settings');
 
-        $template = new \stdClass();
+        $template = new stdClass();
         $template->siteid = $settings['siteid'];
         $template->siteurl = $settings['siteurl'];
         $custompiwikjs = (isset($settings['piwikjsurl']) && !empty($settings['piwikjsurl']));
         $template->piwikjsurl = $custompiwikjs ? $settings['piwikjsurl'] : $settings['siteurl'];
-        $template->imagetrack = $settings['imagetrack'];
+        $template->imagetrack = $settings['imagetrack'] ?? '';
 
         $template->userid = false;
 
@@ -80,17 +100,18 @@ class tool extends tool_base {
         $mform->addElement('text', 'siteurl', get_string('siteurl', 'watool_matomo'));
         $mform->addHelpButton('siteurl', 'siteurl', 'watool_matomo');
         $mform->setType('siteurl', PARAM_TEXT);
-        $mform->addRule('siteurl', get_string('required'), 'required', null, 'client');
+        $mform->disabledIf('siteurl', 'autoupdate', 'checked');
 
         $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
         $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
         $mform->setType('piwikjsurl', PARAM_URL);
         $mform->setDefault('piwikjsurl', '');
+        $mform->disabledIf('piwikjsurl', 'autoupdate', 'checked');
 
         $mform->addElement('text', 'siteid', get_string('siteid', 'watool_matomo'));
         $mform->addHelpButton('siteid', 'siteid', 'watool_matomo');
         $mform->setType('siteid', PARAM_TEXT);
-        $mform->addRule('siteid', get_string('required'), 'required', null, 'client');
+        $mform->disabledIf('siteid', 'autoupdate', 'checked');
 
         $mform->addElement('checkbox', 'imagetrack', get_string('imagetrack', 'watool_matomo'));
         $mform->addHelpButton('imagetrack', 'imagetrack', 'watool_matomo');
@@ -109,6 +130,19 @@ class tool extends tool_base {
         $mform->setType('usefield', PARAM_TEXT);
 
         $mform->disabledIf('usefield', 'userid');
+
+        if (auto_provision::matching_siteurl($this->record)) {
+            $mform->addElement('checkbox', 'autoupdate', get_string('autoupdate', 'watool_matomo'));
+            $mform->addHelpButton('autoupdate', 'autoupdate', 'watool_matomo');
+        }
+
+        $settings = $this->record->get_property('settings');
+        if (!empty($settings['autoupdate'])) {
+            $mform->addElement('textarea', 'autoupdateurls', get_string('autoupdateurls', 'watool_matomo'));
+            $mform->addHelpButton('autoupdateurls', 'autoupdateurls', 'watool_matomo');
+            $mform->setType('autoupdateurls', PARAM_TEXT);
+            $mform->hardFreeze('autoupdateurls');
+        }
     }
 
     /**
@@ -148,40 +182,84 @@ class tool extends tool_base {
         if (!empty($data['piwikjsurl']) && substr(trim($data['piwikjsurl']), -1) == '/') {
             $errors['piwikjsurl'] = get_string('error:siteurltrailingslash', 'watool_matomo');
         }
+
+        if (!empty($data['autoupdate'])) {
+            $ap = new auto_provision();
+            if (!$ap->validate_record($this->record)) {
+                $errors['autoupdate'] = get_string('error:autoupdatevalidation', 'watool_matomo');
+            }
+        }
     }
 
     /**
      * Build settings array from submitted form data.
      *
-     * @param \stdClass $data
+     * @param stdClass $data
      *
      * @return array
      */
-    public function form_build_settings(\stdClass $data): array {
-        $settings = [];
-        $settings['siteid']  = isset($data->siteid) ? $data->siteid : '';
-        $settings['siteurl'] = isset($data->siteurl) ? $data->siteurl : '';
-        $settings['piwikjsurl'] = isset($data->piwikjsurl) ? $data->piwikjsurl : '';
-        $settings['imagetrack'] = isset($data->imagetrack) ? $data->imagetrack : 0;
-        $settings['userid'] = isset($data->userid) ? $data->userid : 0;
-        $settings['usefield'] = isset($data->usefield) ? $data->usefield : 'id';
-
-        return $settings;
+    public function form_build_settings(stdClass $data): array {
+        // If auto updating is enabled, convert urls back to array. autoupdateurls is not a user input.
+        $data->autoupdateurls = (!empty($data->autoupdate) && !empty($data->autoupdateurls))
+            ? explode(PHP_EOL, $data->autoupdateurls) : [];
+        return array_merge(
+            self::SETTINGS_DEFAULTS,
+            array_intersect_key(get_object_vars($data), self::SETTINGS_DEFAULTS),
+        );
     }
 
     /**
      * Set form data.
      *
-     * @param \stdClass $data Form data.
+     * @param stdClass $data Form data.
      *
      * @return void
      */
-    public function form_set_data(\stdClass &$data) {
+    public function form_set_data(stdClass &$data) {
         $data->siteid = isset($data->settings['siteid']) ? $data->settings['siteid'] : '';
         $data->siteurl = isset($data->settings['siteurl']) ? $data->settings['siteurl'] : '';
         $data->piwikjsurl = isset($data->settings['piwikjsurl']) ? $data->settings['piwikjsurl'] : '';
         $data->imagetrack = isset($data->settings['imagetrack']) ? $data->settings['imagetrack'] : 0;
         $data->userid = isset($data->settings['userid']) ? $data->settings['userid'] : 1;
         $data->usefield = isset($data->settings['usefield']) ? $data->settings['usefield'] : 'id';
+        $data->autoupdate = isset($data->settings['autoupdate']) ? $data->settings['autoupdate'] : 0;
+        $data->autoupdateurls = isset($data->settings['autoupdateurls'])
+            ? implode(PHP_EOL, $data->settings['autoupdateurls']) : '';
+    }
+
+    /**
+     * Is the auto provisioning config set?
+     *
+     * @return bool
+     */
+    public static function supports_auto_provision(): bool {
+        $config = get_config('watool_matomo');
+
+        return !empty($config->siteurl) && !empty($config->apitoken);
+    }
+
+    /**
+     * Is there a need to create or update an auto provision?
+     * This will be called often, so don't perform any heavy actions.
+     *
+     * @return bool
+     */
+    public static function can_auto_provision(): bool {
+        if (!self::supports_auto_provision()) {
+            return false;
+        }
+        $action = auto_provision::get_action();
+        return !empty($action->type);
+    }
+
+    /**
+     * Auto provision based on config 'siteurl' and 'apitoken'.
+     * This can either create a new Matomo instance, or update an existing one.
+     *
+     * @return void
+     */
+    public static function auto_provision(): void {
+        $ap = new auto_provision();
+        $ap->attempt();
     }
 }
