@@ -25,8 +25,8 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$plugin->version   = 2024022001;      // The current plugin version (Date: YYYYMMDDXX).
-$plugin->release   = 2024022001;      // Same as version.
+$plugin->version   = 2024101800;      // The current plugin version (Date: YYYYMMDDXX).
+$plugin->release   = 2024101800;      // Same as version.
 $plugin->requires  = 2022112800;      // Requires Moodle 4.1 or later.
 $plugin->component = "tool_webanalytics";
 $plugin->supported = [401, 403];  // Available as of Moodle 4.1.0 or later.
