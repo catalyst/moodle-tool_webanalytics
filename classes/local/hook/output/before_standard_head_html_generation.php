@@ -31,7 +31,7 @@ class before_standard_head_html_generation {
     /**
      * Render tracking code.
      *
-     * @param \core\hook\output\standard_head_html_generation $hook
+     * @param \core\hook\output\before_standard_head_html_generation $hook
      */
     public static function callback(\core\hook\output\before_standard_head_html_generation $hook): void {
         $hook->add_html(injector::render_tracking_code());

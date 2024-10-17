@@ -1,4 +1,4 @@
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/catalyst/moodle-tool_webanalytics/ci/master)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/actions/workflow/status/catalyst/moodle-tool_webanalytics/ci.yml?branch=MOODLE_401_STABLE&label=ci)
 
 
 # Web Analytics
