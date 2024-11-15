@@ -29,5 +29,5 @@ $plugin->version   = 2024101800;      // The current plugin version (Date: YYYYM
 $plugin->release   = 2024101800;      // Same as version.
 $plugin->requires  = 2022112800;      // Requires Moodle 4.1 or later.
 $plugin->component = "tool_webanalytics";
-$plugin->supported = [401, 403];  // Available as of Moodle 4.1.0 or later.
+$plugin->supported = [401, 405];  // Available as of Moodle 4.1.0 or later.
 $plugin->maturity  = MATURITY_STABLE;
