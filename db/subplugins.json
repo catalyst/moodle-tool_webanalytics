@@ -1,4 +1,7 @@
 {
+    "subplugintypes": {
+        "watool": "tool"
+    },
     "plugintypes": {
         "watool": "admin\/tool\/webanalytics\/tool"
     }
