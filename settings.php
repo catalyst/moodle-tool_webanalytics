@@ -26,11 +26,23 @@
 defined('MOODLE_INTERNAL') || die;
 
 if (is_siteadmin()) {
-    $externalpage = new admin_externalpage(
-        'tool_webanalytics_manage',
-        get_string('pluginname', 'tool_webanalytics'),
-        new moodle_url('/admin/tool/webanalytics/manage.php')
+    $category = new admin_category(
+            'tool_webanalytics',
+            new lang_string('pluginname', 'tool_webanalytics'),
+            false
     );
+    $ADMIN->add('tools', $category);
 
-    $ADMIN->add('tools', $externalpage);
+    $externalpage = new admin_externalpage(
+            'tool_webanalytics_manage',
+            get_string('pluginname', 'tool_webanalytics'),
+            new moodle_url('/admin/tool/webanalytics/manage.php')
+    );
+    $ADMIN->add('tool_webanalytics', $externalpage);
+
+    foreach (core_plugin_manager::instance()->get_plugins_of_type('watool') as $plugin) {
+        /** @var \tool_webanalytics\plugin_manager $plugin */
+        $plugin->load_settings($ADMIN, 'tool_webanalytics', $hassiteconfig);
+    }
+
 }

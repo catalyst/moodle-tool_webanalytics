@@ -51,6 +51,13 @@ interface record_interface {
     public function get_property($name);
 
     /**
+     * Set the property value.
+     *
+     * @param string $name Property name.
+     */
+    public function set_property($name, $value);
+
+    /**
      * Export the record.
      *
      * @return \stdClass
