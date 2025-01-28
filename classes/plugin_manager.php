@@ -25,6 +25,8 @@
 
 namespace tool_webanalytics;
 
+use tool_webanalytics\plugininfo\watool;
+
 defined('MOODLE_INTERNAL') || die;
 
 /**
@@ -118,6 +120,20 @@ class plugin_manager {
     }
 
     /**
+     * Return a list of all enabled plugins by type.
+     *
+     * @param string $type
+     * @return watool|null
+     */
+    public function get_enabled_plugin_by_type(string $type): ?watool {
+        if (is_null(static::$plugins)) {
+            static::$plugins = $this->build_plugins();
+        }
+
+        return static::$plugins[$type];
+    }
+
+    /**
      * Build a list of enabled plugins.
      *
      * @return \core\plugininfo\base[]
@@ -141,4 +157,23 @@ class plugin_manager {
         return $plugins;
     }
 
+    /**
+     * Get all sub-plugins that support auto provisioning.
+     *
+     * @return \core\plugininfo\base[]
+     */
+    public function get_auto_provision_type_plugins(): array {
+        return array_filter($this->build_plugins(), static function($plugin) {
+            $classes = \core_component::get_component_classes_in_namespace('watool_' . $plugin->name, 'tool');
+            if (!$class = array_key_first($classes)) {
+                return false;
+            }
+            $method = 'supports_auto_provision';
+            if (!method_exists($class, $method)) {
+                return false;
+            }
+            return $class::$method();
+        }
+        );
+    }
 }

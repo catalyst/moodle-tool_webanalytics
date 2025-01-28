@@ -15,54 +15,40 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Interface to describe records.
+ * Auto-provisioning service.
  *
  * @package   tool_webanalytics
- * @author    Dmitrii Metelkin (dmitriim@catalyst-au.net)
- * @copyright 2018 Catalyst IT
+ * @author    Simon Adams (simon.adams@catalyst-eu.net)
+ * @copyright 2023 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 namespace tool_webanalytics;
 
-defined('MOODLE_INTERNAL') || die();
+use tool_webanalytics\plugininfo\watool;
 
 /**
- * Interface to describe records.
+ * Class that allows for Auto-provisioning.
  *
- * @copyright  2020 Catalyst IT
+ * @copyright  2023 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-interface record_interface {
+class auto_provisioner {
 
     /**
-     * Check if an record is enabled.
+     * Get all plugin types that support provisioning and are ready to provision. Then attempt an auto-provision.
      *
-     * @return bool
+     * @return void
      */
-    public function is_enabled(): bool;
+    public static function auto_provision(): void {
+        $autoprovisionable = plugin_manager::instance()->get_auto_provision_type_plugins();
 
-    /**
-     * Return property value.
-     *
-     * @param string $name Property name.
-     * @return mixed Property value.
-     */
-    public function get_property($name);
-
-    /**
-     * Set the property value.
-     *
-     * @param string $name Property name.
-     * @param mixed $value Property value.
-     */
-    public function set_property($name, $value);
-
-    /**
-     * Export the record.
-     *
-     * @return \stdClass
-     */
-    public function export(): \stdClass;
-
+        /** @var watool $tool */
+        foreach ($autoprovisionable as $tool) {
+            $class = $tool->get_tool_classname();
+            if ($class::can_auto_provision()) {
+                $class::auto_provision();
+            }
+        }
+    }
 }

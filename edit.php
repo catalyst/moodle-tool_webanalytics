@@ -34,7 +34,7 @@ require_once($CFG->libdir.'/adminlib.php');
 admin_externalpage_setup('tool_webanalytics_manage');
 
 $type = required_param('type', PARAM_ALPHAEXT);
-$edit = optional_param('edit', 0, PARAM_RAW);
+$id = optional_param('id', 0, PARAM_ALPHANUM);
 
 $manageurl = new moodle_url('/admin/tool/webanalytics/manage.php');
 
@@ -49,8 +49,8 @@ $tool = null;
 $dimensions = null;
 $manager = new records_manager();
 
-if ($edit) {
-    $record = $manager->get($edit);
+if ($id) {
+    $record = $manager->get($id);
     if (empty($record)) {
         throw new moodle_exception('not_found', 'tool_webanalytics', $manageurl);
     }

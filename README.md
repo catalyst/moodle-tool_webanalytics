@@ -36,6 +36,15 @@ including categories and action types
 - Optional tracking for User ID
 - User ID could be id or username
 
+#### Matomo auto-provisioning
+- Set the watool_matomo global config settings 'apitoken' and 'apiurl' to enable auto provisioning. The preferred way of setting these is in config.php e.g:
+    - `$CFG->forced_plugin_settings['watool_matomo']['siteurl'] = 'matomo.org';` The url of the Matomo server.
+    - `$CFG->forced_plugin_settings['watool_matomo']['apitoken'] = 'xxxx';` The token to allow use of the API at the server. Learn how to get this [here](https://matomo.org/faq/general/faq_114/).
+- An attempt to auto provision will be made the first time a page is loaded when the API config above is set and there are no existing Matomo instances.
+- A successfully auto-provisioned site will have an entry in the management page `admin/tool/webanalytics/manage.php` named 'auto-provisioned'.
+- If autoprovisioning failed, the instance will be set with the name 'auto-provisioned:FAILED' to stop continuing attempts per page load. Delete the instance to attempt an autoprovision again.
+- There is an additional config setting 'defaultautoupdate' that allows you to choose if you want to enable "Automatic URL Updating" for auto provisioned sites. Auto updating allows for registration of new URLs with Matomo, and can be managed individually on existing instances when auto provisioning is turned on and the siteurl matches the config url. Failed auto updates will temporarily disable Automatic URL Updating, but updates can be re-attempted by turning this setting back on.
+
 ### Google Universal Analytics
 - Plugin modifies the page speed sample to have 50% of your visitors samples for page speed instead of 1% making it much more useful
 - Set your Google tracking ID
