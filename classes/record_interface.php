@@ -25,8 +25,6 @@
 
 namespace tool_webanalytics;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Interface to describe records.
  *
@@ -34,7 +32,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface record_interface {
-
     /**
      * Check if an record is enabled.
      *
@@ -56,5 +53,4 @@ interface record_interface {
      * @return \stdClass
      */
     public function export(): \stdClass;
-
 }

@@ -25,8 +25,6 @@
 
 namespace tool_webanalytics;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Interface describes records manager behaviour.
  *
@@ -34,7 +32,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 interface records_manager_interface {
-
     /**
      * Returns single web analytics record.
      *
@@ -65,7 +62,7 @@ interface records_manager_interface {
      *
      * @return string Unique ID of the analytics.
      */
-    public function save(record_interface $tool) : string;
+    public function save(record_interface $tool): string;
 
     /**
      * Delete analytics.

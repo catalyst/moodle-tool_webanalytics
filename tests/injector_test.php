@@ -23,8 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-
-defined('MOODLE_INTERNAL') || die();
+namespace tool_webanalytics;
 
 use tool_webanalytics\injector;
 use tool_webanalytics\records_manager;
@@ -35,13 +34,13 @@ use tool_webanalytics\record;
  *
  * @copyright  2021 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \tool_webanalytics\injector
  */
-class tool_webanalytics_injector_test extends advanced_testcase {
-
+final class injector_test extends \advanced_testcase {
     /**
      * Test render empty tracking code without any config.
      */
-    public function test_render_empty_tracking_code() {
+    public function test_render_empty_tracking_code(): void {
         $this->resetAfterTest();
         $this->assertEmpty(injector::render_tracking_code());
     }
@@ -49,7 +48,7 @@ class tool_webanalytics_injector_test extends advanced_testcase {
     /**
      * Test render tracking code.
      */
-    public function test_render_tracking_code() {
+    public function test_render_tracking_code(): void {
         $this->resetAfterTest();
 
         $manager = new records_manager();
@@ -82,7 +81,7 @@ class tool_webanalytics_injector_test extends advanced_testcase {
     /**
      * Test render tracking code.
      */
-    public function test_render_tracking_code_without_disabled_records() {
+    public function test_render_tracking_code_without_disabled_records(): void {
         $this->resetAfterTest();
 
         $manager = new records_manager();
@@ -110,5 +109,4 @@ class tool_webanalytics_injector_test extends advanced_testcase {
         $this->assertTrue(strpos($actual, 'googletagmanager') !== false);
         $this->assertTrue(strpos($actual, 'Test GTM') !== false);
     }
-
 }

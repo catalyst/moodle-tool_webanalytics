@@ -27,8 +27,6 @@ namespace tool_webanalytics\tool;
 
 use tool_webanalytics\record_interface;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Interface to describe WA tools.
  *

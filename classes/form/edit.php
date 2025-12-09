@@ -28,8 +28,6 @@ namespace tool_webanalytics\form;
 use moodleform;
 use tool_webanalytics\plugin_manager;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Edit form.
  *
@@ -169,5 +167,4 @@ class edit extends moodleform {
         $this->_form->freeze(['type']);
         $this->tool->form_definition_after_data($this->_form);
     }
-
 }

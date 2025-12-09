@@ -25,8 +25,6 @@
 
 namespace watool_guniversal\privacy;
 
-defined('MOODLE_INTERNAL') || die;
-
 use core_privacy\local\metadata\collection;
 use core_privacy\local\request\approved_userlist;
 use core_privacy\local\request\contextlist;
@@ -40,10 +38,9 @@ use core_privacy\local\request\userlist;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class provider implements
-    \core_privacy\local\metadata\provider,
     \core_privacy\local\request\core_userlist_provider,
+    \core_privacy\local\metadata\provider,
     \core_privacy\local\request\plugin\provider {
-
     /**
      * Returns information about the user data stored in this component.
      *
@@ -65,7 +62,7 @@ class provider implements
      * @param   int         $userid     The user to search.
      * @return  contextlist $contextlist  The contextlist containing the list of contexts used in this plugin.
      */
-    public static function get_contexts_for_userid(int $userid) : contextlist {
+    public static function get_contexts_for_userid(int $userid): contextlist {
         return new contextlist();
     }
 

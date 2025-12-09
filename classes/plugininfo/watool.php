@@ -29,8 +29,6 @@ use core\plugininfo\base;
 use tool_webanalytics\record_interface;
 use tool_webanalytics\tool\tool_interface;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Sub plugin class.
  *
@@ -38,7 +36,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class watool extends base {
-
     /**
      * Return a configured web analytics tool instance for this plugin.
      *
@@ -51,5 +48,4 @@ class watool extends base {
 
         return new  $class($record);
     }
-
 }

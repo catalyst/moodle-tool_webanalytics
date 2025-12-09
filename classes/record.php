@@ -28,8 +28,6 @@ namespace tool_webanalytics;
 use coding_exception;
 use stdClass;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Class analytics described single analytics built from DB record.
  *
@@ -37,7 +35,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class record implements record_interface {
-
     /**
      * Analytics ID.
      *
@@ -85,7 +82,7 @@ class record implements record_interface {
      *
      * @var array
      */
-    protected $settings = array();
+    protected $settings = [];
 
     /**
      * Constructor.
