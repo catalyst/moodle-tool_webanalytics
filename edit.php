@@ -26,10 +26,10 @@
 use tool_webanalytics\form\edit;
 use tool_webanalytics\record;
 use tool_webanalytics\records_manager;
-use \tool_webanalytics\plugin_manager;
+use tool_webanalytics\plugin_manager;
 
-require_once(__DIR__.'/../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
+require_once(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
 
 admin_externalpage_setup('tool_webanalytics_manage');
 

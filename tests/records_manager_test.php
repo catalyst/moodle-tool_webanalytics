@@ -22,9 +22,7 @@
  * @copyright 2021 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-
-defined('MOODLE_INTERNAL') || die();
+namespace tool_webanalytics;
 
 use tool_webanalytics\record;
 use tool_webanalytics\records_manager;
@@ -34,9 +32,9 @@ use tool_webanalytics\records_manager;
  *
  * @copyright  2021 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \tool_webanalytics\records_manager
  */
-class tool_webanalytics_records_manager_test extends advanced_testcase {
-
+final class records_manager_test extends \advanced_testcase {
     /**
      * A helper function for setting some test records to a config.
      */
@@ -77,14 +75,14 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
     /**
      * Test expected global config name.
      */
-    public function test_config_name() {
+    public function test_config_name(): void {
         $this->assertSame('tool_webanalytics_records', records_manager::CONFIG_NAME);
     }
 
     /**
      * Test check that the manager is ready to serve records.
      */
-    public function test_is_ready() {
+    public function test_is_ready(): void {
         global $CFG;
         $this->resetAfterTest();
         $manager = new records_manager();
@@ -98,7 +96,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
     /**
      * Test can get all records.
      */
-    public function test_get_all_records() {
+    public function test_get_all_records(): void {
         $this->resetAfterTest();
 
         $manager = new records_manager();
@@ -113,7 +111,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
     /**
      * Test can get enabled records.
      */
-    public function test_get_enabled() {
+    public function test_get_enabled(): void {
         $this->resetAfterTest();
 
         $manager = new records_manager();
@@ -130,7 +128,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
     /**
      * Test we can retrieve specific record by id.
      */
-    public function test_get() {
+    public function test_get(): void {
         $this->resetAfterTest();
 
         $manager = new records_manager();
@@ -150,7 +148,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
     /**
      * Test we can insert a new record.
      */
-    public function test_insert_record() {
+    public function test_insert_record(): void {
         global $CFG;
 
         $this->resetAfterTest();
@@ -195,14 +193,14 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
                 'trackadmin' => 0,
                 'cleanurl' => 0,
                 'settings' => [],
-            ]
+            ],
         ], unserialize($CFG->tool_webanalytics_records));
     }
 
     /**
      * Test we can update record.
      */
-    public function test_update_record() {
+    public function test_update_record(): void {
         global $CFG;
 
         $this->resetAfterTest();
@@ -257,15 +255,14 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
                 'trackadmin' => 0,
                 'cleanurl' => 0,
                 'settings' => [],
-            ]
+            ],
         ], unserialize($CFG->tool_webanalytics_records));
-
     }
 
     /**
      * Test we can delete record.
      */
-    public function test_delete_record() {
+    public function test_delete_record(): void {
         global $CFG;
 
         $this->resetAfterTest();
@@ -292,8 +289,7 @@ class tool_webanalytics_records_manager_test extends advanced_testcase {
                 'trackadmin' => 0,
                 'cleanurl' => 0,
                 'settings' => [],
-            ]
+            ],
         ], unserialize($CFG->tool_webanalytics_records));
     }
-
 }

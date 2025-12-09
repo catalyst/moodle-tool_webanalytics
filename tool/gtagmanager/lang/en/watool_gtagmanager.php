@@ -26,6 +26,6 @@
 defined('MOODLE_INTERNAL') || die;
 
 $string['pluginname'] = 'Google Tag Manager';
+$string['privacy:metadata'] = 'Google Tag Manager does not store or send any user data';
 $string['siteid'] = 'Container ID';
 $string['siteid_help'] = 'Enter your Container ID for Google Tag Manage';
-$string['privacy:metadata'] = 'Google Tag Manager does not store or send any user data';

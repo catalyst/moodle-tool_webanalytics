@@ -25,9 +25,9 @@
 
 use tool_webanalytics\records_manager;
 
-require_once(__DIR__.'/../../../config.php');
-require_once($CFG->libdir.'/adminlib.php');
-require_once($CFG->libdir.'/formslib.php');
+require_once(__DIR__ . '/../../../config.php');
+require_once($CFG->libdir . '/adminlib.php');
+require_once($CFG->libdir . '/formslib.php');
 
 admin_externalpage_setup('tool_webanalytics_manage');
 
@@ -54,8 +54,7 @@ if ($confirm != md5($id)) {
     echo $OUTPUT->heading(get_string($action . '_heading', 'tool_webanalytics'));
     echo $OUTPUT->confirm($confirmstring, $deleteurl, $manageurl);
     echo $OUTPUT->footer();
-
-} else if (data_submitted() and confirm_sesskey()) {
+} else if (data_submitted() && confirm_sesskey()) {
     $manager->delete($id);
     redirect($manageurl);
 }

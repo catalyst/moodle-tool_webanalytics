@@ -25,15 +25,14 @@
 
 namespace tool_webanalytics\table;
 
+defined('MOODLE_INTERNAL') || die();
+
 use flexible_table;
 use html_writer;
 use moodle_url;
 use tool_webanalytics\record_interface;
 
-
-defined('MOODLE_INTERNAL') || die();
-
-require_once($CFG->libdir.'/tablelib.php');
+require_once($CFG->libdir . '/tablelib.php');
 
 /**
  * Class tools_table
@@ -56,7 +55,7 @@ class tools_table extends flexible_table {
         global $PAGE;
 
         $id = (is_null($id) ? self::$autoid++ : $id);
-        parent::__construct('tool_wa_manage_'.$id);
+        parent::__construct('tool_wa_manage_' . $id);
 
         $this->define_baseurl($PAGE->url);
         $this->set_attribute('class', 'generaltable admintable');
@@ -64,7 +63,7 @@ class tools_table extends flexible_table {
         $this->define_columns([
             'name',
             'type',
-            'actions'
+            'actions',
         ]);
 
         $this->define_headers([
@@ -131,7 +130,7 @@ class tools_table extends flexible_table {
         $buttons[] = self::format_icon_link(
             new moodle_url('/admin/tool/webanalytics/edit.php', [
                 'edit' => $record->get_property('id'),
-                'type' => $record->get_property('type')
+                'type' => $record->get_property('type'),
             ]),
             't/edit',
             get_string('edit')
@@ -139,7 +138,7 @@ class tools_table extends flexible_table {
 
         $buttons[] = self::format_icon_link(
             new moodle_url('/admin/tool/webanalytics/delete.php', ['id' => $record->get_property('id')]),
-            't/delete' ,
+            't/delete',
             get_string('delete')
         );
 
@@ -196,5 +195,4 @@ class tools_table extends flexible_table {
     public function print_nothing_to_display() {
         echo html_writer::div(get_string('no_analytics', 'tool_webanalytics'));
     }
-
 }

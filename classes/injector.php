@@ -26,8 +26,6 @@
 
 namespace tool_webanalytics;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Injector class.
  *
@@ -35,7 +33,6 @@ defined('MOODLE_INTERNAL') || die;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class injector {
-
     /**
      * Inject Web analytics tracking code for all tools.
      *
@@ -45,7 +42,7 @@ class injector {
         $result = '';
 
         // Do not inject if being called in an ajax or cli script unless it's a unit test.
-        if ((CLI_SCRIPT or AJAX_SCRIPT) && !PHPUNIT_TEST) {
+        if ((CLI_SCRIPT || AJAX_SCRIPT) && !PHPUNIT_TEST) {
             return $result;
         }
 
@@ -79,5 +76,4 @@ class injector {
     public static function get_records_manager(): records_manager_interface {
         return new records_manager();
     }
-
 }

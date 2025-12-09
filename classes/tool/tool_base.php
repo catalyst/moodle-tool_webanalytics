@@ -27,8 +27,6 @@ namespace tool_webanalytics\tool;
 
 use tool_webanalytics\record_interface;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Web analytics abstract tool class.
  *
@@ -71,7 +69,6 @@ abstract class tool_base implements tool_interface {
      * @return void
      */
     public function form_definition_after_data(\MoodleQuickForm &$mform) {
-
     }
 
     /**
@@ -108,12 +105,13 @@ abstract class tool_base implements tool_interface {
 
         // Adds course category name.
         if (isset($pageinfo[1]->category)) {
-            if ($category = $DB->get_record('course_categories', ['id' => $pageinfo[1]->category])
+            if (
+                $category = $DB->get_record('course_categories', ['id' => $pageinfo[1]->category])
             ) {
                 $cats = explode("/", $category->path);
                 foreach (array_filter($cats) as $cat) {
                     if ($categorydepth = $DB->get_record("course_categories", ["id" => $cat])) {
-                        $trackurl .= self::might_encode($categorydepth->name, $urlencode).'/';
+                        $trackurl .= self::might_encode($categorydepth->name, $urlencode) . '/';
                     }
                 }
             }
@@ -122,7 +120,7 @@ abstract class tool_base implements tool_interface {
         // Adds course full name.
         if (isset($pageinfo[1]->fullname)) {
             if (isset($pageinfo[2]->name)) {
-                $trackurl .= self::might_encode($pageinfo[1]->fullname, $urlencode).'/';
+                $trackurl .= self::might_encode($pageinfo[1]->fullname, $urlencode) . '/';
             } else {
                 $trackurl .= self::might_encode($pageinfo[1]->fullname, $urlencode);
                 $trackurl .= '/';
@@ -143,5 +141,4 @@ abstract class tool_base implements tool_interface {
 
         return $trackurl;
     }
-
 }

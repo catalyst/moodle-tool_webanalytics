@@ -25,8 +25,6 @@
 
 namespace tool_webanalytics;
 
-defined('MOODLE_INTERNAL') || die;
-
 /**
  * Plugin manager.
  *
@@ -140,5 +138,4 @@ class plugin_manager {
 
         return $plugins;
     }
-
 }

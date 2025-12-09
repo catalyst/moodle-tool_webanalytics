@@ -25,8 +25,6 @@
 
 namespace tool_webanalytics;
 
-defined('MOODLE_INTERNAL') || die();
-
 
 /**
  * Record manager that uses global CFG for storing records.
@@ -83,7 +81,7 @@ class records_manager implements records_manager_interface {
      *
      * @return false|\tool_webanalytics\record
      */
-    public function get(string $id) : ?record {
+    public function get(string $id): ?record {
         $record = null;
 
         if (!empty($this->data[$id])) {
@@ -135,7 +133,7 @@ class records_manager implements records_manager_interface {
      *
      * @return string Unique ID of the analytics.
      */
-    public function save(record_interface $record) : string {
+    public function save(record_interface $record): string {
         $datarecord = $record->export();
 
         if (empty($datarecord->id)) {
@@ -175,5 +173,4 @@ class records_manager implements records_manager_interface {
 
         return isset($CFG->tool_webanalytics_records);
     }
-
 }

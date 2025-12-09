@@ -23,8 +23,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
+namespace tool_webanalytics;
 use tool_webanalytics\record;
 
 
@@ -33,8 +32,9 @@ use tool_webanalytics\record;
  *
  * @copyright  2020 Catalyst IT
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @covers \tool_webanalytics\record
  */
-class tool_webanalytics_record_test extends advanced_testcase {
+final class record_test extends \advanced_testcase {
     /**
      * Test data
      *
@@ -51,16 +51,17 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Initial set up.
      */
-    public function setUp() : void {
+    public function setUp(): void {
+        parent::setUp();
         $this->resetAfterTest();
-        $this->data = new stdClass();
+        $this->data = new \stdClass();
         $this->record = new record($this->data);
     }
 
     /**
      * Teardown unit tests.
      */
-    public function tearDown() : void {
+    public function tearDown(): void {
         $this->data = null;
         $this->record = null;
         parent::tearDown();
@@ -69,8 +70,8 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Test implements required interface.
      */
-    public function test_implements_required_interface() {
-        $this->assertInstanceOf('tool_webanalytics\record_interface', $this->record );
+    public function test_implements_required_interface(): void {
+        $this->assertInstanceOf('tool_webanalytics\record_interface', $this->record);
     }
 
     /**
@@ -78,7 +79,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
      *
      * @return array
      */
-    public function default_values_data_provider() {
+    public static function default_values_data_provider(): array {
         return [
             ['id', null],
             ['enabled', 0],
@@ -97,14 +98,14 @@ class tool_webanalytics_record_test extends advanced_testcase {
      * @param string $name Name.
      * @param mixed $value Value.
      */
-    public function test_has_correct_default_values($name, $value) {
+    public function test_has_correct_default_values($name, $value): void {
         $this->assertEquals($value, $this->record->get_property($name));
     }
 
     /**
      * Test can return  values.
      */
-    public function test_can_get_values() {
+    public function test_can_get_values(): void {
         $this->data->id = 2;
         $this->data->enabled = 1;
         $this->data->name = "Test name";
@@ -126,7 +127,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Test throw coding exception if request invalid property.
      */
-    public function test_throw_exception_on_incorrect_property() {
+    public function test_throw_exception_on_incorrect_property(): void {
         $this->expectException('coding_exception');
         $this->expectExceptionMessage('Requested invalid property.');
         $this->record->get_property('test random property');
@@ -135,7 +136,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Test we can check status.
      */
-    public function test_is_enabled() {
+    public function test_is_enabled(): void {
         $this->assertFalse($this->record->is_enabled());
 
         $this->data->enabled = 'not empty';
@@ -154,8 +155,8 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Test we can export empty record as required.
      */
-    public function test_export_empty_record() {
-        $expected = new stdClass();
+    public function test_export_empty_record(): void {
+        $expected = new \stdClass();
         $expected->id = null;
         $expected->enabled = 0;
         $expected->name = '';
@@ -170,8 +171,8 @@ class tool_webanalytics_record_test extends advanced_testcase {
     /**
      * Test we can export not empty record as required.
      */
-    public function test_export_not_empty_record() {
-        $expected = new stdClass();
+    public function test_export_not_empty_record(): void {
+        $expected = new \stdClass();
         $expected->id = 1;
         $expected->enabled = 1;
         $expected->name = 'Test';
@@ -190,10 +191,10 @@ class tool_webanalytics_record_test extends advanced_testcase {
      *
      * @return array
      */
-    public function not_array_settings_data_provider() {
+    public static function not_array_settings_data_provider(): array {
         return [
             ['string'],
-            [new stdClass()],
+            [new \stdClass()],
             [1],
             ['1'],
             [true],
@@ -207,7 +208,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
      * @dataProvider not_array_settings_data_provider
      * @param mixed $settings Test settings.
      */
-    public function test_return_empty_settings_if_they_are_not_array($settings) {
+    public function test_return_empty_settings_if_they_are_not_array($settings): void {
         $this->data->settings = $settings;
         $this->record = new record($this->data);
 
@@ -220,10 +221,10 @@ class tool_webanalytics_record_test extends advanced_testcase {
      * @dataProvider not_array_settings_data_provider
      * @param mixed $settings Test settings.
      */
-    public function test_export_empty_settings_if_they_are_not_array($settings) {
+    public function test_export_empty_settings_if_they_are_not_array($settings): void {
         $this->data->settings = $settings;
 
-        $expected = new stdClass();
+        $expected = new \stdClass();
         $expected->id = null;
         $expected->enabled = 0;
         $expected->name = '';
@@ -235,5 +236,4 @@ class tool_webanalytics_record_test extends advanced_testcase {
         $this->record = new record($this->data);
         $this->assertEquals($expected, $this->record->export());
     }
-
 }

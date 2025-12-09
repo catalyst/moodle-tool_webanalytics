@@ -25,23 +25,23 @@
 
 defined('MOODLE_INTERNAL') || die;
 
-$string['pluginname'] = 'Matomo Analytics (formerly Piwik)';
-$string['siteurl'] = 'Analytics URL';
-$string['siteurl_help'] = 'Enter your Matomo URL without http(s) or a trailing slash';
-$string['piwikjsurl'] = 'Alternative piwik.js URL';
-$string['piwikjsurl_help'] = 'Enter alternative piwik.js URL (optional) without http(s), piwik.js or a trailing slash, used when you host your own version of piwik.js';
-$string['siteid'] = 'Matomo Site ID';
-$string['siteid_help'] = 'Enter your Matomo Site ID';
-$string['imagetrack'] = 'Image Tracking';
-$string['imagetrack_help'] = 'Enable Image Tracking for Moodle for browsers with JavaScript disabled';
 $string['error:siteid'] = 'You must provide Site ID';
 $string['error:siteurl'] = 'You must provide site URL';
-$string['error:siteurlinvalid'] = 'You must provide valid site URL';
 $string['error:siteurlhttps'] = 'Please provide URL without http(s)';
+$string['error:siteurlinvalid'] = 'You must provide valid site URL';
 $string['error:siteurltrailingslash'] = 'Please provide URL without a trailing slash';
+$string['imagetrack'] = 'Image Tracking';
+$string['imagetrack_help'] = 'Enable Image Tracking for Moodle for browsers with JavaScript disabled';
+$string['piwikjsurl'] = 'Alternative piwik.js URL';
+$string['piwikjsurl_help'] = 'Enter alternative piwik.js URL (optional) without http(s), piwik.js or a trailing slash, used when you host your own version of piwik.js';
+$string['pluginname'] = 'Matomo Analytics (formerly Piwik)';
 $string['privacy:metadata:watool_matomo'] = 'In order to track user activity, user data needs to be sent with that service.';
 $string['privacy:metadata:watool_matomo:userid'] = 'The userid is sent from Moodle to personalise user activity.';
-$string['userid'] = 'Track User ID';
-$string['userid_help'] = 'If enabled userId parameter will be sent for tracking';
+$string['siteid'] = 'Matomo Site ID';
+$string['siteid_help'] = 'Enter your Matomo Site ID';
+$string['siteurl'] = 'Analytics URL';
+$string['siteurl_help'] = 'Enter your Matomo URL without http(s) or a trailing slash';
 $string['usefield'] = 'User ID field';
 $string['usefield_help'] = 'Select a user field to be used as User ID when sending for tracking';
+$string['userid'] = 'Track User ID';
+$string['userid_help'] = 'If enabled userId parameter will be sent for tracking';

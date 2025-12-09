@@ -27,8 +27,6 @@ namespace watool_guniversal\tool;
 
 use tool_webanalytics\tool\tool_base;
 
-defined('MOODLE_INTERNAL') || die();
-
 /**
  * Web analytics tool.
  *
@@ -36,7 +34,6 @@ defined('MOODLE_INTERNAL') || die();
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool extends tool_base {
-
     /**
      * Get tracking code to insert.
      *
