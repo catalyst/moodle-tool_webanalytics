@@ -5,6 +5,17 @@
 
 A Moodle admin tool adding Web Analytics to your Moodle site.
 
+## Why use this plugin instead of pasting a snippet into Additional HTML?
+
+Moodle's **Additional HTML** setting (`Site administration > Appearance > Additional HTML`) lets you paste raw JavaScript into every page. This plugin is better for several reasons:
+
+**Multi-instance management** — run multiple analytics tools simultaneously, each independently enabled or disabled via the admin UI, without editing raw HTML.
+
+**User ID tracking** — optionally sends `$USER->id` or `$USER->username` to Matomo or Google Analytics, something that requires custom PHP to do manually.
+
+**GDPR metadata** — tools that send user IDs properly declare that external data flow via Moodle's privacy API, satisfying audit requirements.
+
+
 ## Branches
 
 | Moodle version    | Branch              | PHP       |
