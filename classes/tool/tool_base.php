@@ -80,7 +80,8 @@ abstract class tool_base implements tool_interface {
      */
     protected function might_encode($input, $encode): string {
         if (!$encode) {
-            return str_replace("'", "\'", $input);
+            $input = str_replace('\\', '\\\\', $input);
+            return str_replace("'", "\\'", $input);
         }
 
         return urlencode($input);

@@ -60,7 +60,7 @@ class tool extends tool_base {
         $template->doctitle = "";
 
         if (!empty($this->record->get_property('cleanurl'))) {
-            $template->doctitle = "_paq.push(['setDocumentTitle', '" . $this->trackurl() . "']);\n";
+            $template->doctitle = "_paq.push(['setDocumentTitle', " . json_encode($this->trackurl()) . "]);\n";
         }
 
         return $OUTPUT->render_from_template('watool_matomo/tracking_code', $template);
