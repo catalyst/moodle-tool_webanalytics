@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die;
 
 if (is_siteadmin()) {
-    $externalpage = new admin_externalpage(
+    $externalpage = new core\setting\page\externalpage(
         'tool_webanalytics_manage',
         get_string('pluginname', 'tool_webanalytics'),
         new moodle_url('/admin/tool/webanalytics/manage.php')
