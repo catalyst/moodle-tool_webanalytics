@@ -90,12 +90,6 @@ class edit extends moodleform {
         $mform->addHelpButton('enabled', 'enabled', 'tool_webanalytics');
         $mform->setDefault('enabled', 1);
 
-        $mform->addElement('checkbox', 'trackadmin', get_string('trackadmin', 'tool_webanalytics'));
-        $mform->addHelpButton('trackadmin', 'trackadmin', 'tool_webanalytics');
-
-        $mform->addElement('checkbox', 'cleanurl', get_string('cleanurl', 'tool_webanalytics'));
-        $mform->addHelpButton('cleanurl', 'cleanurl', 'tool_webanalytics');
-
         $mform->addElement('text', 'name', get_string('name', 'tool_webanalytics'));
         $mform->addHelpButton('name', 'name', 'tool_webanalytics');
         $mform->setType('name', PARAM_TEXT);
@@ -106,6 +100,12 @@ class edit extends moodleform {
             'topofbody' => get_string('topofbody', 'tool_webanalytics'),
             'footer' => get_string('footer', 'tool_webanalytics'),
         ];
+
+        $mform->addElement('checkbox', 'trackadmin', get_string('trackadmin', 'tool_webanalytics'));
+        $mform->addHelpButton('trackadmin', 'trackadmin', 'tool_webanalytics');
+
+        $mform->addElement('checkbox', 'cleanurl', get_string('cleanurl', 'tool_webanalytics'));
+        $mform->addHelpButton('cleanurl', 'cleanurl', 'tool_webanalytics');
 
         $this->tool->form_add_settings_elements($mform);
 
