@@ -89,29 +89,6 @@ class tool extends tool_base {
         $mform->setType('siteurl', PARAM_TEXT);
         $mform->addRule('siteurl', get_string('required'), 'required', null, 'client');
 
-        $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
-        $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
-        $mform->setType('piwikjsurl', PARAM_URL);
-        $mform->setDefault('piwikjsurl', '');
-
-        $mform->addElement(
-            'text',
-            'trackerendpoint',
-            get_string('trackerendpoint', 'watool_matomo'),
-            ['placeholder' => self::TRACKER_ENDPOINT]
-        );
-        $mform->addHelpButton('trackerendpoint', 'trackerendpoint', 'watool_matomo');
-        $mform->setType('trackerendpoint', PARAM_FILE);
-
-        $mform->addElement(
-            'text',
-            'scriptendpoint',
-            get_string('scriptendpoint', 'watool_matomo'),
-            ['placeholder' => self::SCRIPT_ENDPOINT]
-        );
-        $mform->addHelpButton('scriptendpoint', 'scriptendpoint', 'watool_matomo');
-        $mform->setType('scriptendpoint', PARAM_FILE);
-
         $mform->addElement('text', 'siteid', get_string('siteid', 'watool_matomo'));
         $mform->addHelpButton('siteid', 'siteid', 'watool_matomo');
         $mform->setType('siteid', PARAM_TEXT);
@@ -134,6 +111,32 @@ class tool extends tool_base {
         $mform->setType('usefield', PARAM_TEXT);
 
         $mform->disabledIf('usefield', 'userid');
+
+        $mform->addElement('header', 'urloverridesheader', get_string('urloverridesheader', 'watool_matomo'));
+        $mform->addElement('static', 'urloverridesdesc', '', get_string('urloverridesdesc', 'watool_matomo'));
+
+        $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
+        $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
+        $mform->setType('piwikjsurl', PARAM_URL);
+        $mform->setDefault('piwikjsurl', '');
+
+        $mform->addElement(
+            'text',
+            'trackerendpoint',
+            get_string('trackerendpoint', 'watool_matomo'),
+            ['placeholder' => self::TRACKER_ENDPOINT]
+        );
+        $mform->addHelpButton('trackerendpoint', 'trackerendpoint', 'watool_matomo');
+        $mform->setType('trackerendpoint', PARAM_FILE);
+
+        $mform->addElement(
+            'text',
+            'scriptendpoint',
+            get_string('scriptendpoint', 'watool_matomo'),
+            ['placeholder' => self::SCRIPT_ENDPOINT]
+        );
+        $mform->addHelpButton('scriptendpoint', 'scriptendpoint', 'watool_matomo');
+        $mform->setType('scriptendpoint', PARAM_FILE);
     }
 
     /**
