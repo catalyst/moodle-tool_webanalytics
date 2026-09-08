@@ -131,4 +131,33 @@ final class tool_test extends \advanced_testcase {
         $this->assertStringContainsString("setDocumentTitle', \"", $output);
         $this->assertStringNotContainsString("setDocumentTitle', '", $output);
     }
+
+    /**
+     * Test tracking endpoints default to the original Piwik filenames.
+     */
+    public function test_get_tracking_code_defaults_to_piwik_endpoints(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $output = $this->make_tool()->get_tracking_code();
+
+        $this->assertStringContainsString("setTrackerUrl', u+'" . tool::TRACKER_ENDPOINT . "'", $output);
+        $this->assertStringContainsString("g.src=p+'" . tool::SCRIPT_ENDPOINT . "'", $output);
+    }
+
+    /**
+     * Test configured tracking endpoint names are rendered.
+     */
+    public function test_get_tracking_code_uses_configured_endpoints(): void {
+        $this->resetAfterTest();
+        $this->setAdminUser();
+
+        $output = $this->make_tool([
+            'trackerendpoint' => 'infstats.php',
+            'scriptendpoint' => 'infstats.js',
+        ])->get_tracking_code();
+
+        $this->assertStringContainsString("setTrackerUrl', u+'infstats.php'", $output);
+        $this->assertStringContainsString("g.src=p+'infstats.js'", $output);
+    }
 }

@@ -34,6 +34,12 @@ use tool_webanalytics\tool\tool_base;
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 class tool extends tool_base {
+    /** Default Matomo tracker endpoint. */
+    public const TRACKER_ENDPOINT = 'piwik.php';
+
+    /** Default Matomo script endpoint. */
+    public const SCRIPT_ENDPOINT = 'piwik.js';
+
     /**
      * Get tracking code to insert.
      *
@@ -49,6 +55,10 @@ class tool extends tool_base {
         $template->siteurl = $settings['siteurl'];
         $custompiwikjs = (isset($settings['piwikjsurl']) && !empty($settings['piwikjsurl']));
         $template->piwikjsurl = $custompiwikjs ? $settings['piwikjsurl'] : $settings['siteurl'];
+        $template->trackerendpoint = !empty($settings['trackerendpoint']) ?
+            $settings['trackerendpoint'] : self::TRACKER_ENDPOINT;
+        $template->scriptendpoint = !empty($settings['scriptendpoint']) ?
+            $settings['scriptendpoint'] : self::SCRIPT_ENDPOINT;
         $template->imagetrack = $settings['imagetrack'];
 
         $template->userid = false;
@@ -79,11 +89,6 @@ class tool extends tool_base {
         $mform->setType('siteurl', PARAM_TEXT);
         $mform->addRule('siteurl', get_string('required'), 'required', null, 'client');
 
-        $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
-        $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
-        $mform->setType('piwikjsurl', PARAM_URL);
-        $mform->setDefault('piwikjsurl', '');
-
         $mform->addElement('text', 'siteid', get_string('siteid', 'watool_matomo'));
         $mform->addHelpButton('siteid', 'siteid', 'watool_matomo');
         $mform->setType('siteid', PARAM_TEXT);
@@ -106,6 +111,32 @@ class tool extends tool_base {
         $mform->setType('usefield', PARAM_TEXT);
 
         $mform->disabledIf('usefield', 'userid');
+
+        $mform->addElement('header', 'urloverridesheader', get_string('urloverridesheader', 'watool_matomo'));
+        $mform->addElement('static', 'urloverridesdesc', '', get_string('urloverridesdesc', 'watool_matomo'));
+
+        $mform->addElement('text', 'piwikjsurl', get_string('piwikjsurl', 'watool_matomo'));
+        $mform->addHelpButton('piwikjsurl', 'piwikjsurl', 'watool_matomo');
+        $mform->setType('piwikjsurl', PARAM_URL);
+        $mform->setDefault('piwikjsurl', '');
+
+        $mform->addElement(
+            'text',
+            'trackerendpoint',
+            get_string('trackerendpoint', 'watool_matomo'),
+            ['placeholder' => self::TRACKER_ENDPOINT]
+        );
+        $mform->addHelpButton('trackerendpoint', 'trackerendpoint', 'watool_matomo');
+        $mform->setType('trackerendpoint', PARAM_FILE);
+
+        $mform->addElement(
+            'text',
+            'scriptendpoint',
+            get_string('scriptendpoint', 'watool_matomo'),
+            ['placeholder' => self::SCRIPT_ENDPOINT]
+        );
+        $mform->addHelpButton('scriptendpoint', 'scriptendpoint', 'watool_matomo');
+        $mform->setType('scriptendpoint', PARAM_FILE);
     }
 
     /**
@@ -159,6 +190,8 @@ class tool extends tool_base {
         $settings['siteid']  = isset($data->siteid) ? $data->siteid : '';
         $settings['siteurl'] = isset($data->siteurl) ? $data->siteurl : '';
         $settings['piwikjsurl'] = isset($data->piwikjsurl) ? $data->piwikjsurl : '';
+        $settings['trackerendpoint'] = isset($data->trackerendpoint) ? $data->trackerendpoint : self::TRACKER_ENDPOINT;
+        $settings['scriptendpoint'] = isset($data->scriptendpoint) ? $data->scriptendpoint : self::SCRIPT_ENDPOINT;
         $settings['imagetrack'] = isset($data->imagetrack) ? $data->imagetrack : 0;
         $settings['userid'] = isset($data->userid) ? $data->userid : 0;
         $settings['usefield'] = isset($data->usefield) ? $data->usefield : 'id';
@@ -177,6 +210,10 @@ class tool extends tool_base {
         $data->siteid = isset($data->settings['siteid']) ? $data->settings['siteid'] : '';
         $data->siteurl = isset($data->settings['siteurl']) ? $data->settings['siteurl'] : '';
         $data->piwikjsurl = isset($data->settings['piwikjsurl']) ? $data->settings['piwikjsurl'] : '';
+        $data->trackerendpoint = isset($data->settings['trackerendpoint']) ?
+            $data->settings['trackerendpoint'] : self::TRACKER_ENDPOINT;
+        $data->scriptendpoint = isset($data->settings['scriptendpoint']) ?
+            $data->settings['scriptendpoint'] : self::SCRIPT_ENDPOINT;
         $data->imagetrack = isset($data->settings['imagetrack']) ? $data->settings['imagetrack'] : 0;
         $data->userid = isset($data->settings['userid']) ? $data->settings['userid'] : 1;
         $data->usefield = isset($data->settings['usefield']) ? $data->settings['usefield'] : 'id';

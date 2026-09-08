@@ -24,6 +24,8 @@
         "addition": "Page tracking info added by this plugin",
         "siteurl": "examplesite.com",
         "piwikjsurl": "Alternative piwik.js URL",
+        "trackerendpoint": "piwik.php",
+        "scriptendpoint": "piwik.js",
         "doctitle": "Page title",
         "imagetrack": "Image tracking"
     }
@@ -33,7 +35,7 @@
 {{#imagetrack}}
     <noscript>
         <p>
-            <img src="//{{{siteurl}}}/piwik.php?idsite={{{siteid}}}" style="border:0;" alt="" />
+            <img src="//{{{siteurl}}}/{{{trackerendpoint}}}?idsite={{{siteid}}}" style="border:0;" alt="" />
         </p>
     </noscript>
 {{/imagetrack}}
@@ -51,10 +53,10 @@
         var u='//{{{siteurl}}}/';
         var p='//{{{piwikjsurl}}}/';
 
-        _paq.push(['setTrackerUrl', u+'piwik.php']);
+        _paq.push(['setTrackerUrl', u+'{{{trackerendpoint}}}']);
         _paq.push(['setSiteId', {{{siteid}}}]);
         var d=document, g=d.createElement('script'), s=d.getElementsByTagName('script')[0];
-        g.type='text/javascript'; g.async=true; g.defer=true; g.src=p+'piwik.js'; s.parentNode.insertBefore(g,s);
+        g.type='text/javascript'; g.async=true; g.defer=true; g.src=p+'{{{scriptendpoint}}}'; s.parentNode.insertBefore(g,s);
     }
 
     if (window.addEventListener) {
