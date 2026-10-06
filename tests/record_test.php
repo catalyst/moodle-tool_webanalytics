@@ -78,7 +78,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
      *
      * @return array
      */
-    public function default_values_data_provider() {
+    public static function default_values_data_provider() {
         return [
             ['id', null],
             ['enabled', 0],
@@ -190,7 +190,7 @@ class tool_webanalytics_record_test extends advanced_testcase {
      *
      * @return array
      */
-    public function not_array_settings_data_provider() {
+    public static function not_array_settings_data_provider() {
         return [
             ['string'],
             [new stdClass()],
